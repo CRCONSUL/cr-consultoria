@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CR Consultoria - Controle de Produtividade</title>
-<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"CR Consultoria","short_name":"CR Prod","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[]}'>
+<meta name="theme-color" content="#0f172a">
+<title>Controle de Produtividade Empresarial</title>
+<link rel="manifest" href='data:application/manifest+json,{"name":"Produtividade","short_name":"Prod","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a"}'>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -14,710 +15,570 @@
   --primary:#3b82f6;
   --text:#e2e8f0;
   --muted:#94a3b8;
-  --green:#22c55e;
-  --orange:#f97316;
-  --red:#ef4444;
+  --danger:#ef4444;
+  --success:#22c55e;
+  --warning:#f59e0b;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
 body{background:var(--bg);color:var(--text);display:flex;min-height:100vh}
-.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 0;position:fixed;height:100vh;overflow-y:auto;z-index:100}
-.sidebar .logo{padding:0 20px 20px;font-size:18px;font-weight:bold;color:var(--primary);border-bottom:1px solid var(--border);margin-bottom:10px}
-.sidebar a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:var(--muted);text-decoration:none;cursor:pointer;transition:.2s}
-.sidebar a:hover{background:rgba(59,130,246,.1);color:var(--text)}
-.sidebar a.active{background:rgba(59,130,246,.15);color:var(--primary);border-right:3px solid var(--primary)}
-.main{margin-left:240px;flex:1;padding:24px;width:calc(100% - 240px)}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.topbar h1{font-size:22px}
-.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 0;position:fixed;height:100vh;overflow-y:auto;z-index:10}
+.sidebar h1{font-size:18px;padding:0 20px 20px;color:var(--primary);border-bottom:1px solid var(--border)}
+.nav-item{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--muted);transition:.2s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(59,130,246,.1);color:var(--text)}
+.nav-item.active{background:rgba(59,130,246,.15);color:var(--primary);border-left-color:var(--primary)}
+.main{margin-left:240px;flex:1;padding:24px;min-width:0}
 .page{display:none}
 .page.active{display:block}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.page-title{font-size:24px;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
 .card .label{color:var(--muted);font-size:13px;margin-bottom:8px}
-.card .value{font-size:28px;font-weight:bold}
-.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px}
-.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
-.chart-box h3{margin-bottom:16px;font-size:16px}
+.card .value{font-size:28px;font-weight:700}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;height:340px}
+.chart-box h3{margin-bottom:12px;font-size:15px;color:var(--muted)}
+.btn{background:var(--primary);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{filter:brightness(1.1)}
+.btn.secondary{background:#475569}
+.btn.danger{background:var(--danger)}
+.btn.success{background:var(--success)}
+.btn.warning{background:var(--warning);color:#000}
+.btn.small{padding:6px 10px;font-size:12px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
 th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
-th{background:rgba(59,130,246,.1);color:var(--muted);font-weight:600}
+th{background:#0f172a;color:var(--muted);font-weight:600}
 tr:last-child td{border-bottom:none}
-.btn{background:var(--primary);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s}
-.btn:hover{filter:brightness(1.1)}
-.btn-sm{padding:6px 10px;font-size:13px}
-.btn-danger{background:var(--red)}
-.btn-secondary{background:#475569}
-.btn-success{background:var(--green)}
-.btn-warning{background:var(--orange)}
 .badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block}
-.badge.ativo{background:rgba(34,197,94,.2);color:var(--green)}
-.badge.ferias{background:rgba(249,115,22,.2);color:var(--orange)}
-.badge.inativo{background:rgba(239,68,68,.2);color:var(--red)}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;justify-content:center;align-items:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.modal h2{margin-bottom:20px;font-size:18px}
-.form-group{margin-bottom:16px}
+.badge.ativo{background:rgba(34,197,94,.2);color:var(--success)}
+.badge.ferias{background:rgba(245,158,11,.2);color:var(--warning)}
+.badge.inativo{background:rgba(239,68,68,.2);color:var(--danger)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal.show{display:flex}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-content h2{margin-bottom:16px;font-size:20px}
+.form-group{margin-bottom:14px}
 .form-group label{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px}
-.form-group textarea{resize:vertical;min-height:80px}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-.timer-display{font-size:64px;font-weight:bold;text-align:center;font-variant-numeric:tabular-nums;margin:20px 0;color:var(--primary)}
-.timer-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
-.timer-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px;align-items:end}
-.filters .form-group{margin-bottom:0}
-.menu-toggle{display:none;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer}
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%);transition:.3s}
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0;width:100%}
-  .menu-toggle{display:block}
-  .timer-display{font-size:42px}
-}
+input,select,textarea{width:100%;background:#0f172a;border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-size:14px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.timer-display{font-size:64px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:var(--primary);margin:20px 0}
+.timer-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:560px;margin:0 auto}
+.timer-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
 .empty{text-align:center;color:var(--muted);padding:40px}
+@media(max-width:768px){
+  .sidebar{width:64px}
+  .sidebar h1{display:none}
+  .nav-item{justify-content:center;padding:14px}
+  .nav-item span{display:none}
+  .main{margin-left:64px}
+  .charts{grid-template-columns:1fr}
+  .timer-display{font-size:44px}
+}
 </style>
 </head>
 <body>
-
-<div class="sidebar" id="sidebar">
-  <div class="logo">CR Consultoria</div>
-  <a class="nav-link active" data-page="dashboard" onclick="navigate('dashboard')">📊 Dashboard</a>
-  <a class="nav-link" data-page="employees" onclick="navigate('employees')">👥 Funcionários</a>
-  <a class="nav-link" data-page="activities" onclick="navigate('activities')">📋 Atividades</a>
-  <a class="nav-link" data-page="timer" onclick="navigate('timer')">⏱️ Cronômetro</a>
-  <a class="nav-link" data-page="reports" onclick="navigate('reports')">📈 Relatórios</a>
-</div>
-
-<div class="main">
-  <div class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-      <h1 id="pageTitle">Dashboard</h1>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn btn-secondary" onclick="backupData()">💾 Backup</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('restoreInput').click()">📂 Restaurar</button>
-      <input type="file" id="restoreInput" accept="application/json" style="display:none" onchange="restoreData(event)">
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="page-dashboard" class="page active">
+<aside class="sidebar">
+  <h1>⚡ Produtividade</h1>
+  <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">📊 <span>Dashboard</span></div>
+  <div class="nav-item" data-page="employees" onclick="navigate('employees')">👥 <span>Funcionários</span></div>
+  <div class="nav-item" data-page="activities" onclick="navigate('activities')">📋 <span>Atividades</span></div>
+  <div class="nav-item" data-page="timer" onclick="navigate('timer')">⏱️ <span>Cronômetro</span></div>
+  <div class="nav-item" data-page="reports" onclick="navigate('reports')">📈 <span>Relatórios</span></div>
+  <div class="nav-item" data-page="backup" onclick="navigate('backup')">💾 <span>Backup</span></div>
+</aside>
+<main class="main">
+  <section id="page-dashboard" class="page active">
+    <h2 class="page-title">Dashboard</h2>
     <div class="cards">
-      <div class="card"><div class="label">Funcionários Ativos</div><div class="value" id="statActiveEmployees">0</div></div>
+      <div class="card"><div class="label">Funcionários Ativos</div><div class="value" id="statActive">0</div></div>
       <div class="card"><div class="label">Atividades</div><div class="value" id="statActivities">0</div></div>
       <div class="card"><div class="label">Total Registros</div><div class="value" id="statPoints">0</div></div>
       <div class="card"><div class="label">Horas Totais</div><div class="value" id="statHours">0h</div></div>
     </div>
     <div class="charts">
-      <div class="chart-box"><h3>Produtividade por Funcionário (min)</h3><canvas id="chartBar"></canvas></div>
-      <div class="chart-box"><h3>Horas por Atividade</h3><canvas id="chartDonut"></canvas></div>
+      <div class="chart-box"><h3>Horas por Funcionário</h3><canvas id="chartBar"></canvas></div>
+      <div class="chart-box"><h3>Distribuição por Atividade</h3><canvas id="chartDonut"></canvas></div>
     </div>
-  </div>
+  </section>
 
-  <!-- FUNCIONÁRIOS -->
-  <div id="page-employees" class="page">
-    <div style="margin-bottom:16px"><button class="btn" onclick="openEmployeeModal()">+ Novo Funcionário</button></div>
-    <table>
-      <thead><tr><th>Nome</th><th>Cargo</th><th>Status</th><th>Ações</th></tr></thead>
-      <tbody id="employeesBody"></tbody>
-    </table>
-  </div>
+  <section id="page-employees" class="page">
+    <h2 class="page-title">Funcionários</h2>
+    <div class="toolbar"><button class="btn" onclick="openEmployeeModal()">+ Novo Funcionário</button></div>
+    <table><thead><tr><th>Nome</th><th>Cargo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="employeesBody"></tbody></table>
+  </section>
 
-  <!-- ATIVIDADES -->
-  <div id="page-activities" class="page">
-    <div style="margin-bottom:16px"><button class="btn" onclick="openActivityModal()">+ Nova Atividade</button></div>
-    <table>
-      <thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead>
-      <tbody id="activitiesBody"></tbody>
-    </table>
-  </div>
+  <section id="page-activities" class="page">
+    <h2 class="page-title">Atividades</h2>
+    <div class="toolbar"><button class="btn" onclick="openActivityModal()">+ Nova Atividade</button></div>
+    <table><thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead><tbody id="activitiesBody"></tbody></table>
+  </section>
 
-  <!-- CRONÔMETRO -->
-  <div id="page-timer" class="page">
-    <div class="timer-form">
-      <div class="filters">
-        <div class="form-group"><label>Funcionário</label><select id="timerEmployee"></select></div>
-        <div class="form-group"><label>Atividade</label><select id="timerActivity"></select></div>
-      </div>
+  <section id="page-timer" class="page">
+    <h2 class="page-title">Cronômetro</h2>
+    <div class="timer-box">
+      <div class="form-group"><label>Funcionário</label><select id="timerEmployee"></select></div>
+      <div class="form-group"><label>Atividade</label><select id="timerActivity"></select></div>
       <div class="timer-display" id="timerDisplay">00:00:00</div>
-      <div class="timer-controls">
-        <button class="btn btn-success" id="btnStart" onclick="startTimer()">▶ Iniciar</button>
-        <button class="btn btn-warning" id="btnPause" onclick="pauseTimer()" disabled>⏸ Pausar</button>
-        <button class="btn btn-success" id="btnResume" onclick="resumeTimer()" disabled>⏵ Retomar</button>
-        <button class="btn btn-danger" id="btnFinish" onclick="finishTimer()" disabled>⏹ Finalizar</button>
+      <div class="timer-controls" id="timerControls">
+        <button class="btn success" id="btnStart" onclick="startTimer()">Iniciar</button>
+        <button class="btn warning" id="btnPause" onclick="pauseTimer()" style="display:none">Pausar</button>
+        <button class="btn success" id="btnResume" onclick="resumeTimer()" style="display:none">Retomar</button>
+        <button class="btn danger" id="btnFinish" onclick="finishTimer()" style="display:none">Finalizar</button>
       </div>
-      <div class="form-group"><label>Observação</label><textarea id="timerObservation" placeholder="Digite uma observação sobre o registro..."></textarea></div>
+      <div class="form-group"><label>Observação</label><textarea id="timerNote" rows="3" placeholder="Observações sobre a atividade..."></textarea></div>
     </div>
-    <h3 style="margin-bottom:12px">Registros Recentes</h3>
-    <table>
-      <thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead>
-      <tbody id="recentPointsBody"></tbody>
-    </table>
-  </div>
+    <h3 style="margin:24px 0 12px">Registros Recentes</h3>
+    <table><thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Ações</th></tr></thead><tbody id="recentPoints"></tbody></table>
+  </section>
 
-  <!-- RELATÓRIOS -->
-  <div id="page-reports" class="page">
+  <section id="page-reports" class="page">
+    <h2 class="page-title">Relatórios</h2>
     <div class="filters">
-      <div class="form-group"><label>Funcionário</label><select id="filterEmployee"><option value="">Todos</option></select></div>
-      <div class="form-group"><label>Atividade</label><select id="filterActivity"><option value="">Todas</option></select></div>
-      <div class="form-group"><label>Data Início</label><input type="date" id="filterStart"></div>
-      <div class="form-group"><label>Data Fim</label><input type="date" id="filterEnd"></div>
-      <div class="form-group" style="display:flex;gap:8px">
-        <button class="btn" onclick="renderReports()">Filtrar</button>
-        <button class="btn btn-secondary" onclick="clearFilters()">Limpar</button>
-        <button class="btn btn-success" onclick="exportCSV()">📄 Exportar CSV</button>
+      <select id="filterEmployee"><option value="">Todos Funcionários</option></select>
+      <select id="filterActivity"><option value="">Todas Atividades</option></select>
+      <input type="date" id="filterStart">
+      <input type="date" id="filterEnd">
+    </div>
+    <div class="toolbar">
+      <button class="btn" onclick="renderReports()">Filtrar</button>
+      <button class="btn secondary" onclick="clearFilters()">Limpar</button>
+      <button class="btn success" onclick="exportCSV()">Exportar CSV</button>
+    </div>
+    <table><thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead><tbody id="reportsBody"></tbody></table>
+  </section>
+
+  <section id="page-backup" class="page">
+    <h2 class="page-title">Backup & Restore</h2>
+    <div class="toolbar">
+      <button class="btn" onclick="backupData()">Exportar JSON</button>
+      <label class="btn secondary" style="cursor:pointer">Importar JSON<input type="file" accept=".json" style="display:none" onchange="restoreData(event)"></label>
+    </div>
+    <div class="card">
+      <div class="label">Restaurar dados</div>
+      <p style="margin:10px 0;color:var(--muted)">Escolha o modo de importação:</p>
+      <div class="form-group">
+        <label><input type="radio" name="restoreMode" value="replace" checked style="width:auto"> Substituir todos os dados</label><br>
+        <label><input type="radio" name="restoreMode" value="merge" style="width:auto"> Mesclar com dados atuais</label>
       </div>
     </div>
-    <table>
-      <thead><tr><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead>
-      <tbody id="reportsBody"></tbody>
-    </table>
-  </div>
-</div>
+  </section>
+</main>
 
-<!-- MODAL FUNCIONÁRIO -->
-<div class="modal-overlay" id="employeeModal">
-  <div class="modal">
+<div class="modal" id="employeeModal">
+  <div class="modal-content">
     <h2 id="employeeModalTitle">Novo Funcionário</h2>
-    <input type="hidden" id="employeeId">
-    <div class="form-group"><label>Nome</label><input type="text" id="employeeName"></div>
-    <div class="form-group"><label>Cargo</label><input type="text" id="employeeRole"></div>
-    <div class="form-group"><label>Status</label><select id="employeeStatus"><option value="ativo">Ativo</option><option value="ferias">Férias</option><option value="inativo">Inativo</option></select></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('employeeModal')">Cancelar</button>
-      <button class="btn" onclick="saveEmployee()">Salvar</button>
-    </div>
+    <input type="hidden" id="empId">
+    <div class="form-group"><label>Nome</label><input type="text" id="empName"></div>
+    <div class="form-group"><label>Cargo</label><input type="text" id="empRole"></div>
+    <div class="form-group"><label>Status</label><select id="empStatus"><option value="ativo">Ativo</option><option value="ferias">Férias</option><option value="inativo">Inativo</option></select></div>
+    <div class="modal-actions"><button class="btn secondary" onclick="closeModal('employeeModal')">Cancelar</button><button class="btn" onclick="saveEmployee()">Salvar</button></div>
   </div>
 </div>
 
-<!-- MODAL ATIVIDADE -->
-<div class="modal-overlay" id="activityModal">
-  <div class="modal">
+<div class="modal" id="activityModal">
+  <div class="modal-content">
     <h2 id="activityModalTitle">Nova Atividade</h2>
-    <input type="hidden" id="activityId">
-    <div class="form-group"><label>Nome</label><input type="text" id="activityName"></div>
-    <div class="form-group"><label>Descrição</label><textarea id="activityDesc"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('activityModal')">Cancelar</button>
-      <button class="btn" onclick="saveActivity()">Salvar</button>
-    </div>
+    <input type="hidden" id="actId">
+    <div class="form-group"><label>Nome</label><input type="text" id="actName"></div>
+    <div class="form-group"><label>Descrição</label><textarea id="actDesc" rows="3"></textarea></div>
+    <div class="modal-actions"><button class="btn secondary" onclick="closeModal('activityModal')">Cancelar</button><button class="btn" onclick="saveActivity()">Salvar</button></div>
   </div>
 </div>
 
-<!-- MODAL CONFIRMAÇÃO -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal">
-    <h2>Confirmar</h2>
-    <p id="confirmMessage" style="margin-bottom:20px;color:var(--muted)"></p>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeConfirm()">Cancelar</button>
-      <button class="btn btn-danger" id="confirmOkBtn">Confirmar</button>
-    </div>
+<div class="modal" id="confirmModal">
+  <div class="modal-content">
+    <h2>Confirmação</h2>
+    <p id="confirmMessage" style="margin:12px 0;color:var(--muted)"></p>
+    <div class="modal-actions"><button class="btn secondary" id="confirmCancelBtn">Cancelar</button><button class="btn danger" id="confirmOkBtn">Confirmar</button></div>
   </div>
 </div>
 
 <script>
-// ===== STATE =====
-let state = { employees: [], activities: [], points: [] };
-let chartBar = null, chartDonut = null;
-let timer = { running: false, paused: false, elapsed: 0, interval: null, startTime: null, employeeId: null, activityId: null };
-let confirmCallback = null;
+let employees=[], activities=[], points=[];
+let confirmCallback=null;
+let timerState={running:false,paused:false,elapsed:0,startTs:0,intervalId:null,empId:null,actId:null};
+let chartBar=null, chartDonut=null;
 
-// ===== STORAGE =====
-function loadState(){
-  const raw = localStorage.getItem('cr_consultoria_data');
-  if(raw){
-    try{ state = JSON.parse(raw); }catch(e){ seedData(); }
+function load(){
+  const data=localStorage.getItem('prodData');
+  if(data){
+    const d=JSON.parse(data);
+    employees=d.employees||[];
+    activities=d.activities||[];
+    points=d.points||[];
   } else {
     seedData();
   }
-  if(!state.employees) state.employees = [];
-  if(!state.activities) state.activities = [];
-  if(!state.points) state.points = [];
 }
-function saveState(){ localStorage.setItem('cr_consultoria_data', JSON.stringify(state)); }
-
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-
+function save(){
+  localStorage.setItem('prodData',JSON.stringify({employees,activities,points}));
+}
 function seedData(){
-  const now = Date.now();
-  const day = 86400000;
-  state = {
-    employees: [
-      { id:'e1', name:'Cecília Rijo', role:'Consultora', status:'ativo' },
-      { id:'e2', name:'Carlos Mendes', role:'Analista', status:'ativo' },
-      { id:'e3', name:'Ana Oliveira', role:'Gestora', status:'ferias' }
-    ],
-    activities: [
-      { id:'a1', name:'Reunião com Cliente', description:'Reuniões de alinhamento com clientes' },
-      { id:'a2', name:'Análise de Dados', description:'Análise de métricas e relatórios' },
-      { id:'a3', name:'Desenvolvimento', description:'Desenvolvimento de soluções e entregáveis' }
-    ],
-    points: [
-      { id:uid(), employeeId:'e1', activityId:'a1', startTime: now-day-3600000*2, endTime: now-day-3600000*1, duration:3600000, date:new Date(now-day).toISOString().slice(0,10), observacao:'Reunião inicial com cliente novo.' },
-      { id:uid(), employeeId:'e1', activityId:'a2', startTime: now-day*2-3600000*3, endTime: now-day*2-3600000*1, duration:3600000*2, date:new Date(now-day*2).toISOString().slice(0,10), observacao:'Análise de indicadores do trimestre.' },
-      { id:uid(), employeeId:'e2', activityId:'a3', startTime: now-day-3600000*4, endTime: now-day-3600000*1, duration:3600000*3, date:new Date(now-day).toISOString().slice(0,10), observacao:'Desenvolvimento de dashboard.' },
-      { id:uid(), employeeId:'e2', activityId:'a1', startTime: now-day*3-3600000*2, endTime: now-day*3-3600000*1, duration:3600000, date:new Date(now-day*3).toISOString().slice(0,10), observacao:'Reunião de follow-up.' },
-      { id:uid(), employeeId:'e1', activityId:'a3', startTime: now-day*2-3600000*5, endTime: now-day*2-3600000*2, duration:3600000*3, date:new Date(now-day*2).toISOString().slice(0,10), observacao:'Entrega de relatório final.' }
-    ]
-  };
-  saveState();
+  employees=[
+    {id:1,name:'Cecília Rijo',role:'Consultora',status:'ativo'},
+    {id:2,name:'Carlos Mendes',role:'Analista',status:'ativo'},
+    {id:3,name:'Ana Oliveira',role:'Gestora',status:'ferias'}
+  ];
+  activities=[
+    {id:1,name:'Reunião com Cliente',desc:'Atendimento e alinhamento com clientes'},
+    {id:2,name:'Análise de Dados',desc:'Análise de métricas e indicadores'},
+    {id:3,name:'Desenvolvimento',desc:'Implementação de funcionalidades'}
+  ];
+  const now=Date.now();
+  points=[
+    {id:1,empId:1,actId:1,duration:5400,note:'Reunião inicial',ts:now-86400000*2},
+    {id:2,empId:1,actId:2,duration:7200,note:'Análise mensal',ts:now-86400000},
+    {id:3,empId:2,actId:3,duration:10800,note:'Sprint atual',ts:now-3600000*5},
+    {id:4,empId:2,actId:1,duration:3600,note:'Follow-up',ts:now-3600000*2}
+  ];
+  save();
 }
 
-// ===== HELPERS =====
-function fmtDuration(ms){
-  const s = Math.floor(ms/1000);
-  const h = Math.floor(s/3600);
-  const m = Math.floor((s%3600)/60);
-  const sec = s%60;
-  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
-}
-function fmtMinutes(ms){ return Math.round(ms/60000); }
-function employeeName(id){ const e = state.employees.find(x=>x.id===id); return e?e.name:'-'; }
-function activityName(id){ const a = state.activities.find(x=>x.id===id); return a?a.name:'-'; }
-function statusLabel(s){ return {ativo:'Ativo',ferias:'Férias',inativo:'Inativo'}[s]||s; }
-function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-// ===== NAVIGATION =====
 function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(a=>a.classList.remove('active'));
-  document.querySelector('.nav-link[data-page="'+page+'"]').classList.add('active');
-  const titles = {dashboard:'Dashboard',employees:'Funcionários',activities:'Atividades',timer:'Cronômetro',reports:'Relatórios'};
-  document.getElementById('pageTitle').textContent = titles[page];
+  document.querySelector('.nav-item[data-page="'+page+'"]').classList.add('active');
   if(page==='dashboard') renderDashboard();
   if(page==='employees') renderEmployees();
   if(page==='activities') renderActivities();
   if(page==='timer') renderTimerPage();
   if(page==='reports') renderReports();
-  document.getElementById('sidebar').classList.remove('open');
 }
 
-// ===== DASHBOARD =====
+function fmtDuration(sec){
+  sec=Math.floor(sec);
+  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function fmtDate(ts){
+  const d=new Date(ts);
+  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function empName(id){return (employees.find(e=>e.id===id)||{}).name||'—';}
+function actName(id){return (activities.find(a=>a.id===id)||{}).name||'—';}
+function nextId(arr){return arr.length?Math.max(...arr.map(x=>x.id))+1:1;}
+
 function renderDashboard(){
-  const activeEmp = state.employees.filter(e=>e.status==='ativo').length;
-  const totalPoints = state.points.length;
-  const totalMs = state.points.reduce((s,p)=>s+(p.duration||0),0);
-  const totalHours = (totalMs/3600000).toFixed(1);
-  document.getElementById('statActiveEmployees').textContent = activeEmp;
-  document.getElementById('statActivities').textContent = state.activities.length;
-  document.getElementById('statPoints').textContent = totalPoints;
-  document.getElementById('statHours').textContent = totalHours+'h';
-
-  // Bar: produtividade por funcionário (minutos)
-  const empLabels = state.employees.map(e=>e.name);
-  const empData = state.employees.map(e=>{
-    return fmtMinutes(state.points.filter(p=>p.employeeId===e.id).reduce((s,p)=>s+(p.duration||0),0));
-  });
-  if(chartBar) chartBar.destroy();
-  chartBar = new Chart(document.getElementById('chartBar'),{
+  document.getElementById('statActive').textContent=employees.filter(e=>e.status==='ativo').length;
+  document.getElementById('statActivities').textContent=activities.length;
+  document.getElementById('statPoints').textContent=points.length;
+  const totalSec=points.reduce((s,p)=>s+p.duration,0);
+  document.getElementById('statHours').textContent=(totalSec/3600).toFixed(1)+'h';
+  renderCharts();
+}
+function renderCharts(){
+  const empHours={};
+  points.forEach(p=>{empHours[p.empId]=(empHours[p.empId]||0)+p.duration;});
+  const labels=Object.keys(empHours).map(id=>empName(+id));
+  const data=Object.values(empHours).map(s=>+(s/3600).toFixed(2));
+  if(chartBar)chartBar.destroy();
+  chartBar=new Chart(document.getElementById('chartBar'),{
     type:'bar',
-    data:{ labels:empLabels, datasets:[{ label:'Minutos', data:empData, backgroundColor:'#3b82f6', borderRadius:6 }] },
-    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}},y:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}}} }
+    data:{labels,datasets:[{label:'Horas',data,backgroundColor:'#3b82f6',borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}},y:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}}}}
   });
-
-  // Donut: horas por atividade
-  const actLabels = state.activities.map(a=>a.name);
-  const actData = state.activities.map(a=>{
-    return ((state.points.filter(p=>p.activityId===a.id).reduce((s,p)=>s+(p.duration||0),0))/3600000).toFixed(2);
-  });
-  if(chartDonut) chartDonut.destroy();
-  chartDonut = new Chart(document.getElementById('chartDonut'),{
+  const actHours={};
+  points.forEach(p=>{actHours[p.actId]=(actHours[p.actId]||0)+p.duration;});
+  const alabels=Object.keys(actHours).map(id=>actName(+id));
+  const adata=Object.values(actHours).map(s=>+(s/3600).toFixed(2));
+  if(chartDonut)chartDonut.destroy();
+  chartDonut=new Chart(document.getElementById('chartDonut'),{
     type:'doughnut',
-    data:{ labels:actLabels, datasets:[{ data:actData, backgroundColor:['#3b82f6','#22c55e','#f97316','#ef4444','#a855f7','#14b8a6'] }] },
-    options:{ responsive:true, plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}} }
+    data:{labels:alabels,datasets:[{data:adata,backgroundColor:['#3b82f6','#22c55e','#f59e0b','#ef4444','#a855f7','#06b6d4']}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}}}
   });
 }
 
-// ===== EMPLOYEES =====
 function renderEmployees(){
-  const body = document.getElementById('employeesBody');
-  if(!state.employees.length){ body.innerHTML = '<tr><td colspan="4" class="empty">Nenhum funcionário cadastrado</td></tr>'; return; }
-  body.innerHTML = state.employees.map(e=>`
+  const body=document.getElementById('employeesBody');
+  if(!employees.length){body.innerHTML='<tr><td colspan="4" class="empty">Nenhum funcionário cadastrado</td></tr>';return;}
+  body.innerHTML=employees.map(e=>`
     <tr>
-      <td>${escapeHtml(e.name)}</td>
-      <td>${escapeHtml(e.role)}</td>
-      <td><span class="badge ${e.status}">${statusLabel(e.status)}</span></td>
-      <td>
-        <button class="btn btn-sm" onclick="openEmployeeModal('${e.id}')">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteEmployee('${e.id}')">🗑️</button>
-      </td>
+      <td>${e.name}</td><td>${e.role}</td>
+      <td><span class="badge ${e.status}">${e.status}</span></td>
+      <td><button class="btn small" onclick="openEmployeeModal(${e.id})">Editar</button> <button class="btn small danger" onclick="deleteEmployee(${e.id})">Excluir</button></td>
     </tr>`).join('');
 }
 function openEmployeeModal(id){
-  const modal = document.getElementById('employeeModal');
+  const m=document.getElementById('employeeModal');
   if(id){
-    const e = state.employees.find(x=>x.id===id);
-    if(!e) return;
-    document.getElementById('employeeModalTitle').textContent = 'Editar Funcionário';
-    document.getElementById('employeeId').value = e.id;
-    document.getElementById('employeeName').value = e.name;
-    document.getElementById('employeeRole').value = e.role;
-    document.getElementById('employeeStatus').value = e.status;
+    const e=employees.find(x=>x.id===id);
+    document.getElementById('employeeModalTitle').textContent='Editar Funcionário';
+    document.getElementById('empId').value=e.id;
+    document.getElementById('empName').value=e.name;
+    document.getElementById('empRole').value=e.role;
+    document.getElementById('empStatus').value=e.status;
   } else {
-    document.getElementById('employeeModalTitle').textContent = 'Novo Funcionário';
-    document.getElementById('employeeId').value = '';
-    document.getElementById('employeeName').value = '';
-    document.getElementById('employeeRole').value = '';
-    document.getElementById('employeeStatus').value = 'ativo';
+    document.getElementById('employeeModalTitle').textContent='Novo Funcionário';
+    document.getElementById('empId').value='';
+    document.getElementById('empName').value='';
+    document.getElementById('empRole').value='';
+    document.getElementById('empStatus').value='ativo';
   }
-  modal.classList.add('show');
+  m.classList.add('show');
 }
 function saveEmployee(){
-  const id = document.getElementById('employeeId').value;
-  const name = document.getElementById('employeeName').value.trim();
-  const role = document.getElementById('employeeRole').value.trim();
-  const status = document.getElementById('employeeStatus').value;
-  if(!name){ alert('Informe o nome'); return; }
+  const id=document.getElementById('empId').value;
+  const name=document.getElementById('empName').value.trim();
+  const role=document.getElementById('empRole').value.trim();
+  const status=document.getElementById('empStatus').value;
+  if(!name||!role){alert('Preencha nome e cargo');return;}
   if(id){
-    const e = state.employees.find(x=>x.id===id);
-    if(e){ e.name=name; e.role=role; e.status=status; }
+    const e=employees.find(x=>x.id===+id);
+    e.name=name;e.role=role;e.status=status;
   } else {
-    state.employees.push({ id:uid(), name, role, status });
+    employees.push({id:nextId(employees),name,role,status});
   }
-  saveState();
-  closeModal('employeeModal');
-  renderEmployees();
+  save();renderEmployees();closeModal('employeeModal');
 }
 function deleteEmployee(id){
-  showConfirm('Excluir este funcionário?', ()=>{
-    state.employees = state.employees.filter(e=>e.id!==id);
-    saveState();
-    renderEmployees();
+  const e=employees.find(x=>x.id===id);
+  showConfirm('Excluir funcionário "'+e.name+'"? Os registros relacionados serão mantidos.',()=>{
+    employees=employees.filter(x=>x.id!==id);
+    save();renderEmployees();
   });
 }
 
-// ===== ACTIVITIES =====
 function renderActivities(){
-  const body = document.getElementById('activitiesBody');
-  if(!state.activities.length){ body.innerHTML = '<tr><td colspan="3" class="empty">Nenhuma atividade cadastrada</td></tr>'; return; }
-  body.innerHTML = state.activities.map(a=>`
+  const body=document.getElementById('activitiesBody');
+  if(!activities.length){body.innerHTML='<tr><td colspan="3" class="empty">Nenhuma atividade cadastrada</td></tr>';return;}
+  body.innerHTML=activities.map(a=>`
     <tr>
-      <td>${escapeHtml(a.name)}</td>
-      <td>${escapeHtml(a.description)}</td>
-      <td>
-        <button class="btn btn-sm" onclick="openActivityModal('${a.id}')">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteActivity('${a.id}')">🗑️</button>
-      </td>
+      <td>${a.name}</td><td>${a.desc||'—'}</td>
+      <td><button class="btn small" onclick="openActivityModal(${a.id})">Editar</button> <button class="btn small danger" onclick="deleteActivity(${a.id})">Excluir</button></td>
     </tr>`).join('');
 }
 function openActivityModal(id){
-  const modal = document.getElementById('activityModal');
+  const m=document.getElementById('activityModal');
   if(id){
-    const a = state.activities.find(x=>x.id===id);
-    if(!a) return;
-    document.getElementById('activityModalTitle').textContent = 'Editar Atividade';
-    document.getElementById('activityId').value = a.id;
-    document.getElementById('activityName').value = a.name;
-    document.getElementById('activityDesc').value = a.description||'';
+    const a=activities.find(x=>x.id===id);
+    document.getElementById('activityModalTitle').textContent='Editar Atividade';
+    document.getElementById('actId').value=a.id;
+    document.getElementById('actName').value=a.name;
+    document.getElementById('actDesc').value=a.desc||'';
   } else {
-    document.getElementById('activityModalTitle').textContent = 'Nova Atividade';
-    document.getElementById('activityId').value = '';
-    document.getElementById('activityName').value = '';
-    document.getElementById('activityDesc').value = '';
+    document.getElementById('activityModalTitle').textContent='Nova Atividade';
+    document.getElementById('actId').value='';
+    document.getElementById('actName').value='';
+    document.getElementById('actDesc').value='';
   }
-  modal.classList.add('show');
+  m.classList.add('show');
 }
 function saveActivity(){
-  const id = document.getElementById('activityId').value;
-  const name = document.getElementById('activityName').value.trim();
-  const description = document.getElementById('activityDesc').value.trim();
-  if(!name){ alert('Informe o nome'); return; }
+  const id=document.getElementById('actId').value;
+  const name=document.getElementById('actName').value.trim();
+  const desc=document.getElementById('actDesc').value.trim();
+  if(!name){alert('Preencha o nome');return;}
   if(id){
-    const a = state.activities.find(x=>x.id===id);
-    if(a){ a.name=name; a.description=description; }
+    const a=activities.find(x=>x.id===+id);
+    a.name=name;a.desc=desc;
   } else {
-    state.activities.push({ id:uid(), name, description });
+    activities.push({id:nextId(activities),name,desc});
   }
-  saveState();
-  closeModal('activityModal');
-  renderActivities();
+  save();renderActivities();closeModal('activityModal');
 }
 function deleteActivity(id){
-  showConfirm('Excluir esta atividade?', ()=>{
-    state.activities = state.activities.filter(a=>a.id!==id);
-    saveState();
-    renderActivities();
+  const a=activities.find(x=>x.id===id);
+  showConfirm('Excluir atividade "'+a.name+'"?',()=>{
+    activities=activities.filter(x=>x.id!==id);
+    save();renderActivities();
   });
 }
 
-// ===== TIMER =====
 function renderTimerPage(){
-  const empSel = document.getElementById('timerEmployee');
-  const actSel = document.getElementById('timerActivity');
-  empSel.innerHTML = '<option value="">Selecione...</option>' + state.employees.filter(e=>e.status==='ativo').map(e=>`<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
-  actSel.innerHTML = '<option value="">Selecione...</option>' + state.activities.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
-  if(timer.employeeId) empSel.value = timer.employeeId;
-  if(timer.activityId) actSel.value = timer.activityId;
+  const empSel=document.getElementById('timerEmployee');
+  const actSel=document.getElementById('timerActivity');
+  empSel.innerHTML='<option value="">Selecione...</option>'+employees.filter(e=>e.status==='ativo').map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  actSel.innerHTML='<option value="">Selecione...</option>'+activities.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
   renderRecentPoints();
-}
-function updateTimerDisplay(){ document.getElementById('timerDisplay').textContent = fmtDuration(timer.elapsed); }
-function setTimerButtons(){
-  document.getElementById('btnStart').disabled = timer.running;
-  document.getElementById('btnPause').disabled = !timer.running;
-  document.getElementById('btnResume').disabled = !timer.paused;
-  document.getElementById('btnFinish').disabled = !(timer.running||timer.paused||timer.elapsed>0);
-}
-function startTimer(){
-  const empId = document.getElementById('timerEmployee').value;
-  const actId = document.getElementById('timerActivity').value;
-  if(!empId || !actId){ alert('Selecione funcionário e atividade'); return; }
-  if(timer.running) return;
-  if(timer.paused){ resumeTimer(); return; }
-  timer.employeeId = empId;
-  timer.activityId = actId;
-  timer.startTime = Date.now();
-  timer.elapsed = 0;
-  timer.running = true;
-  timer.paused = false;
-  timer.interval = setInterval(()=>{ timer.elapsed = Date.now() - timer.startTime; updateTimerDisplay(); }, 1000);
-  setTimerButtons();
-}
-function pauseTimer(){
-  if(!timer.running) return;
-  clearInterval(timer.interval);
-  timer.elapsed = Date.now() - timer.startTime;
-  timer.running = false;
-  timer.paused = true;
-  updateTimerDisplay();
-  setTimerButtons();
-}
-function resumeTimer(){
-  if(!timer.paused) return;
-  timer.startTime = Date.now() - timer.elapsed;
-  timer.running = true;
-  timer.paused = false;
-  timer.interval = setInterval(()=>{ timer.elapsed = Date.now() - timer.startTime; updateTimerDisplay(); }, 1000);
-  setTimerButtons();
-}
-function finishTimer(){
-  if(!timer.employeeId || !timer.activityId){ alert('Selecione funcionário e atividade'); return; }
-  if(timer.running){ timer.elapsed = Date.now() - timer.startTime; }
-  clearInterval(timer.interval);
-  const observacao = document.getElementById('timerObservation').value.trim();
-  const now = Date.now();
-  const point = {
-    id: uid(),
-    employeeId: timer.employeeId,
-    activityId: timer.activityId,
-    startTime: now - timer.elapsed,
-    endTime: now,
-    duration: timer.elapsed,
-    date: new Date(now).toISOString().slice(0,10),
-    observacao: observacao
-  };
-  state.points.push(point);
-  saveState();
-  // reset
-  timer = { running:false, paused:false, elapsed:0, interval:null, startTime:null, employeeId:null, activityId:null };
-  document.getElementById('timerObservation').value = '';
-  document.getElementById('timerEmployee').value = '';
-  document.getElementById('timerActivity').value = '';
-  updateTimerDisplay();
-  setTimerButtons();
-  renderRecentPoints();
-  alert('Registro salvo com sucesso!');
 }
 function renderRecentPoints(){
-  const body = document.getElementById('recentPointsBody');
-  const recent = state.points.slice().reverse().slice(0,10);
-  if(!recent.length){ body.innerHTML = '<tr><td colspan="6" class="empty">Nenhum registro</td></tr>'; return; }
-  body.innerHTML = recent.map(p=>`
-    <tr>
-      <td>${escapeHtml(employeeName(p.employeeId))}</td>
-      <td>${escapeHtml(activityName(p.activityId))}</td>
-      <td>${fmtDuration(p.duration)}</td>
-      <td>${p.date}</td>
-      <td>${escapeHtml(p.observacao)}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deletePoint('${p.id}')">🗑️</button></td>
-    </tr>`).join('');
+  const body=document.getElementById('recentPoints');
+  const recent=[...points].sort((a,b)=>b.ts-a.ts).slice(0,8);
+  if(!recent.length){body.innerHTML='<tr><td colspan="5" class="empty">Nenhum registro</td></tr>';return;}
+  body.innerHTML=recent.map(p=>`
+    <tr><td>${empName(p.empId)}</td><td>${actName(p.actId)}</td><td>${fmtDuration(p.duration)}</td><td>${fmtDate(p.ts)}</td>
+    <td><button class="btn small danger" onclick="deletePoint(${p.id})">Excluir</button></td></tr>`).join('');
+}
+function updateTimerDisplay(){
+  document.getElementById('timerDisplay').textContent=fmtDuration(timerState.elapsed);
+}
+function setControls(state){
+  document.getElementById('btnStart').style.display=state==='idle'?'inline-flex':'none';
+  document.getElementById('btnPause').style.display=state==='running'?'inline-flex':'none';
+  document.getElementById('btnResume').style.display=state==='paused'?'inline-flex':'none';
+  document.getElementById('btnFinish').style.display=state==='running'||state==='paused'?'inline-flex':'none';
+}
+function startTimer(){
+  const empId=+document.getElementById('timerEmployee').value;
+  const actId=+document.getElementById('timerActivity').value;
+  if(!empId||!actId){alert('Selecione funcionário e atividade');return;}
+  timerState={running:true,paused:false,elapsed:0,startTs:Date.now(),intervalId:null,empId,actId};
+  timerState.intervalId=setInterval(()=>{timerState.elapsed=Math.floor((Date.now()-timerState.startTs)/1000);updateTimerDisplay();},1000);
+  setControls('running');
+}
+function pauseTimer(){
+  if(!timerState.running)return;
+  clearInterval(timerState.intervalId);
+  timerState.running=false;timerState.paused=true;
+  setControls('paused');
+}
+function resumeTimer(){
+  if(!timerState.paused)return;
+  timerState.running=true;timerState.paused=false;
+  timerState.startTs=Date.now()-timerState.elapsed*1000;
+  timerState.intervalId=setInterval(()=>{timerState.elapsed=Math.floor((Date.now()-timerState.startTs)/1000);updateTimerDisplay();},1000);
+  setControls('running');
+}
+function finishTimer(){
+  if(timerState.elapsed<=0){resetTimer();return;}
+  const note=document.getElementById('timerNote').value.trim();
+  points.push({id:nextId(points),empId:timerState.empId,actId:timerState.actId,duration:timerState.elapsed,note,ts:Date.now()});
+  save();renderRecentPoints();resetTimer();
+}
+function resetTimer(){
+  clearInterval(timerState.intervalId);
+  timerState={running:false,paused:false,elapsed:0,startTs:0,intervalId:null,empId:null,actId:null};
+  document.getElementById('timerDisplay').textContent='00:00:00';
+  document.getElementById('timerNote').value='';
+  setControls('idle');
 }
 function deletePoint(id){
-  showConfirm('Excluir este registro?', ()=>{
-    state.points = state.points.filter(p=>p.id!==id);
-    saveState();
-    renderRecentPoints();
-    if(document.getElementById('page-reports').classList.contains('active')) renderReports();
+  showConfirm('Excluir este registro de ponto?',()=>{
+    points=points.filter(p=>p.id!==id);
+    save();renderRecentPoints();if(document.getElementById('page-reports').classList.contains('active'))renderReports();
   });
 }
 
-// ===== REPORTS =====
-function populateReportFilters(){
-  const empSel = document.getElementById('filterEmployee');
-  const actSel = document.getElementById('filterActivity');
-  empSel.innerHTML = '<option value="">Todos</option>' + state.employees.map(e=>`<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
-  actSel.innerHTML = '<option value="">Todas</option>' + state.activities.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
-}
 function renderReports(){
-  populateReportFilters();
-  const empFilter = document.getElementById('filterEmployee').value;
-  const actFilter = document.getElementById('filterActivity').value;
-  const startFilter = document.getElementById('filterStart').value;
-  const endFilter = document.getElementById('filterEnd').value;
-  let points = state.points.slice();
-  if(empFilter) points = points.filter(p=>p.employeeId===empFilter);
-  if(actFilter) points = points.filter(p=>p.activityId===actFilter);
-  if(startFilter) points = points.filter(p=>p.date>=startFilter);
-  if(endFilter) points = points.filter(p=>p.date<=endFilter);
-  points.sort((a,b)=>b.startTime-a.startTime);
-  const body = document.getElementById('reportsBody');
-  if(!points.length){ body.innerHTML = '<tr><td colspan="8" class="empty">Nenhum registro encontrado</td></tr>'; return; }
-  body.innerHTML = points.map(p=>`
-    <tr>
-      <td>${escapeHtml(employeeName(p.employeeId))}</td>
-      <td>${escapeHtml(activityName(p.activityId))}</td>
-      <td>${new Date(p.startTime).toLocaleString('pt-BR')}</td>
-      <td>${new Date(p.endTime).toLocaleString('pt-BR')}</td>
-      <td>${fmtDuration(p.duration)}</td>
-      <td>${p.date}</td>
-      <td>${escapeHtml(p.observacao)}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deletePoint('${p.id}')">🗑️</button></td>
-    </tr>`).join('');
+  const fEmp=document.getElementById('filterEmployee').value;
+  const fAct=document.getElementById('filterActivity').value;
+  const fStart=document.getElementById('filterStart').value;
+  const fEnd=document.getElementById('filterEnd').value;
+  const empSel=document.getElementById('filterEmployee');
+  const actSel=document.getElementById('filterActivity');
+  if(empSel.options.length<=1){employees.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;empSel.appendChild(o);});}
+  if(actSel.options.length<=1){activities.forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=a.name;actSel.appendChild(o);});}
+  let filtered=[...points];
+  if(fEmp)filtered=filtered.filter(p=>p.empId===+fEmp);
+  if(fAct)filtered=filtered.filter(p=>p.actId===+fAct);
+  if(fStart)filtered=filtered.filter(p=>new Date(p.ts)>=new Date(fStart));
+  if(fEnd){const end=new Date(fEnd);end.setHours(23,59,59,999);filtered=filtered.filter(p=>new Date(p.ts)<=end);}
+  filtered.sort((a,b)=>b.ts-a.ts);
+  const body=document.getElementById('reportsBody');
+  if(!filtered.length){body.innerHTML='<tr><td colspan="6" class="empty">Nenhum registro encontrado</td></tr>';return;}
+  body.innerHTML=filtered.map(p=>`
+    <tr><td>${empName(p.empId)}</td><td>${actName(p.actId)}</td><td>${fmtDuration(p.duration)}</td><td>${fmtDate(p.ts)}</td><td>${p.note||'—'}</td>
+    <td><button class="btn small danger" onclick="deletePoint(${p.id})">Excluir</button></td></tr>`).join('');
 }
 function clearFilters(){
-  document.getElementById('filterEmployee').value = '';
-  document.getElementById('filterActivity').value = '';
-  document.getElementById('filterStart').value = '';
-  document.getElementById('filterEnd').value = '';
+  document.getElementById('filterEmployee').value='';
+  document.getElementById('filterActivity').value='';
+  document.getElementById('filterStart').value='';
+  document.getElementById('filterEnd').value='';
   renderReports();
 }
 function exportCSV(){
-  const empFilter = document.getElementById('filterEmployee').value;
-  const actFilter = document.getElementById('filterActivity').value;
-  const startFilter = document.getElementById('filterStart').value;
-  const endFilter = document.getElementById('filterEnd').value;
-  let points = state.points.slice();
-  if(empFilter) points = points.filter(p=>p.employeeId===empFilter);
-  if(actFilter) points = points.filter(p=>p.activityId===actFilter);
-  if(startFilter) points = points.filter(p=>p.date>=startFilter);
-  if(endFilter) points = points.filter(p=>p.date<=endFilter);
-  points.sort((a,b)=>b.startTime-a.startTime);
-  const headers = ['Funcionário','Atividade','Início','Fim','Duração','Data','Observação'];
-  const rows = points.map(p=>[
-    employeeName(p.employeeId),
-    activityName(p.activityId),
-    new Date(p.startTime).toLocaleString('pt-BR'),
-    new Date(p.endTime).toLocaleString('pt-BR'),
-    fmtDuration(p.duration),
-    p.date,
-    (p.observacao||'').replace(/\n/g,' ')
-  ]);
-  const csv = [headers, ...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
-  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'relatorio_cr_consultoria.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+  const fEmp=document.getElementById('filterEmployee').value;
+  const fAct=document.getElementById('filterActivity').value;
+  const fStart=document.getElementById('filterStart').value;
+  const fEnd=document.getElementById('filterEnd').value;
+  let filtered=[...points];
+  if(fEmp)filtered=filtered.filter(p=>p.empId===+fEmp);
+  if(fAct)filtered=filtered.filter(p=>p.actId===+fAct);
+  if(fStart)filtered=filtered.filter(p=>new Date(p.ts)>=new Date(fStart));
+  if(fEnd){const end=new Date(fEnd);end.setHours(23,59,59,999);filtered=filtered.filter(p=>new Date(p.ts)<=end);}
+  filtered.sort((a,b)=>b.ts-a.ts);
+  const rows=[['Funcionário','Atividade','Duração','Data','Observação']];
+  filtered.forEach(p=>{rows.push([empName(p.empId),actName(p.actId),fmtDuration(p.duration),fmtDate(p.ts),(p.note||'').replace(/\n/g,' ')]);});
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='relatorio_produtividade.csv';a.click();
 }
 
-// ===== BACKUP / RESTORE =====
 function backupData(){
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'backup_cr_consultoria_'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  const blob=new Blob([JSON.stringify({employees,activities,points},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup_produtividade.json';a.click();
 }
 function restoreData(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
+  const file=event.target.files[0];
+  if(!file)return;
+  const mode=document.querySelector('input[name="restoreMode"]:checked').value;
+  const reader=new FileReader();
+  reader.onload=e=>{
     try{
-      const data = JSON.parse(e.target.result);
-      if(!data.employees || !data.activities || !data.points) throw new Error('Formato inválido');
-      showConfirm('Substituir todos os dados pelo backup? (Cancelar mescla)', ()=>{
-        state = { employees:data.employees, activities:data.activities, points:data.points };
-        saveState();
-        navigate('dashboard');
-        alert('Dados restaurados!');
-      }, ()=>{
-        // merge
-        const existingIds = new Set([...state.employees.map(x=>x.id), ...state.activities.map(x=>x.id), ...state.points.map(x=>x.id)]);
-        data.employees.forEach(e=>{ if(!existingIds.has(e.id)) state.employees.push(e); });
-        data.activities.forEach(a=>{ if(!existingIds.has(a.id)) state.activities.push(a); });
-        data.points.forEach(p=>{ if(!existingIds.has(p.id)) state.points.push(p); });
-        saveState();
-        navigate('dashboard');
-        alert('Dados mesclados!');
+      const d=JSON.parse(e.target.result);
+      if(!d.employees||!d.activities||!d.points)throw new Error('Formato inválido');
+      showConfirm('Importar dados no modo '+(mode==='replace'?'SUBSTITUIR':'MESCLAR')+'?',()=>{
+        if(mode==='replace'){employees=d.employees;activities=d.activities;points=d.points;}
+        else {
+          d.employees.forEach(ne=>{if(!employees.find(e=>e.id===ne.id))employees.push(ne);});
+          d.activities.forEach(na=>{if(!activities.find(a=>a.id===na.id))activities.push(na);});
+          d.points.forEach(np=>{if(!points.find(p=>p.id===np.id))points.push(np);});
+        }
+        save();renderEmployees();renderActivities();renderRecentPoints();renderReports();alert('Dados importados com sucesso!');
       });
-    }catch(err){
-      alert('Arquivo inválido: '+err.message);
-    }
-    event.target.value = '';
+    }catch(err){alert('Erro ao importar: '+err.message);}
+    event.target.value='';
   };
   reader.readAsText(file);
 }
 
-// ===== MODALS =====
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-function showConfirm(message, onConfirm, onCancel){
-  document.getElementById('confirmMessage').textContent = message;
-  confirmCallback = onConfirm;
-  const btn = document.getElementById('confirmOkBtn');
-  btn.onclick = ()=>{ closeConfirm(); if(confirmCallback) confirmCallback(); };
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+
+function showConfirm(message,onConfirm,onCancel){
+  document.getElementById('confirmMessage').textContent=message;
+  confirmCallback=onConfirm;
+  const btn=document.getElementById('confirmOkBtn');
+  btn.onclick=()=>{
+    const cb=confirmCallback;
+    closeConfirm();
+    if(cb)cb();
+  };
+  const cancelBtn=document.getElementById('confirmCancelBtn');
+  window._confirmCancel=onCancel||null;
+  cancelBtn.onclick=()=>{
+    const cc=window._confirmCancel;
+    closeConfirm();
+    if(cc)cc();
+  };
   document.getElementById('confirmModal').classList.add('show');
-  if(onCancel){
-    // store cancel callback if needed
-    window._confirmCancel = onCancel;
-  }
 }
-function closeConfirm(){ document.getElementById('confirmModal').classList.remove('show'); confirmCallback = null; }
+function closeConfirm(){
+  document.getElementById('confirmModal').classList.remove('show');
+  confirmCallback=null;
+  window._confirmCancel=null;
+}
 
-// ===== INIT =====
-loadState();
+window.navigate=navigate;
+window.openEmployeeModal=openEmployeeModal;
+window.saveEmployee=saveEmployee;
+window.deleteEmployee=deleteEmployee;
+window.openActivityModal=openActivityModal;
+window.saveActivity=saveActivity;
+window.deleteActivity=deleteActivity;
+window.startTimer=startTimer;
+window.pauseTimer=pauseTimer;
+window.resumeTimer=resumeTimer;
+window.finishTimer=finishTimer;
+window.deletePoint=deletePoint;
+window.renderReports=renderReports;
+window.clearFilters=clearFilters;
+window.exportCSV=exportCSV;
+window.backupData=backupData;
+window.restoreData=restoreData;
+window.closeModal=closeModal;
+window.closeConfirm=closeConfirm;
+window.showConfirm=showConfirm;
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeConfirm();});
+
+load();
 navigate('dashboard');
-setTimerButtons();
-
-// ===== SERVICE WORKER (inline via blob) =====
-if('serviceWorker' in navigator){
-  const swCode = `
-    const CACHE='cr-consultoria-v1';
-    self.addEventListener('install', e=>{ self.skipWaiting(); });
-    self.addEventListener('activate', e=>{ e.waitUntil(self.clients.claim()); });
-    self.addEventListener('fetch', e=>{
-      e.respondWith(
-        caches.match(e.request).then(r=> r || fetch(e.request).then(resp=>{
-          if(resp && e.request.method==='GET' && e.request.url.startsWith('http')){
-            const clone = resp.clone();
-            caches.open(CACHE).then(c=>c.put(e.request, clone));
-          }
-          return resp;
-        }).catch(()=>resp))
-      );
-    });
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(()=>{});
-}
-
-// Expose globals
-window.navigate = navigate;
-window.openEmployeeModal = openEmployeeModal;
-window.saveEmployee = saveEmployee;
-window.deleteEmployee = deleteEmployee;
-window.openActivityModal = openActivityModal;
-window.saveActivity = saveActivity;
-window.deleteActivity = deleteActivity;
-window.startTimer = startTimer;
-window.pauseTimer = pauseTimer;
-window.resumeTimer = resumeTimer;
-window.finishTimer = finishTimer;
-window.deletePoint = deletePoint;
-window.renderReports = renderReports;
-window.clearFilters = clearFilters;
-window.exportCSV = exportCSV;
-window.backupData = backupData;
-window.restoreData = restoreData;
-window.closeModal = closeModal;
-window.closeConfirm = closeConfirm;
-window.showConfirm = showConfirm;
+setControls('idle');
 </script>
 </body>
 </html>
