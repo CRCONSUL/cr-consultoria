@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CR Consultoria - Controle de Produtividade</title>
+<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"CR Consultoria","short_name":"CR Prod","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[]}'>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --border:#334155;
+  --primary:#3b82f6;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --green:#22c55e;
+  --orange:#f97316;
+  --red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 0;position:fixed;height:100vh;overflow-y:auto;z-index:100}
+.sidebar .logo{padding:0 20px 20px;font-size:18px;font-weight:bold;color:var(--primary);border-bottom:1px solid var(--border);margin-bottom:10px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:var(--muted);text-decoration:none;cursor:pointer;transition:.2s}
+.sidebar a:hover{background:rgba(59,130,246,.1);color:var(--text)}
+.sidebar a.active{background:rgba(59,130,246,.15);color:var(--primary);border-right:3px solid var(--primary)}
+.main{margin-left:240px;flex:1;padding:24px;width:calc(100% - 240px)}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.topbar h1{font-size:22px}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.page{display:none}
+.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card .label{color:var(--muted);font-size:13px;margin-bottom:8px}
+.card .value{font-size:28px;font-weight:bold}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-box h3{margin-bottom:16px;font-size:16px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
+th{background:rgba(59,130,246,.1);color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:none}
+.btn{background:var(--primary);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s}
+.btn:hover{filter:brightness(1.1)}
+.btn-sm{padding:6px 10px;font-size:13px}
+.btn-danger{background:var(--red)}
+.btn-secondary{background:#475569}
+.btn-success{background:var(--green)}
+.btn-warning{background:var(--orange)}
+.badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block}
+.badge.ativo{background:rgba(34,197,94,.2);color:var(--green)}
+.badge.ferias{background:rgba(249,115,22,.2);color:var(--orange)}
+.badge.inativo{background:rgba(239,68,68,.2);color:var(--red)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal h2{margin-bottom:20px;font-size:18px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px}
+.form-group textarea{resize:vertical;min-height:80px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.timer-display{font-size:64px;font-weight:bold;text-align:center;font-variant-numeric:tabular-nums;margin:20px 0;color:var(--primary)}
+.timer-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.timer-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px;align-items:end}
+.filters .form-group{margin-bottom:0}
+.menu-toggle{display:none;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:.3s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;width:100%}
+  .menu-toggle{display:block}
+  .timer-display{font-size:42px}
+}
+.empty{text-align:center;color:var(--muted);padding:40px}
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="logo">CR Consultoria</div>
+  <a class="nav-link active" data-page="dashboard" onclick="navigate('dashboard')">📊 Dashboard</a>
+  <a class="nav-link" data-page="employees" onclick="navigate('employees')">👥 Funcionários</a>
+  <a class="nav-link" data-page="activities" onclick="navigate('activities')">📋 Atividades</a>
+  <a class="nav-link" data-page="timer" onclick="navigate('timer')">⏱️ Cronômetro</a>
+  <a class="nav-link" data-page="reports" onclick="navigate('reports')">📈 Relatórios</a>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <h1 id="pageTitle">Dashboard</h1>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-secondary" onclick="backupData()">💾 Backup</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('restoreInput').click()">📂 Restaurar</button>
+      <input type="file" id="restoreInput" accept="application/json" style="display:none" onchange="restoreData(event)">
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="cards">
+      <div class="card"><div class="label">Funcionários Ativos</div><div class="value" id="statActiveEmployees">0</div></div>
+      <div class="card"><div class="label">Atividades</div><div class="value" id="statActivities">0</div></div>
+      <div class="card"><div class="label">Total Registros</div><div class="value" id="statPoints">0</div></div>
+      <div class="card"><div class="label">Horas Totais</div><div class="value" id="statHours">0h</div></div>
+    </div>
+    <div class="charts">
+      <div class="chart-box"><h3>Produtividade por Funcionário (min)</h3><canvas id="chartBar"></canvas></div>
+      <div class="chart-box"><h3>Horas por Atividade</h3><canvas id="chartDonut"></canvas></div>
+    </div>
+  </div>
+
+  <!-- FUNCIONÁRIOS -->
+  <div id="page-employees" class="page">
+    <div style="margin-bottom:16px"><button class="btn" onclick="openEmployeeModal()">+ Novo Funcionário</button></div>
+    <table>
+      <thead><tr><th>Nome</th><th>Cargo</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="employeesBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ATIVIDADES -->
+  <div id="page-activities" class="page">
+    <div style="margin-bottom:16px"><button class="btn" onclick="openActivityModal()">+ Nova Atividade</button></div>
+    <table>
+      <thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead>
+      <tbody id="activitiesBody"></tbody>
+    </table>
+  </div>
+
+  <!-- CRONÔMETRO -->
+  <div id="page-timer" class="page">
+    <div class="timer-form">
+      <div class="filters">
+        <div class="form-group"><label>Funcionário</label><select id="timerEmployee"></select></div>
+        <div class="form-group"><label>Atividade</label><select id="timerActivity"></select></div>
+      </div>
+      <div class="timer-display" id="timerDisplay">00:00:00</div>
+      <div class="timer-controls">
+        <button class="btn btn-success" id="btnStart" onclick="startTimer()">▶ Iniciar</button>
+        <button class="btn btn-warning" id="btnPause" onclick="pauseTimer()" disabled>⏸ Pausar</button>
+        <button class="btn btn-success" id="btnResume" onclick="resumeTimer()" disabled>⏵ Retomar</button>
+        <button class="btn btn-danger" id="btnFinish" onclick="finishTimer()" disabled>⏹ Finalizar</button>
+      </div>
+      <div class="form-group"><label>Observação</label><textarea id="timerObservation" placeholder="Digite uma observação sobre o registro..."></textarea></div>
+    </div>
+    <h3 style="margin-bottom:12px">Registros Recentes</h3>
+    <table>
+      <thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead>
+      <tbody id="recentPointsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <div id="page-reports" class="page">
+    <div class="filters">
+      <div class="form-group"><label>Funcionário</label><select id="filterEmployee"><option value="">Todos</option></select></div>
+      <div class="form-group"><label>Atividade</label><select id="filterActivity"><option value="">Todas</option></select></div>
+      <div class="form-group"><label>Data Início</label><input type="date" id="filterStart"></div>
+      <div class="form-group"><label>Data Fim</label><input type="date" id="filterEnd"></div>
+      <div class="form-group" style="display:flex;gap:8px">
+        <button class="btn" onclick="renderReports()">Filtrar</button>
+        <button class="btn btn-secondary" onclick="clearFilters()">Limpar</button>
+        <button class="btn btn-success" onclick="exportCSV()">📄 Exportar CSV</button>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead>
+      <tbody id="reportsBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL FUNCIONÁRIO -->
+<div class="modal-overlay" id="employeeModal">
+  <div class="modal">
+    <h2 id="employeeModalTitle">Novo Funcionário</h2>
+    <input type="hidden" id="employeeId">
+    <div class="form-group"><label>Nome</label><input type="text" id="employeeName"></div>
+    <div class="form-group"><label>Cargo</label><input type="text" id="employeeRole"></div>
+    <div class="form-group"><label>Status</label><select id="employeeStatus"><option value="ativo">Ativo</option><option value="ferias">Férias</option><option value="inativo">Inativo</option></select></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('employeeModal')">Cancelar</button>
+      <button class="btn" onclick="saveEmployee()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ATIVIDADE -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal">
+    <h2 id="activityModalTitle">Nova Atividade</h2>
+    <input type="hidden" id="activityId">
+    <div class="form-group"><label>Nome</label><input type="text" id="activityName"></div>
+    <div class="form-group"><label>Descrição</label><textarea id="activityDesc"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('activityModal')">Cancelar</button>
+      <button class="btn" onclick="saveActivity()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <h2>Confirmar</h2>
+    <p id="confirmMessage" style="margin-bottom:20px;color:var(--muted)"></p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let state = { employees: [], activities: [], points: [] };
+let chartBar = null, chartDonut = null;
+let timer = { running: false, paused: false, elapsed: 0, interval: null, startTime: null, employeeId: null, activityId: null };
+let confirmCallback = null;
+
+// ===== STORAGE =====
+function loadState(){
+  const raw = localStorage.getItem('cr_consultoria_data');
+  if(raw){
+    try{ state = JSON.parse(raw); }catch(e){ seedData(); }
+  } else {
+    seedData();
+  }
+  if(!state.employees) state.employees = [];
+  if(!state.activities) state.activities = [];
+  if(!state.points) state.points = [];
+}
+function saveState(){ localStorage.setItem('cr_consultoria_data', JSON.stringify(state)); }
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+function seedData(){
+  const now = Date.now();
+  const day = 86400000;
+  state = {
+    employees: [
+      { id:'e1', name:'Cecília Rijo', role:'Consultora', status:'ativo' },
+      { id:'e2', name:'Carlos Mendes', role:'Analista', status:'ativo' },
+      { id:'e3', name:'Ana Oliveira', role:'Gestora', status:'ferias' }
+    ],
+    activities: [
+      { id:'a1', name:'Reunião com Cliente', description:'Reuniões de alinhamento com clientes' },
+      { id:'a2', name:'Análise de Dados', description:'Análise de métricas e relatórios' },
+      { id:'a3', name:'Desenvolvimento', description:'Desenvolvimento de soluções e entregáveis' }
+    ],
+    points: [
+      { id:uid(), employeeId:'e1', activityId:'a1', startTime: now-day-3600000*2, endTime: now-day-3600000*1, duration:3600000, date:new Date(now-day).toISOString().slice(0,10), observacao:'Reunião inicial com cliente novo.' },
+      { id:uid(), employeeId:'e1', activityId:'a2', startTime: now-day*2-3600000*3, endTime: now-day*2-3600000*1, duration:3600000*2, date:new Date(now-day*2).toISOString().slice(0,10), observacao:'Análise de indicadores do trimestre.' },
+      { id:uid(), employeeId:'e2', activityId:'a3', startTime: now-day-3600000*4, endTime: now-day-3600000*1, duration:3600000*3, date:new Date(now-day).toISOString().slice(0,10), observacao:'Desenvolvimento de dashboard.' },
+      { id:uid(), employeeId:'e2', activityId:'a1', startTime: now-day*3-3600000*2, endTime: now-day*3-3600000*1, duration:3600000, date:new Date(now-day*3).toISOString().slice(0,10), observacao:'Reunião de follow-up.' },
+      { id:uid(), employeeId:'e1', activityId:'a3', startTime: now-day*2-3600000*5, endTime: now-day*2-3600000*2, duration:3600000*3, date:new Date(now-day*2).toISOString().slice(0,10), observacao:'Entrega de relatório final.' }
+    ]
+  };
+  saveState();
+}
+
+// ===== HELPERS =====
+function fmtDuration(ms){
+  const s = Math.floor(ms/1000);
+  const h = Math.floor(s/3600);
+  const m = Math.floor((s%3600)/60);
+  const sec = s%60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+function fmtMinutes(ms){ return Math.round(ms/60000); }
+function employeeName(id){ const e = state.employees.find(x=>x.id===id); return e?e.name:'-'; }
+function activityName(id){ const a = state.activities.find(x=>x.id===id); return a?a.name:'-'; }
+function statusLabel(s){ return {ativo:'Ativo',ferias:'Férias',inativo:'Inativo'}[s]||s; }
+function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ===== NAVIGATION =====
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(a=>a.classList.remove('active'));
+  document.querySelector('.nav-link[data-page="'+page+'"]').classList.add('active');
+  const titles = {dashboard:'Dashboard',employees:'Funcionários',activities:'Atividades',timer:'Cronômetro',reports:'Relatórios'};
+  document.getElementById('pageTitle').textContent = titles[page];
+  if(page==='dashboard') renderDashboard();
+  if(page==='employees') renderEmployees();
+  if(page==='activities') renderActivities();
+  if(page==='timer') renderTimerPage();
+  if(page==='reports') renderReports();
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// ===== DASHBOARD =====
+function renderDashboard(){
+  const activeEmp = state.employees.filter(e=>e.status==='ativo').length;
+  const totalPoints = state.points.length;
+  const totalMs = state.points.reduce((s,p)=>s+(p.duration||0),0);
+  const totalHours = (totalMs/3600000).toFixed(1);
+  document.getElementById('statActiveEmployees').textContent = activeEmp;
+  document.getElementById('statActivities').textContent = state.activities.length;
+  document.getElementById('statPoints').textContent = totalPoints;
+  document.getElementById('statHours').textContent = totalHours+'h';
+
+  // Bar: produtividade por funcionário (minutos)
+  const empLabels = state.employees.map(e=>e.name);
+  const empData = state.employees.map(e=>{
+    return fmtMinutes(state.points.filter(p=>p.employeeId===e.id).reduce((s,p)=>s+(p.duration||0),0));
+  });
+  if(chartBar) chartBar.destroy();
+  chartBar = new Chart(document.getElementById('chartBar'),{
+    type:'bar',
+    data:{ labels:empLabels, datasets:[{ label:'Minutos', data:empData, backgroundColor:'#3b82f6', borderRadius:6 }] },
+    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}},y:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}}} }
+  });
+
+  // Donut: horas por atividade
+  const actLabels = state.activities.map(a=>a.name);
+  const actData = state.activities.map(a=>{
+    return ((state.points.filter(p=>p.activityId===a.id).reduce((s,p)=>s+(p.duration||0),0))/3600000).toFixed(2);
+  });
+  if(chartDonut) chartDonut.destroy();
+  chartDonut = new Chart(document.getElementById('chartDonut'),{
+    type:'doughnut',
+    data:{ labels:actLabels, datasets:[{ data:actData, backgroundColor:['#3b82f6','#22c55e','#f97316','#ef4444','#a855f7','#14b8a6'] }] },
+    options:{ responsive:true, plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}} }
+  });
+}
+
+// ===== EMPLOYEES =====
+function renderEmployees(){
+  const body = document.getElementById('employeesBody');
+  if(!state.employees.length){ body.innerHTML = '<tr><td colspan="4" class="empty">Nenhum funcionário cadastrado</td></tr>'; return; }
+  body.innerHTML = state.employees.map(e=>`
+    <tr>
+      <td>${escapeHtml(e.name)}</td>
+      <td>${escapeHtml(e.role)}</td>
+      <td><span class="badge ${e.status}">${statusLabel(e.status)}</span></td>
+      <td>
+        <button class="btn btn-sm" onclick="openEmployeeModal('${e.id}')">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteEmployee('${e.id}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function openEmployeeModal(id){
+  const modal = document.getElementById('employeeModal');
+  if(id){
+    const e = state.employees.find(x=>x.id===id);
+    if(!e) return;
+    document.getElementById('employeeModalTitle').textContent = 'Editar Funcionário';
+    document.getElementById('employeeId').value = e.id;
+    document.getElementById('employeeName').value = e.name;
+    document.getElementById('employeeRole').value = e.role;
+    document.getElementById('employeeStatus').value = e.status;
+  } else {
+    document.getElementById('employeeModalTitle').textContent = 'Novo Funcionário';
+    document.getElementById('employeeId').value = '';
+    document.getElementById('employeeName').value = '';
+    document.getElementById('employeeRole').value = '';
+    document.getElementById('employeeStatus').value = 'ativo';
+  }
+  modal.classList.add('show');
+}
+function saveEmployee(){
+  const id = document.getElementById('employeeId').value;
+  const name = document.getElementById('employeeName').value.trim();
+  const role = document.getElementById('employeeRole').value.trim();
+  const status = document.getElementById('employeeStatus').value;
+  if(!name){ alert('Informe o nome'); return; }
+  if(id){
+    const e = state.employees.find(x=>x.id===id);
+    if(e){ e.name=name; e.role=role; e.status=status; }
+  } else {
+    state.employees.push({ id:uid(), name, role, status });
+  }
+  saveState();
+  closeModal('employeeModal');
+  renderEmployees();
+}
+function deleteEmployee(id){
+  showConfirm('Excluir este funcionário?', ()=>{
+    state.employees = state.employees.filter(e=>e.id!==id);
+    saveState();
+    renderEmployees();
+  });
+}
+
+// ===== ACTIVITIES =====
+function renderActivities(){
+  const body = document.getElementById('activitiesBody');
+  if(!state.activities.length){ body.innerHTML = '<tr><td colspan="3" class="empty">Nenhuma atividade cadastrada</td></tr>'; return; }
+  body.innerHTML = state.activities.map(a=>`
+    <tr>
+      <td>${escapeHtml(a.name)}</td>
+      <td>${escapeHtml(a.description)}</td>
+      <td>
+        <button class="btn btn-sm" onclick="openActivityModal('${a.id}')">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteActivity('${a.id}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function openActivityModal(id){
+  const modal = document.getElementById('activityModal');
+  if(id){
+    const a = state.activities.find(x=>x.id===id);
+    if(!a) return;
+    document.getElementById('activityModalTitle').textContent = 'Editar Atividade';
+    document.getElementById('activityId').value = a.id;
+    document.getElementById('activityName').value = a.name;
+    document.getElementById('activityDesc').value = a.description||'';
+  } else {
+    document.getElementById('activityModalTitle').textContent = 'Nova Atividade';
+    document.getElementById('activityId').value = '';
+    document.getElementById('activityName').value = '';
+    document.getElementById('activityDesc').value = '';
+  }
+  modal.classList.add('show');
+}
+function saveActivity(){
+  const id = document.getElementById('activityId').value;
+  const name = document.getElementById('activityName').value.trim();
+  const description = document.getElementById('activityDesc').value.trim();
+  if(!name){ alert('Informe o nome'); return; }
+  if(id){
+    const a = state.activities.find(x=>x.id===id);
+    if(a){ a.name=name; a.description=description; }
+  } else {
+    state.activities.push({ id:uid(), name, description });
+  }
+  saveState();
+  closeModal('activityModal');
+  renderActivities();
+}
+function deleteActivity(id){
+  showConfirm('Excluir esta atividade?', ()=>{
+    state.activities = state.activities.filter(a=>a.id!==id);
+    saveState();
+    renderActivities();
+  });
+}
+
+// ===== TIMER =====
+function renderTimerPage(){
+  const empSel = document.getElementById('timerEmployee');
+  const actSel = document.getElementById('timerActivity');
+  empSel.innerHTML = '<option value="">Selecione...</option>' + state.employees.filter(e=>e.status==='ativo').map(e=>`<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
+  actSel.innerHTML = '<option value="">Selecione...</option>' + state.activities.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
+  if(timer.employeeId) empSel.value = timer.employeeId;
+  if(timer.activityId) actSel.value = timer.activityId;
+  renderRecentPoints();
+}
+function updateTimerDisplay(){ document.getElementById('timerDisplay').textContent = fmtDuration(timer.elapsed); }
+function setTimerButtons(){
+  document.getElementById('btnStart').disabled = timer.running;
+  document.getElementById('btnPause').disabled = !timer.running;
+  document.getElementById('btnResume').disabled = !timer.paused;
+  document.getElementById('btnFinish').disabled = !(timer.running||timer.paused||timer.elapsed>0);
+}
+function startTimer(){
+  const empId = document.getElementById('timerEmployee').value;
+  const actId = document.getElementById('timerActivity').value;
+  if(!empId || !actId){ alert('Selecione funcionário e atividade'); return; }
+  if(timer.running) return;
+  if(timer.paused){ resumeTimer(); return; }
+  timer.employeeId = empId;
+  timer.activityId = actId;
+  timer.startTime = Date.now();
+  timer.elapsed = 0;
+  timer.running = true;
+  timer.paused = false;
+  timer.interval = setInterval(()=>{ timer.elapsed = Date.now() - timer.startTime; updateTimerDisplay(); }, 1000);
+  setTimerButtons();
+}
+function pauseTimer(){
+  if(!timer.running) return;
+  clearInterval(timer.interval);
+  timer.elapsed = Date.now() - timer.startTime;
+  timer.running = false;
+  timer.paused = true;
+  updateTimerDisplay();
+  setTimerButtons();
+}
+function resumeTimer(){
+  if(!timer.paused) return;
+  timer.startTime = Date.now() - timer.elapsed;
+  timer.running = true;
+  timer.paused = false;
+  timer.interval = setInterval(()=>{ timer.elapsed = Date.now() - timer.startTime; updateTimerDisplay(); }, 1000);
+  setTimerButtons();
+}
+function finishTimer(){
+  if(!timer.employeeId || !timer.activityId){ alert('Selecione funcionário e atividade'); return; }
+  if(timer.running){ timer.elapsed = Date.now() - timer.startTime; }
+  clearInterval(timer.interval);
+  const observacao = document.getElementById('timerObservation').value.trim();
+  const now = Date.now();
+  const point = {
+    id: uid(),
+    employeeId: timer.employeeId,
+    activityId: timer.activityId,
+    startTime: now - timer.elapsed,
+    endTime: now,
+    duration: timer.elapsed,
+    date: new Date(now).toISOString().slice(0,10),
+    observacao: observacao
+  };
+  state.points.push(point);
+  saveState();
+  // reset
+  timer = { running:false, paused:false, elapsed:0, interval:null, startTime:null, employeeId:null, activityId:null };
+  document.getElementById('timerObservation').value = '';
+  document.getElementById('timerEmployee').value = '';
+  document.getElementById('timerActivity').value = '';
+  updateTimerDisplay();
+  setTimerButtons();
+  renderRecentPoints();
+  alert('Registro salvo com sucesso!');
+}
+function renderRecentPoints(){
+  const body = document.getElementById('recentPointsBody');
+  const recent = state.points.slice().reverse().slice(0,10);
+  if(!recent.length){ body.innerHTML = '<tr><td colspan="6" class="empty">Nenhum registro</td></tr>'; return; }
+  body.innerHTML = recent.map(p=>`
+    <tr>
+      <td>${escapeHtml(employeeName(p.employeeId))}</td>
+      <td>${escapeHtml(activityName(p.activityId))}</td>
+      <td>${fmtDuration(p.duration)}</td>
+      <td>${p.date}</td>
+      <td>${escapeHtml(p.observacao)}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deletePoint('${p.id}')">🗑️</button></td>
+    </tr>`).join('');
+}
+function deletePoint(id){
+  showConfirm('Excluir este registro?', ()=>{
+    state.points = state.points.filter(p=>p.id!==id);
+    saveState();
+    renderRecentPoints();
+    if(document.getElementById('page-reports').classList.contains('active')) renderReports();
+  });
+}
+
+// ===== REPORTS =====
+function populateReportFilters(){
+  const empSel = document.getElementById('filterEmployee');
+  const actSel = document.getElementById('filterActivity');
+  empSel.innerHTML = '<option value="">Todos</option>' + state.employees.map(e=>`<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
+  actSel.innerHTML = '<option value="">Todas</option>' + state.activities.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');
+}
+function renderReports(){
+  populateReportFilters();
+  const empFilter = document.getElementById('filterEmployee').value;
+  const actFilter = document.getElementById('filterActivity').value;
+  const startFilter = document.getElementById('filterStart').value;
+  const endFilter = document.getElementById('filterEnd').value;
+  let points = state.points.slice();
+  if(empFilter) points = points.filter(p=>p.employeeId===empFilter);
+  if(actFilter) points = points.filter(p=>p.activityId===actFilter);
+  if(startFilter) points = points.filter(p=>p.date>=startFilter);
+  if(endFilter) points = points.filter(p=>p.date<=endFilter);
+  points.sort((a,b)=>b.startTime-a.startTime);
+  const body = document.getElementById('reportsBody');
+  if(!points.length){ body.innerHTML = '<tr><td colspan="8" class="empty">Nenhum registro encontrado</td></tr>'; return; }
+  body.innerHTML = points.map(p=>`
+    <tr>
+      <td>${escapeHtml(employeeName(p.employeeId))}</td>
+      <td>${escapeHtml(activityName(p.activityId))}</td>
+      <td>${new Date(p.startTime).toLocaleString('pt-BR')}</td>
+      <td>${new Date(p.endTime).toLocaleString('pt-BR')}</td>
+      <td>${fmtDuration(p.duration)}</td>
+      <td>${p.date}</td>
+      <td>${escapeHtml(p.observacao)}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deletePoint('${p.id}')">🗑️</button></td>
+    </tr>`).join('');
+}
+function clearFilters(){
+  document.getElementById('filterEmployee').value = '';
+  document.getElementById('filterActivity').value = '';
+  document.getElementById('filterStart').value = '';
+  document.getElementById('filterEnd').value = '';
+  renderReports();
+}
+function exportCSV(){
+  const empFilter = document.getElementById('filterEmployee').value;
+  const actFilter = document.getElementById('filterActivity').value;
+  const startFilter = document.getElementById('filterStart').value;
+  const endFilter = document.getElementById('filterEnd').value;
+  let points = state.points.slice();
+  if(empFilter) points = points.filter(p=>p.employeeId===empFilter);
+  if(actFilter) points = points.filter(p=>p.activityId===actFilter);
+  if(startFilter) points = points.filter(p=>p.date>=startFilter);
+  if(endFilter) points = points.filter(p=>p.date<=endFilter);
+  points.sort((a,b)=>b.startTime-a.startTime);
+  const headers = ['Funcionário','Atividade','Início','Fim','Duração','Data','Observação'];
+  const rows = points.map(p=>[
+    employeeName(p.employeeId),
+    activityName(p.activityId),
+    new Date(p.startTime).toLocaleString('pt-BR'),
+    new Date(p.endTime).toLocaleString('pt-BR'),
+    fmtDuration(p.duration),
+    p.date,
+    (p.observacao||'').replace(/\n/g,' ')
+  ]);
+  const csv = [headers, ...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'relatorio_cr_consultoria.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ===== BACKUP / RESTORE =====
+function backupData(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'backup_cr_consultoria_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function restoreData(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!data.employees || !data.activities || !data.points) throw new Error('Formato inválido');
+      showConfirm('Substituir todos os dados pelo backup? (Cancelar mescla)', ()=>{
+        state = { employees:data.employees, activities:data.activities, points:data.points };
+        saveState();
+        navigate('dashboard');
+        alert('Dados restaurados!');
+      }, ()=>{
+        // merge
+        const existingIds = new Set([...state.employees.map(x=>x.id), ...state.activities.map(x=>x.id), ...state.points.map(x=>x.id)]);
+        data.employees.forEach(e=>{ if(!existingIds.has(e.id)) state.employees.push(e); });
+        data.activities.forEach(a=>{ if(!existingIds.has(a.id)) state.activities.push(a); });
+        data.points.forEach(p=>{ if(!existingIds.has(p.id)) state.points.push(p); });
+        saveState();
+        navigate('dashboard');
+        alert('Dados mesclados!');
+      });
+    }catch(err){
+      alert('Arquivo inválido: '+err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ===== MODALS =====
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function showConfirm(message, onConfirm, onCancel){
+  document.getElementById('confirmMessage').textContent = message;
+  confirmCallback = onConfirm;
+  const btn = document.getElementById('confirmOkBtn');
+  btn.onclick = ()=>{ closeConfirm(); if(confirmCallback) confirmCallback(); };
+  document.getElementById('confirmModal').classList.add('show');
+  if(onCancel){
+    // store cancel callback if needed
+    window._confirmCancel = onCancel;
+  }
+}
+function closeConfirm(){ document.getElementById('confirmModal').classList.remove('show'); confirmCallback = null; }
+
+// ===== INIT =====
+loadState();
+navigate('dashboard');
+setTimerButtons();
+
+// ===== SERVICE WORKER (inline via blob) =====
+if('serviceWorker' in navigator){
+  const swCode = `
+    const CACHE='cr-consultoria-v1';
+    self.addEventListener('install', e=>{ self.skipWaiting(); });
+    self.addEventListener('activate', e=>{ e.waitUntil(self.clients.claim()); });
+    self.addEventListener('fetch', e=>{
+      e.respondWith(
+        caches.match(e.request).then(r=> r || fetch(e.request).then(resp=>{
+          if(resp && e.request.method==='GET' && e.request.url.startsWith('http')){
+            const clone = resp.clone();
+            caches.open(CACHE).then(c=>c.put(e.request, clone));
+          }
+          return resp;
+        }).catch(()=>resp))
+      );
+    });
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+
+// Expose globals
+window.navigate = navigate;
+window.openEmployeeModal = openEmployeeModal;
+window.saveEmployee = saveEmployee;
+window.deleteEmployee = deleteEmployee;
+window.openActivityModal = openActivityModal;
+window.saveActivity = saveActivity;
+window.deleteActivity = deleteActivity;
+window.startTimer = startTimer;
+window.pauseTimer = pauseTimer;
+window.resumeTimer = resumeTimer;
+window.finishTimer = finishTimer;
+window.deletePoint = deletePoint;
+window.renderReports = renderReports;
+window.clearFilters = clearFilters;
+window.exportCSV = exportCSV;
+window.backupData = backupData;
+window.restoreData = restoreData;
+window.closeModal = closeModal;
+window.closeConfirm = closeConfirm;
+window.showConfirm = showConfirm;
+</script>
+</body>
+</html>
