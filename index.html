@@ -14,10 +14,10 @@ body {
 }
 .hidden { display: none !important; }
 
-/* ===== TELA DE LOGIN ===== */
+/* LOGIN */
 #loginScreen {
   display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; background: var(--bg, #0f0f13);
+  min-height: 100vh; background: #0f0f13;
 }
 .login-card {
   background: #1a1a24; border-radius: 16px; padding: 40px;
@@ -39,10 +39,8 @@ body {
 }
 .login-card button:hover { background: #5558e6; }
 
-/* ===== APLICATIVO PRINCIPAL ===== */
+/* APP */
 #app { display: flex; flex-direction: column; }
-
-/* CABEÇALHO */
 header {
   background: #1a1a24; padding: 12px 24px;
   display: flex; align-items: center; justify-content: space-between;
@@ -56,140 +54,91 @@ header .user-info button {
   background: transparent; color: #ccc; cursor: pointer; font-size: 13px;
 }
 header .user-info button:hover { background: #2a2a35; }
-
-/* CONTEÚDO */
 .content { display: flex; gap: 24px; padding: 24px; flex-wrap: wrap; }
-
-/* PAINEL ESQUERDO (REGISTRO) */
 .main-panel { flex: 1; min-width: 300px; }
 .main-panel h3 { margin-bottom: 16px; color: #fff; font-size: 20px; }
 
-/* REGISTRO */
 .registro-card {
-  background: #1a1a24; border-radius: 12px; padding: 24px;
-  margin-bottom: 24px;
+  background: #1a1a24; border-radius: 12px; padding: 24px; margin-bottom: 24px;
 }
-.registro-card .row {
-  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
-}
-.registro-card .row label { width: 100%; font-size: 13px; color: #888; margin-bottom: 2px; }
-.registro-card select, .registro-card input, .registro-card textarea {
-  flex: 1; min-width: 140px; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #333; background: #252533; color: #e0e0e0;
-  font-size: 14px;
-}
-.registro-card select:focus, .registro-card input:focus, .registro-card textarea:focus {
-  outline: none; border-color: #6366f1;
-}
-.registro-card textarea {
-  width: 100%; min-height: 60px; resize: vertical; font-family: inherit;
-}
-.atividade-wrapper {
-  display: flex; gap: 8px; flex: 1; min-width: 140px;
-}
-.atividade-wrapper select { flex: 1; }
+.registro-card .row { margin-bottom: 12px; }
+.registro-card .row label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
+.atividade-wrapper { display: flex; gap: 8px; }
+.atividade-wrapper select { flex: 1; padding: 10px 12px; border-radius: 6px;
+  border: 1px solid #333; background: #252533; color: #e0e0e0; font-size: 14px; }
+.atividade-wrapper select:focus { outline: none; border-color: #6366f1; }
 .btn-nova-atv {
   padding: 10px 12px; border-radius: 6px; border: 1px solid #6366f1;
-  background: transparent; color: #6366f1; cursor: pointer;
-  font-size: 18px; line-height: 1; white-space: nowrap;
-  transition: background .2s;
+  background: transparent; color: #6366f1; cursor: pointer; font-size: 18px; line-height: 1;
 }
 .btn-nova-atv:hover { background: rgba(99,102,241,.1); }
-
-.registro-card .actions {
-  display: flex; gap: 12px; margin-top: 16px;
+.registro-card textarea {
+  width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #333;
+  background: #252533; color: #e0e0e0; font-size: 14px; min-height: 60px; resize: vertical;
+  font-family: inherit;
 }
-.registro-card .actions button {
-  padding: 10px 24px; border-radius: 6px; border: none;
-  font-size: 14px; font-weight: 600; cursor: pointer;
-  transition: opacity .2s;
-}
+.actions { display: flex; gap: 12px; margin-top: 16px; }
+.actions button { padding: 10px 24px; border-radius: 6px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
 .btn-iniciar { background: #22c55e; color: #fff; }
-.btn-iniciar:hover { opacity: .9; }
-.btn-iniciar:disabled { background: #444; cursor: not-allowed; opacity: .6; }
+.btn-iniciar:disabled { background: #444; cursor: not-allowed; }
 .btn-parar { background: #ef4444; color: #fff; }
-.btn-parar:hover { opacity: .9; }
-.btn-parar:disabled { background: #444; cursor: not-allowed; opacity: .6; }
 .btn-salvar { background: #6366f1; color: #fff; }
-.btn-salvar:hover { opacity: .9; }
 .cronometro {
   font-size: 32px; font-weight: 700; color: #fff;
   font-family: 'Courier New', monospace; text-align: center;
-  padding: 12px 0; letter-spacing: 2px;
+  padding: 16px 0; letter-spacing: 2px;
 }
 
-/* PAINEL DIREITO (ADMIN) */
-.admin-panel { width: 320px; min-width: 280px; }
-.admin-panel h3 { margin-bottom: 16px; color: #fff; font-size: 18px; }
-.abrir-admin {
+.admin-btn {
   width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #6366f1;
-  background: transparent; color: #6366f1; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: background .2s;
+  background: transparent; color: #6366f1; font-size: 14px; font-weight: 600; cursor: pointer;
+  margin-top: 16px;
 }
-.abrir-admin:hover { background: rgba(99,102,241,.1); }
+.admin-btn:hover { background: rgba(99,102,241,.1); }
 
 /* MODAIS */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,.7);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000;
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
 .modal {
   background: #1a1a24; border-radius: 12px; padding: 24px;
-  width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
 }
-.modal h3 { color: #fff; font-size: 20px; margin-bottom: 16px; }
+.modal h3 { color: #fff; font-size: 18px; margin-bottom: 16px; }
 .modal label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
-.modal input, .modal select, .modal textarea {
+.modal input, .modal textarea {
   width: 100%; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #333; background: #252533; color: #e0e0e0;
-  font-size: 14px; margin-bottom: 12px;
+  border: 1px solid #333; background: #252533; color: #e0e0e0; font-size: 14px; margin-bottom: 12px;
 }
 .modal textarea { min-height: 60px; resize: vertical; }
 .modal input:focus, .modal textarea:focus { outline: none; border-color: #6366f1; }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
-.modal-actions button {
-  padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600;
-  cursor: pointer; border: none; transition: opacity .2s;
-}
+.modal-actions button { padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
 .btn-cancel { background: #333; color: #aaa; }
-.btn-cancel:hover { opacity: .8; }
 .btn-confirm { background: #6366f1; color: #fff; }
-.btn-confirm:hover { opacity: .9; }
 .btn-danger { background: #ef4444; color: #fff; }
-.btn-danger:hover { opacity: .9; }
 
 /* TABELA */
 .tabela-wrap { overflow-x: auto; margin-top: 16px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { background: #252533; color: #888; padding: 10px 12px; text-align: left; font-weight: 600; }
 td { padding: 10px 12px; border-bottom: 1px solid #2a2a35; color: #ccc; }
-tr:hover td { background: rgba(99,102,241,.05); }
-th.acoes { width: 80px; text-align: center; }
-td.acoes { text-align: center; }
-td.acoes button {
-  padding: 4px 10px; border-radius: 4px; border: none;
-  font-size: 12px; cursor: pointer; margin: 0 2px;
-}
-.btn-editar-atv { background: #6366f1; color: #fff; }
-.btn-excluir-atv { background: #ef4444; color: #fff; }
-
-/* HISTÓRICO */
-.historico { margin-top: 24px; }
-.historico h4 { color: #fff; margin-bottom: 8px; }
-
-/* STATUS BADGE */
+th.acoes, td.acoes { width: 80px; text-align: center; }
+td.acoes button { padding: 4px 8px; border-radius: 4px; border: none; font-size: 12px; cursor: pointer; margin: 0 2px; }
+.btn-editar { background: #6366f1; color: #fff; }
+.btn-excluir { background: #ef4444; color: #fff; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
 .badge-concluido { background: rgba(34,197,94,.15); color: #22c55e; }
-.badge-andamento { background: rgba(99,102,241,.15); color: #6366f1; }
-.badge-pausado { background: rgba(234,179,8,.15); color: #eab308; }
+
+.historico { margin-top: 24px; }
+.historico h4 { color: #fff; margin-bottom: 12px; }
 
 .notificacao {
   position: fixed; bottom: 24px; right: 24px; background: #22c55e;
   color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px;
-  font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.3);
-  z-index: 2000; animation: slideIn .3s ease;
+  font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.3); z-index: 2000;
+  animation: slideIn .3s ease;
 }
 .notificacao.erro { background: #ef4444; }
 @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -199,6 +148,7 @@ td.acoes button {
 
 <div id="loginScreen">
   <div class="login-card">
+    <h1>👋</h1>
     <h1>CR Consultoria</h1>
     <p class="sub">Selecione seu nome para acessar</p>
     <select id="loginFuncionario">
@@ -213,7 +163,7 @@ td.acoes button {
     <h2>📋 CR Consultoria</h2>
     <div class="user-info">
       <span id="headerUser"></span>
-      <button onclick="abrirAdmin()">⚙️ Admin</button>
+      <button onclick="document.getElementById('adminSection').scrollIntoView({behavior:'smooth'})">⚙️ Admin</button>
       <button onclick="fazerLogout()">Sair</button>
     </div>
   </header>
@@ -224,21 +174,15 @@ td.acoes button {
       <div class="registro-card">
         <div class="cronometro" id="cronometroDisplay">00:00:00</div>
         <div class="row">
-          <div style="flex:1;min-width:120px">
-            <label>Atividade</label>
-            <div class="atividade-wrapper">
-              <select id="atividadeSelect">
-                <option value="">Selecione...</option>
-              </select>
-              <button class="btn-nova-atv" onclick="abrirModalNovaAtividade()" title="Nova Atividade">＋</button>
-            </div>
+          <label>Atividade</label>
+          <div class="atividade-wrapper">
+            <select id="atividadeSelect"><option value="">Selecione...</option></select>
+            <button class="btn-nova-atv" onclick="abrirModalNovaAtividade()" title="Nova Atividade">➕</button>
           </div>
         </div>
         <div class="row">
-          <div style="flex:1">
-            <label>Observação</label>
-            <textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea>
-          </div>
+          <label>Observação</label>
+          <textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea>
         </div>
         <div class="actions">
           <button class="btn-iniciar" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
@@ -251,33 +195,23 @@ td.acoes button {
         <h4>📄 Últimos Registros</h4>
         <div class="tabela-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Atividade</th>
-                <th>Início</th>
-                <th>Fim</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th class="acoes">Ações</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead>
             <tbody id="historicoBody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <div class="admin-panel" id="adminPanel">
-      <h3>⚙️ Gestão de Atividades</h3>
-      <button class="abrir-admin" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button>
-      <div class="tabela-wrap" style="margin-top:12px">
-        <table>
-          <thead>
-            <tr><th>Atividade</th><th class="acoes">Ações</th></tr>
-          </thead>
-          <tbody id="adminAtividadesBody"></tbody>
-        </table>
+    <div style="width:100%">
+      <div id="adminSection" class="registro-card">
+        <h4 style="color:#fff;margin-bottom:12px">⚙️ Gestão de Atividades</h4>
+        <button class="admin-btn" onclick="abrirModalNovaAtividade()">➕ Nova Atividade</button>
+        <div class="tabela-wrap" style="margin-top:12px">
+          <table>
+            <thead><tr><th>Atividade</th><th class="acoes">Ações</th></tr></thead>
+            <tbody id="adminAtividadesBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -287,10 +221,10 @@ td.acoes button {
 <div id="modalNovaAtividade" class="modal-overlay hidden">
   <div class="modal">
     <h3>Nova Atividade</h3>
-    <label>Nome da Atividade</label>
+    <label>Nome</label>
     <input type="text" id="novaAtvNome" placeholder="Ex: Reunião com Cliente">
     <label>Descrição (opcional)</label>
-    <textarea id="novaAtvDesc" placeholder="Descrição da atividade..."></textarea>
+    <textarea id="novaAtvDesc" placeholder="Descrição..."></textarea>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModal('modalNovaAtividade')">Cancelar</button>
       <button class="btn-confirm" onclick="salvarNovaAtividade()">Salvar</button>
@@ -303,10 +237,10 @@ td.acoes button {
   <div class="modal">
     <h3>Editar Atividade</h3>
     <input type="hidden" id="editAtvId">
-    <label>Nome da Atividade</label>
-    <input type="text" id="editAtvNome" placeholder="Nome da atividade">
+    <label>Nome</label>
+    <input type="text" id="editAtvNome">
     <label>Descrição (opcional)</label>
-    <textarea id="editAtvDesc" placeholder="Descrição..."></textarea>
+    <textarea id="editAtvDesc"></textarea>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModal('modalEditarAtividade')">Cancelar</button>
       <button class="btn-danger" onclick="excluirAtividade()">Excluir</button>
@@ -317,51 +251,53 @@ td.acoes button {
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
-let funcionarios = [];
+
+// ===== FUNCIONÁRIAS FIXAS (sempre aparecem no login) =====
+const FUNCIONARIAS = ['Cecília Rijo', 'Thamires Mendonça', 'Sophia Ataíde'];
+
 let atividades = [];
 let usuarioAtual = null;
 let cronometroAtivo = null;
 let inicioCronometro = null;
 let registroTemporario = null;
 
-// ===== CARGA INICIAL =====
-async function carregarDados() {
-  try {
-    const [dadosResp, atividadesResp] = await Promise.all([
-      fetch(SCRIPT_URL).then(r => r.json()),
-      fetch(SCRIPT_URL + '?path=atividades').then(r => r.json())
-    ]);
-    if (dadosResp.success) funcionarios = [...new Map(dadosResp.data.filter(r => r.FUNCIONÁRIO).map(r => [r.FUNCIONÁRIO, { nome: r.FUNCIONÁRIO }])).values()];
-    if (atividadesResp.success) atividades = atividadesResp.data || [];
+// ===== CARGA =====
+async function carregarTudo() {
+  // Preenche login com as 3 funcionárias
+  const selLogin = document.getElementById('loginFuncionario');
+  FUNCIONARIAS.forEach(n => {
+    const o = document.createElement('option');
+    o.value = n; o.textContent = n; selLogin.appendChild(o);
+  });
 
-    // Preencher selects
-    const selLogin = document.getElementById('loginFuncionario');
-    const nomes = [...new Set(dadosResp.data?.filter(r => r.FUNCIONÁRIO).map(r => r.FUNCIONÁRIO) || [])];
-    nomes.sort().forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; selLogin.appendChild(o); });
-
-    preencherAtividades();
-    if (usuarioAtual) carregarHistorico();
-  } catch (e) { console.error('Erro ao carregar:', e); }
-}
-
-async function carregarAtividades() {
+  // Carrega atividades da planilha
   try {
     const resp = await fetch(SCRIPT_URL + '?path=atividades');
     const dados = await resp.json();
-    if (dados.success) { atividades = dados.data; preencherAtividades(); renderAdminAtividades(); }
+    if (dados.success) { atividades = dados.data || []; }
   } catch (e) { console.error(e); }
+
+  preencherAtividades();
 }
 
 function preencherAtividades() {
   const sel = document.getElementById('atividadeSelect');
   sel.innerHTML = '<option value="">Selecione...</option>';
-  atividades.sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
+  (atividades || []).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
     const o = document.createElement('option');
     o.value = a.id || a.nome;
     o.textContent = a.nome;
     sel.appendChild(o);
   });
   renderAdminAtividades();
+}
+
+async function carregarAtividades() {
+  try {
+    const resp = await fetch(SCRIPT_URL + '?path=atividades');
+    const dados = await resp.json();
+    if (dados.success) { atividades = dados.data || []; preencherAtividades(); }
+  } catch (e) { console.error(e); }
 }
 
 // ===== LOGIN =====
@@ -403,7 +339,6 @@ function pararCronometro() {
   registroTemporario.total = registroTemporario.fim - registroTemporario.inicio;
   document.getElementById('btnParar').classList.add('hidden');
   document.getElementById('btnSalvar').classList.remove('hidden');
-  mostrarNotificacao('Cronômetro parado. Revise e salve.');
 }
 
 async function salvarRegistro() {
@@ -411,23 +346,22 @@ async function salvarRegistro() {
   const data = new Date().toISOString().split('T')[0];
   const inicio = new Date(registroTemporario.inicio);
   const fim = new Date(registroTemporario.fim);
-  const totalSegundos = Math.floor(registroTemporario.total / 1000);
-  const totalHoras = Math.floor(totalSegundos / 3600);
-  const totalMin = Math.floor((totalSegundos % 3600) / 60);
-  const totalSeg = totalSegundos % 60;
-  const nomeAtv = registroTemporario.atividade;
-  const obsFinal = document.getElementById('observacaoInput').value || registroTemporario.obs || '';
+  const totalSeg = Math.floor(registroTemporario.total / 1000);
+  const h = Math.floor(totalSeg / 3600);
+  const m = Math.floor((totalSeg % 3600) / 60);
+  const s = totalSeg % 60;
+  const obs = document.getElementById('observacaoInput').value || '';
 
   const payload = {
     action: 'add',
     ID: 'REG_' + Date.now(),
     DATA: data,
     FUNCIONÁRIO: usuarioAtual,
-    ATIVIDADE: nomeAtv,
+    ATIVIDADE: registroTemporario.atividade,
     'HORA INICIO': inicio.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
     'HORA FIM': fim.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
-    TOTAL: `${String(totalHoras).padStart(2,'0')}:${String(totalMin).padStart(2,'0')}:${String(totalSeg).padStart(2,'0')}`,
-    OBSERVAÇÃO: obsFinal,
+    TOTAL: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
+    OBSERVAÇÃO: obs,
     STATUS: 'concluido',
     'CRIADO EM': new Date().toISOString(),
     'ATUALIZADO EM': new Date().toISOString()
@@ -437,7 +371,7 @@ async function salvarRegistro() {
     const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
     const dados = await resp.json();
     if (dados.success) {
-      mostrarNotificacao('Registro salvo com sucesso! 🎉');
+      mostrarNotificacao('Registro salvo! ✅');
       document.getElementById('btnSalvar').classList.add('hidden');
       document.getElementById('btnIniciar').classList.remove('hidden');
       document.getElementById('observacaoInput').value = '';
@@ -454,47 +388,63 @@ async function carregarHistorico() {
     const resp = await fetch(SCRIPT_URL);
     const dados = await resp.json();
     if (!dados.success) return;
-    const meus = dados.data.filter(r => r.FUNCIONÁRIO === usuarioAtual).sort((a,b) => b.DATA?.localeCompare(a.DATA) || 0);
+    const meus = (dados.data || []).filter(r => r.FUNCIONÁRIO === usuarioAtual).sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
     const tbody = document.getElementById('historicoBody');
     tbody.innerHTML = '';
-    meus.slice(0, 20).forEach(r => {
+    meus.slice(0,20).forEach(r => {
       const tr = document.createElement('tr');
-      const status = (r.STATUS || 'concluido').toLowerCase();
+      const st = (r.STATUS||'concluido').toLowerCase();
       tr.innerHTML = `
-        <td>${r.DATA || '-'}</td>
-        <td>${r.ATIVIDADE || '-'}</td>
-        <td>${r['HORA INICIO'] || '-'}</td>
-        <td>${r['HORA FIM'] || '-'}</td>
-        <td>${r.TOTAL || '-'}</td>
-        <td><span class="badge badge-${status}">${status}</span></td>
+        <td>${r.DATA||'-'}</td>
+        <td>${r.ATIVIDADE||'-'}</td>
+        <td>${r['HORA INICIO']||'-'}</td>
+        <td>${r['HORA FIM']||'-'}</td>
+        <td>${r.TOTAL||'-'}</td>
+        <td><span class="badge badge-${st}">${st}</span></td>
         <td class="acoes">
-          <button class="btn-editar-atv" onclick="editarRegistro('${r.ID}')">✏️</button>
-          <button class="btn-excluir-atv" onclick="excluirRegistro('${r.ID}')">🗑️</button>
-        </td>
-      `;
+          <button class="btn-editar" onclick="editarRegistro('${r.ID}')">✏️</button>
+          <button class="btn-excluir" onclick="excluirRegistro('${r.ID}')">🗑️</button>
+        </td>`;
       tbody.appendChild(tr);
     });
   } catch (e) { console.error(e); }
 }
 
-// ===== ADMIN - ATIVIDADES =====
+async function excluirRegistro(id) {
+  if (!confirm('Excluir este registro?')) return;
+  await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', registroId: id }) });
+  mostrarNotificacao('Registro excluído.');
+  carregarHistorico();
+}
+
+async function editarRegistro(id) {
+  try {
+    const resp = await fetch(SCRIPT_URL);
+    const dados = await resp.json();
+    if (!dados.success) return;
+    const r = (dados.data||[]).find(x => x.ID === id);
+    if (!r) return;
+    document.getElementById('atividadeSelect').value = r.ATIVIDADE||'';
+    document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
+    mostrarNotificacao('Registro carregado para edição.');
+  } catch (e) { mostrarNotificacao('Erro.', true); }
+}
+
+// ===== ADMIN ATIVIDADES =====
 function renderAdminAtividades() {
   const tbody = document.getElementById('adminAtividadesBody');
   tbody.innerHTML = '';
-  atividades.sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
+  (atividades||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${a.nome}</td>
       <td class="acoes">
-        <button class="btn-editar-atv" onclick="abrirModalEditar('${a.id}')">✏️</button>
-        <button class="btn-excluir-atv" onclick="excluirAtividadeId('${a.id}')">🗑️</button>
-      </td>
-    `;
+        <button class="btn-editar" onclick="abrirModalEditar('${a.id}')">✏️</button>
+        <button class="btn-excluir" onclick="excluirAtividadeId('${a.id}')">🗑️</button>
+      </td>`;
     tbody.appendChild(tr);
   });
 }
-
-function abrirAdmin() { document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' }); }
 
 function abrirModalNovaAtividade() {
   document.getElementById('novaAtvNome').value = '';
@@ -506,91 +456,53 @@ function fecharModal(id) { document.getElementById(id).classList.add('hidden'); 
 
 async function salvarNovaAtividade() {
   const nome = document.getElementById('novaAtvNome').value.trim();
-  if (!nome) { mostrarNotificacao('Digite o nome da atividade.', true); return; }
+  if (!nome) { mostrarNotificacao('Digite o nome.', true); return; }
   const desc = document.getElementById('novaAtvDesc').value.trim();
   try {
     const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addAtividade', nome, descricao: desc }) });
     const dados = await resp.json();
     if (dados.success) {
-      mostrarNotificacao('Atividade criada com sucesso! ✅');
+      mostrarNotificacao('Atividade criada! ✅');
       fecharModal('modalNovaAtividade');
       await carregarAtividades();
     }
-  } catch (e) { mostrarNotificacao('Erro ao criar atividade.', true); }
+  } catch (e) { mostrarNotificacao('Erro.', true); }
 }
 
-async function abrirModalEditar(id) {
-  const atv = atividades.find(a => String(a.id) === String(id));
+function abrirModalEditar(id) {
+  const atv = (atividades||[]).find(a => String(a.id) === String(id));
   if (!atv) return;
   document.getElementById('editAtvId').value = id;
-  document.getElementById('editAtvNome').value = atv.nome || '';
-  document.getElementById('editAtvDesc').value = atv.descricao || '';
+  document.getElementById('editAtvNome').value = atv.nome||'';
+  document.getElementById('editAtvDesc').value = atv.descricao||'';
   document.getElementById('modalEditarAtividade').classList.remove('hidden');
 }
 
 async function atualizarAtividade() {
   const id = document.getElementById('editAtvId').value;
   const nome = document.getElementById('editAtvNome').value.trim();
-  if (!nome) { mostrarNotificacao('Digite o nome da atividade.', true); return; }
+  if (!nome) { mostrarNotificacao('Digite o nome.', true); return; }
   const desc = document.getElementById('editAtvDesc').value.trim();
-  try {
-    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editAtividade', id, nome, descricao: desc }) });
-    const dados = await resp.json();
-    if (dados.success) {
-      mostrarNotificacao('Atividade atualizada! ✅');
-      fecharModal('modalEditarAtividade');
-      await carregarAtividades();
-    }
-  } catch (e) { mostrarNotificacao('Erro ao atualizar.', true); }
+  await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editAtividade', id, nome, descricao: desc }) });
+  mostrarNotificacao('Atividade atualizada! ✅');
+  fecharModal('modalEditarAtividade');
+  await carregarAtividades();
 }
 
 async function excluirAtividade() {
-  if (!confirm('Tem certeza que deseja excluir esta atividade?')) return;
+  if (!confirm('Excluir esta atividade?')) return;
   const id = document.getElementById('editAtvId').value;
-  try {
-    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
-    const dados = await resp.json();
-    if (dados.success) {
-      mostrarNotificacao('Atividade excluída.');
-      fecharModal('modalEditarAtividade');
-      await carregarAtividades();
-    }
-  } catch (e) { mostrarNotificacao('Erro ao excluir.', true); }
+  await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
+  mostrarNotificacao('Atividade excluída.');
+  fecharModal('modalEditarAtividade');
+  await carregarAtividades();
 }
 
 async function excluirAtividadeId(id) {
-  if (!confirm('Tem certeza que deseja excluir esta atividade?')) return;
-  try {
-    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
-    const dados = await resp.json();
-    if (dados.success) {
-      mostrarNotificacao('Atividade excluída.');
-      await carregarAtividades();
-    }
-  } catch (e) { mostrarNotificacao('Erro ao excluir.', true); }
-}
-
-async function excluirRegistro(id) {
-  if (!confirm('Excluir este registro?')) return;
-  try {
-    await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', registroId: id }) });
-    mostrarNotificacao('Registro excluído.');
-    carregarHistorico();
-  } catch (e) { mostrarNotificacao('Erro ao excluir.', true); }
-}
-
-async function editarRegistro(id) {
-  try {
-    const resp = await fetch(SCRIPT_URL);
-    const dados = await resp.json();
-    if (!dados.success) return;
-    const r = dados.data.find(x => x.ID === id);
-    if (!r) return;
-    document.getElementById('atividadeSelect').value = r.ATIVIDADE || '';
-    document.getElementById('observacaoInput').value = r.OBSERVAÇÃO || '';
-    mostrarNotificacao('Registro carregado para edição.');
-    document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
-  } catch (e) { mostrarNotificacao('Erro ao carregar.', true); }
+  if (!confirm('Excluir esta atividade?')) return;
+  await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
+  mostrarNotificacao('Atividade excluída.');
+  await carregarAtividades();
 }
 
 // ===== NOTIFICAÇÃO =====
@@ -602,8 +514,8 @@ function mostrarNotificacao(msg, erro = false) {
   setTimeout(() => div.remove(), 3000);
 }
 
-// ===== INICIALIZAR =====
-carregarDados();
+// ===== INICIAR =====
+carregarTudo();
 </script>
 </body>
 </html>
