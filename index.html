@@ -297,11 +297,13 @@ function pausarCronometro(){
   document.getElementById('btnPausar').classList.add('hidden');document.getElementById('btnRetomar').classList.remove('hidden');
   mostrarNotificacao('⏸️ Pausado');
 }
-function retomarCronometro(){
-  if(cronometroAtivo)return;inicioCronometro=Date.now();
-  document.getElementById('btnRetomar').classList.add('hidden');document.getElementById('btnPausar').classList.remove('hidden');
-  cronometroAtivo=setInterval(()=>{document.getElementById('cronometroDisplay').textContent=new Date(Date.now()-inicioCronometro+tempoPausado).toISOString().substr(11,8)},200);
-  mostrarNotificacao('▶️ Retomado!');
+function pausarCronometro(){
+  if(!cronometroAtivo)return;clearInterval(cronometroAtivo);cronometroAtivo=null;
+  tempoPausado+=Date.now()-inicioCronometro-tempoPausado;
+  document.getElementById('btnPausar').classList.add('hidden');
+  document.getElementById('btnRetomar').classList.remove('hidden');
+  document.getElementById('btnParar').classList.remove('hidden');
+  mostrarNotificacao('⏸️ Pausado');
 }
 function pararCronometro(){
   if(cronometroAtivo){clearInterval(cronometroAtivo);cronometroAtivo=null}
