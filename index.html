@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CR Consultoria - Controle de Ponto</title>
+<title>CR Consultoria - Sistema de Gestão</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -11,207 +11,340 @@ body {
   background: #0f0f13;
   color: #e0e0e0;
   min-height: 100vh;
+  display: flex;
 }
 .hidden { display: none !important; }
 
+/* SIDEBAR */
+.sidebar {
+  width: 220px; background: #1a1a24; min-height: 100vh;
+  border-right: 1px solid #2a2a35; padding: 20px 0;
+  position: fixed; left: 0; top: 0; bottom: 0; z-index: 100;
+}
+.sidebar h2 {
+  font-size: 16px; color: #fff; padding: 0 20px 20px;
+  border-bottom: 1px solid #2a2a35; margin-bottom: 8px;
+}
+.sidebar .user-badge {
+  padding: 12px 20px; font-size: 12px; color: #888;
+  border-bottom: 1px solid #2a2a35; margin-bottom: 8px;
+}
+.sidebar .user-badge strong { color: #fff; display: block; font-size: 13px; }
+.sidebar a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px; color: #aaa; text-decoration: none;
+  font-size: 14px; cursor: pointer; transition: all .2s;
+}
+.sidebar a:hover { background: #252533; color: #fff; }
+.sidebar a.active { background: rgba(99,102,241,.15); color: #6366f1; border-right: 3px solid #6366f1; }
+.sidebar .sair {
+  margin-top: 20px; border-top: 1px solid #2a2a35; padding-top: 12px;
+}
+.sidebar .sair a { color: #ef4444; }
+.sidebar .sair a:hover { background: rgba(239,68,68,.1); }
+
+/* CONTEUDO */
+.main {
+  margin-left: 220px; flex: 1; padding: 24px 32px; min-height: 100vh;
+}
+.page { display: none; }
+.page.active { display: block; }
+.page h3 { font-size: 22px; color: #fff; margin-bottom: 20px; }
+
+/* CARDS */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.card {
+  background: #1a1a24; border-radius: 12px; padding: 20px;
+  border: 1px solid #2a2a35;
+}
+.card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+.card .value { font-size: 28px; font-weight: 700; color: #fff; margin-top: 4px; }
+.card .sub { font-size: 13px; color: #aaa; margin-top: 2px; }
+.card.purple { border-color: #6366f1; }
+.card.purple .value { color: #818cf8; }
+.card.green { border-color: #22c55e; }
+.card.green .value { color: #4ade80; }
+.card.blue { border-color: #3b82f6; }
+.card.blue .value { color: #60a5fa; }
+.card.orange { border-color: #f59e0b; }
+.card.orange .value { color: #fbbf24; }
+
+/* FORM ELEMENTOS */
+select, input, textarea {
+  padding: 10px 12px; border-radius: 6px; border: 1px solid #333;
+  background: #252533; color: #e0e0e0; font-size: 14px;
+  width: 100%; font-family: inherit;
+}
+select:focus, input:focus, textarea:focus { outline: none; border-color: #6366f1; }
+textarea { min-height: 60px; resize: vertical; }
+label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
+.form-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.form-group { flex: 1; min-width: 150px; }
+
+/* BOTOES */
+.btn {
+  padding: 10px 20px; border-radius: 6px; border: none;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: opacity .2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover { opacity: .85; }
+.btn-primary { background: #6366f1; color: #fff; }
+.btn-success { background: #22c55e; color: #fff; }
+.btn-danger { background: #ef4444; color: #fff; }
+.btn-outline { background: transparent; border: 1px solid #444; color: #aaa; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+
+/* TABELA */
+.tabela-wrap { overflow-x: auto; margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #252533; color: #888; padding: 10px 12px; text-align: left; font-weight: 600; }
+td { padding: 10px 12px; border-bottom: 1px solid #2a2a35; color: #ccc; }
+tr:hover td { background: rgba(99,102,241,.03); }
+th.acoes, td.acoes { width: 90px; text-align: center; }
+
+/* BADGE */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-concluido { background: rgba(34,197,94,.15); color: #22c55e; }
+.badge-andamento { background: rgba(99,102,241,.15); color: #818cf8; }
+
+/* ATIVIDADE WRAPPER */
+.atv-wrapper { display: flex; gap: 8px; }
+.atv-wrapper select { flex: 1; }
+.btn-plus {
+  padding: 10px 14px; border-radius: 6px; border: 1px solid #6366f1;
+  background: transparent; color: #6366f1; cursor: pointer; font-size: 18px; line-height: 1;
+}
+.btn-plus:hover { background: rgba(99,102,241,.1); }
+
+/* CRONOMETRO */
+.cronometro {
+  font-size: 42px; font-weight: 700; color: #fff;
+  font-family: 'Courier New', monospace; text-align: center;
+  padding: 20px 0; letter-spacing: 3px;
+}
+
+/* MODAIS */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  display: flex; align-items: center; justify-content: center; z-index: 2000;
+}
+.modal {
+  background: #1a1a24; border-radius: 12px; padding: 24px;
+  width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
+}
+.modal h4 { color: #fff; font-size: 18px; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+/* GRAFICO BARRAS SIMPLES */
+.grafico-wrap { margin-top: 16px; padding: 16px; background: #1a1a24; border-radius: 8px; border: 1px solid #2a2a35; }
+.grafico-wrap h4 { color: #fff; margin-bottom: 12px; font-size: 14px; }
+.barra-container { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding: 0 8px; }
+.barra-item { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+.barra { width: 100%; max-width: 40px; background: #6366f1; border-radius: 4px 4px 0 0; min-height: 4px; transition: height .5s; position: relative; }
+.barra:hover { opacity: .85; }
+.barra-label { font-size: 10px; color: #888; margin-top: 4px; text-align: center; }
+.barra-valor { font-size: 10px; color: #aaa; margin-bottom: 2px; font-weight: 600; }
+
+/* NOTIFICACAO */
+.notificacao {
+  position: fixed; bottom: 24px; right: 24px; background: #22c55e;
+  color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px;
+  font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.3); z-index: 3000;
+  animation: slideIn .3s ease;
+}
+.notificacao.erro { background: #ef4444; }
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
 /* LOGIN */
 #loginScreen {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; background: #0f0f13;
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: #0f0f13; z-index: 5000;
 }
 .login-card {
   background: #1a1a24; border-radius: 16px; padding: 40px;
   width: 100%; max-width: 400px; text-align: center;
   box-shadow: 0 20px 60px rgba(0,0,0,.5);
 }
-.login-card h1 { font-size: 28px; margin-bottom: 4px; color: #fff; }
+.login-card .emoji { font-size: 48px; margin-bottom: 8px; }
+.login-card h1 { font-size: 28px; color: #fff; }
 .login-card .sub { color: #888; margin-bottom: 24px; font-size: 14px; }
-.login-card select {
-  width: 100%; padding: 12px 16px; border-radius: 8px;
-  border: 1px solid #333; background: #252533; color: #fff;
-  font-size: 15px; margin-bottom: 16px; cursor: pointer;
-}
-.login-card select:focus { outline: none; border-color: #6366f1; }
-.login-card button {
-  width: 100%; padding: 12px; border-radius: 8px; border: none;
-  background: #6366f1; color: #fff; font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: background .2s;
-}
-.login-card button:hover { background: #5558e6; }
+.login-card select { margin-bottom: 16px; }
+.login-card .btn { width: 100%; justify-content: center; }
 
-/* APP */
-#app { display: flex; flex-direction: column; }
-header {
-  background: #1a1a24; padding: 12px 24px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid #2a2a35;
-}
-header h2 { font-size: 18px; color: #fff; }
-header .user-info { display: flex; align-items: center; gap: 12px; }
-header .user-info span { color: #aaa; font-size: 14px; }
-header .user-info button {
-  padding: 6px 14px; border-radius: 6px; border: 1px solid #444;
-  background: transparent; color: #ccc; cursor: pointer; font-size: 13px;
-}
-header .user-info button:hover { background: #2a2a35; }
-.content { display: flex; gap: 24px; padding: 24px; flex-wrap: wrap; }
-.main-panel { flex: 1; min-width: 300px; }
-.main-panel h3 { margin-bottom: 16px; color: #fff; font-size: 20px; }
+/* FILTROS */
+.filtros { background: #1a1a24; border-radius: 8px; padding: 16px; margin-bottom: 16px; border: 1px solid #2a2a35; }
 
-.registro-card {
-  background: #1a1a24; border-radius: 12px; padding: 24px; margin-bottom: 24px;
-}
-.registro-card .row { margin-bottom: 12px; }
-.registro-card .row label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
-.atividade-wrapper { display: flex; gap: 8px; }
-.atividade-wrapper select { flex: 1; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #333; background: #252533; color: #e0e0e0; font-size: 14px; }
-.atividade-wrapper select:focus { outline: none; border-color: #6366f1; }
-.btn-nova-atv {
-  padding: 10px 12px; border-radius: 6px; border: 1px solid #6366f1;
-  background: transparent; color: #6366f1; cursor: pointer; font-size: 18px; line-height: 1;
-}
-.btn-nova-atv:hover { background: rgba(99,102,241,.1); }
-.registro-card textarea {
-  width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #333;
-  background: #252533; color: #e0e0e0; font-size: 14px; min-height: 60px; resize: vertical;
-  font-family: inherit;
-}
-.actions { display: flex; gap: 12px; margin-top: 16px; }
-.actions button { padding: 10px 24px; border-radius: 6px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
-.btn-iniciar { background: #22c55e; color: #fff; }
-.btn-iniciar:disabled { background: #444; cursor: not-allowed; }
-.btn-parar { background: #ef4444; color: #fff; }
-.btn-salvar { background: #6366f1; color: #fff; }
-.cronometro {
-  font-size: 32px; font-weight: 700; color: #fff;
-  font-family: 'Courier New', monospace; text-align: center;
-  padding: 16px 0; letter-spacing: 2px;
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .sidebar { width: 60px; }
+  .sidebar h2, .sidebar .user-badge, .sidebar a span { display: none; }
+  .sidebar a { justify-content: center; padding: 14px; }
+  .main { margin-left: 60px; padding: 16px; }
+  .cards { grid-template-columns: 1fr 1fr; }
 }
 
-.admin-btn {
-  width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #6366f1;
-  background: transparent; color: #6366f1; font-size: 14px; font-weight: 600; cursor: pointer;
-  margin-top: 16px;
+/* BACKUP */
+.backup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.backup-card {
+  background: #1a1a24; border: 1px solid #2a2a35; border-radius: 12px;
+  padding: 24px; text-align: center;
 }
-.admin-btn:hover { background: rgba(99,102,241,.1); }
-
-/* MODAIS */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.7);
-  display: flex; align-items: center; justify-content: center; z-index: 1000;
-}
-.modal {
-  background: #1a1a24; border-radius: 12px; padding: 24px;
-  width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
-}
-.modal h3 { color: #fff; font-size: 18px; margin-bottom: 16px; }
-.modal label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
-.modal input, .modal textarea {
-  width: 100%; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #333; background: #252533; color: #e0e0e0; font-size: 14px; margin-bottom: 12px;
-}
-.modal textarea { min-height: 60px; resize: vertical; }
-.modal input:focus, .modal textarea:focus { outline: none; border-color: #6366f1; }
-.modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
-.modal-actions button { padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
-.btn-cancel { background: #333; color: #aaa; }
-.btn-confirm { background: #6366f1; color: #fff; }
-.btn-danger { background: #ef4444; color: #fff; }
-
-/* TABELA */
-.tabela-wrap { overflow-x: auto; margin-top: 16px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #252533; color: #888; padding: 10px 12px; text-align: left; font-weight: 600; }
-td { padding: 10px 12px; border-bottom: 1px solid #2a2a35; color: #ccc; }
-th.acoes, td.acoes { width: 80px; text-align: center; }
-td.acoes button { padding: 4px 8px; border-radius: 4px; border: none; font-size: 12px; cursor: pointer; margin: 0 2px; }
-.btn-editar { background: #6366f1; color: #fff; }
-.btn-excluir { background: #ef4444; color: #fff; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-.badge-concluido { background: rgba(34,197,94,.15); color: #22c55e; }
-
-.historico { margin-top: 24px; }
-.historico h4 { color: #fff; margin-bottom: 12px; }
-
-.notificacao {
-  position: fixed; bottom: 24px; right: 24px; background: #22c55e;
-  color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px;
-  font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.3); z-index: 2000;
-  animation: slideIn .3s ease;
-}
-.notificacao.erro { background: #ef4444; }
-@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.backup-card h4 { color: #fff; margin-bottom: 8px; }
+.backup-card p { color: #888; font-size: 13px; margin-bottom: 16px; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <h1>👋</h1>
+    <div class="emoji">👋</div>
     <h1>CR Consultoria</h1>
     <p class="sub">Selecione seu nome para acessar</p>
-    <select id="loginFuncionario">
-      <option value="">— Selecione —</option>
-    </select>
-    <button onclick="fazerLogin()">Entrar</button>
+    <select id="loginFuncionario"><option value="">— Selecione —</option></select>
+    <button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
   </div>
 </div>
 
-<div id="app" class="hidden">
-  <header>
-    <h2>📋 CR Consultoria</h2>
-    <div class="user-info">
-      <span id="headerUser"></span>
-      <button onclick="document.getElementById('adminSection').scrollIntoView({behavior:'smooth'})">⚙️ Admin</button>
-      <button onclick="fazerLogout()">Sair</button>
-    </div>
-  </header>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <h2>📋 CR Consultoria</h2>
+  <div class="user-badge">
+    <strong id="sidebarUser">—</strong>
+    <span id="sidebarCargo">Consultoria</span>
+  </div>
+  <a class="active" onclick="navegar('dashboard')">📊 <span>Dashboard</span></a>
+  <a onclick="navegar('registro')">⏱️ <span>Registro</span></a>
+  <a onclick="navegar('funcionarios')">👥 <span>Funcionários</span></a>
+  <a onclick="navegar('atividades')">📋 <span>Atividades</span></a>
+  <a onclick="navegar('relatorios')">📈 <span>Relatórios</span></a>
+  <a onclick="navegar('backup')">💾 <span>Back Up</span></a>
+  <div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
+</div>
 
-  <div class="content">
-    <div class="main-panel">
-      <h3>⏱️ Registro de Horas</h3>
-      <div class="registro-card">
-        <div class="cronometro" id="cronometroDisplay">00:00:00</div>
-        <div class="row">
+<!-- CONTEUDO -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <h3>📊 Dashboard</h3>
+    <div class="cards" id="dashCards"></div>
+    <div class="grafico-wrap">
+      <h4>📈 Horas por Dia (últimos 7 dias)</h4>
+      <div class="barra-container" id="graficoBarras"></div>
+    </div>
+    <div style="margin-top:16px;background:#1a1a24;border-radius:8px;padding:16px;border:1px solid #2a2a35">
+      <h4 style="color:#fff;margin-bottom:8px;font-size:14px">📋 Horas por Funcionário no Mês</h4>
+      <div class="tabela-wrap"><table><thead><tr><th>Funcionário</th><th>Registros</th><th>Total Horas</th><th>Média/Dia</th></tr></thead><tbody id="dashTabelaFunc"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- REGISTRO -->
+  <div class="page" id="page-registro">
+    <h3>⏱️ Registro de Horas</h3>
+    <div style="background:#1a1a24;border-radius:12px;padding:24px;border:1px solid #2a2a35">
+      <div class="cronometro" id="cronometroDisplay">00:00:00</div>
+      <div class="form-row">
+        <div class="form-group">
           <label>Atividade</label>
-          <div class="atividade-wrapper">
+          <div class="atv-wrapper">
             <select id="atividadeSelect"><option value="">Selecione...</option></select>
-            <button class="btn-nova-atv" onclick="abrirModalNovaAtividade()" title="Nova Atividade">➕</button>
+            <button class="btn-plus" onclick="abrirModalNovaAtividade()" title="Nova Atividade">＋</button>
           </div>
         </div>
-        <div class="row">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
           <label>Observação</label>
           <textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea>
         </div>
-        <div class="actions">
-          <button class="btn-iniciar" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
-          <button class="btn-parar hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
-          <button class="btn-salvar hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
-        </div>
       </div>
+      <div class="actions">
+        <button class="btn btn-success" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
+        <button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
+        <button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
+      </div>
+    </div>
+    <div style="margin-top:24px;background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35">
+      <h4 style="color:#fff;margin-bottom:12px">📄 Últimos Registros</h4>
+      <div class="tabela-wrap">
+        <table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table>
+      </div>
+    </div>
+  </div>
 
-      <div class="historico">
-        <h4>📄 Últimos Registros</h4>
-        <div class="tabela-wrap">
-          <table>
-            <thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead>
-            <tbody id="historicoBody"></tbody>
-          </table>
+  <!-- FUNCIONARIOS -->
+  <div class="page" id="page-funcionarios">
+    <h3>👥 Funcionários</h3>
+    <div class="cards" id="funcCards"></div>
+  </div>
+
+  <!-- ATIVIDADES -->
+  <div class="page" id="page-atividades">
+    <h3>📋 Gestão de Atividades</h3>
+    <div style="margin-bottom:16px">
+      <button class="btn btn-primary" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button>
+    </div>
+    <div class="tabela-wrap">
+      <table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- RELATORIOS -->
+  <div class="page" id="page-relatorios">
+    <h3>📈 Relatórios</h3>
+    <div class="filtros">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Funcionário</label>
+          <select id="relFiltroFunc">
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Data Inicial</label>
+          <input type="date" id="relDataIni">
+        </div>
+        <div class="form-group">
+          <label>Data Final</label>
+          <input type="date" id="relDataFim">
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end">
+          <button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button>
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end">
+          <button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button>
         </div>
       </div>
     </div>
+    <div class="tabela-wrap">
+      <table><thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead><tbody id="relatorioBody"></tbody></table>
+    </div>
+    <div style="margin-top:12px;text-align:right;color:#888;font-size:13px">
+      Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong>
+    </div>
+  </div>
 
-    <div style="width:100%">
-      <div id="adminSection" class="registro-card">
-        <h4 style="color:#fff;margin-bottom:12px">⚙️ Gestão de Atividades</h4>
-        <button class="admin-btn" onclick="abrirModalNovaAtividade()">➕ Nova Atividade</button>
-        <div class="tabela-wrap" style="margin-top:12px">
-          <table>
-            <thead><tr><th>Atividade</th><th class="acoes">Ações</th></tr></thead>
-            <tbody id="adminAtividadesBody"></tbody>
-          </table>
-        </div>
+  <!-- BACKUP -->
+  <div class="page" id="page-backup">
+    <h3>💾 Back Up</h3>
+    <p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
+    <div class="backup-grid">
+      <div class="backup-card">
+        <h4>📄 Todos os Registros</h4>
+        <p>Exportar todos os registros de ponto como JSON</p>
+        <button class="btn btn-primary" onclick="exportarJSON()">📥 Exportar JSON</button>
+      </div>
+      <div class="backup-card">
+        <h4>📊 Registros em CSV</h4>
+        <p>Exportar todos os registros como CSV (Excel)</p>
+        <button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button>
+      </div>
+      <div class="backup-card">
+        <h4>📋 Atividades CSV</h4>
+        <p>Exportar lista de atividades como CSV</p>
+        <button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button>
       </div>
     </div>
   </div>
@@ -220,14 +353,14 @@ td.acoes button { padding: 4px 8px; border-radius: 4px; border: none; font-size:
 <!-- MODAL NOVA ATIVIDADE -->
 <div id="modalNovaAtividade" class="modal-overlay hidden">
   <div class="modal">
-    <h3>Nova Atividade</h3>
+    <h4>Nova Atividade</h4>
     <label>Nome</label>
     <input type="text" id="novaAtvNome" placeholder="Ex: Reunião com Cliente">
     <label>Descrição (opcional)</label>
-    <textarea id="novaAtvDesc" placeholder="Descrição..."></textarea>
+    <textarea id="novaAtvDesc" placeholder="Descrição da atividade..."></textarea>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="fecharModal('modalNovaAtividade')">Cancelar</button>
-      <button class="btn-confirm" onclick="salvarNovaAtividade()">Salvar</button>
+      <button class="btn btn-outline" onclick="fecharModal('modalNovaAtividade')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarNovaAtividade()">Salvar</button>
     </div>
   </div>
 </div>
@@ -235,16 +368,16 @@ td.acoes button { padding: 4px 8px; border-radius: 4px; border: none; font-size:
 <!-- MODAL EDITAR ATIVIDADE -->
 <div id="modalEditarAtividade" class="modal-overlay hidden">
   <div class="modal">
-    <h3>Editar Atividade</h3>
+    <h4>Editar Atividade</h4>
     <input type="hidden" id="editAtvId">
     <label>Nome</label>
     <input type="text" id="editAtvNome">
-    <label>Descrição (opcional)</label>
+    <label>Descrição</label>
     <textarea id="editAtvDesc"></textarea>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="fecharModal('modalEditarAtividade')">Cancelar</button>
-      <button class="btn-danger" onclick="excluirAtividade()">Excluir</button>
-      <button class="btn-confirm" onclick="atualizarAtividade()">Salvar</button>
+      <button class="btn btn-outline" onclick="fecharModal('modalEditarAtividade')">Cancelar</button>
+      <button class="btn btn-danger" onclick="excluirAtividade()">Excluir</button>
+      <button class="btn btn-primary" onclick="atualizarAtividade()">Salvar</button>
     </div>
   </div>
 </div>
@@ -252,52 +385,68 @@ td.acoes button { padding: 4px 8px; border-radius: 4px; border: none; font-size:
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
 
-// ===== FUNCIONÁRIAS FIXAS (sempre aparecem no login) =====
-const FUNCIONARIAS = ['Cecília Rijo', 'Thamires Mendonça', 'Sophia Ataíde'];
+const FUNCIONARIOS = [
+  { nome: 'Cecília Rijo', email: 'cecilia.rijo@gmail.com', cargo: 'Consultora' },
+  { nome: 'Thamires Mendonça', email: 'thamires@crconsul.com.br', cargo: 'Analista de Marketing Jr' },
+  { nome: 'Sophia Ataíde', email: 'sophia@crconsul.com.br', cargo: 'Estagiária' }
+];
 
 let atividades = [];
+let todosDados = [];
 let usuarioAtual = null;
 let cronometroAtivo = null;
 let inicioCronometro = null;
 let registroTemporario = null;
+let abaAtual = 'dashboard';
 
 // ===== CARGA =====
 async function carregarTudo() {
-  // Preenche login com as 3 funcionárias
   const selLogin = document.getElementById('loginFuncionario');
-  FUNCIONARIAS.forEach(n => {
+  FUNCIONARIOS.forEach(f => {
     const o = document.createElement('option');
-    o.value = n; o.textContent = n; selLogin.appendChild(o);
+    o.value = f.nome; o.textContent = `${f.nome} — ${f.cargo}`;
+    selLogin.appendChild(o);
   });
 
-  // Carrega atividades da planilha
+  document.getElementById('relFiltroFunc').innerHTML = '<option value="todos">Todos</option>';
+  FUNCIONARIOS.forEach(f => {
+    const o = document.createElement('option');
+    o.value = f.nome; o.textContent = f.nome;
+    document.getElementById('relFiltroFunc').appendChild(o);
+  });
+
+  await carregarDadosPlanilha();
+  await carregarAtividadesPlanilha();
+}
+
+async function carregarDadosPlanilha() {
+  try {
+    const resp = await fetch(SCRIPT_URL);
+    const dados = await resp.json();
+    if (dados.success) todosDados = dados.data || [];
+    else todosDados = [];
+  } catch (e) { todosDados = []; console.error(e); }
+  if (usuarioAtual) { atualizarDashboard(); carregarHistorico(); atualizarFuncionarios(); }
+}
+
+async function carregarAtividadesPlanilha() {
   try {
     const resp = await fetch(SCRIPT_URL + '?path=atividades');
     const dados = await resp.json();
-    if (dados.success) { atividades = dados.data || []; }
-  } catch (e) { console.error(e); }
-
-  preencherAtividades();
-}
-
-function preencherAtividades() {
-  const sel = document.getElementById('atividadeSelect');
-  sel.innerHTML = '<option value="">Selecione...</option>';
-  (atividades || []).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
-    const o = document.createElement('option');
-    o.value = a.id || a.nome;
-    o.textContent = a.nome;
-    sel.appendChild(o);
-  });
+    if (dados.success) atividades = dados.data || [];
+  } catch (e) { atividades = []; }
+  preencherSelectAtividades();
   renderAdminAtividades();
 }
 
-async function carregarAtividades() {
-  try {
-    const resp = await fetch(SCRIPT_URL + '?path=atividades');
-    const dados = await resp.json();
-    if (dados.success) { atividades = dados.data || []; preencherAtividades(); }
-  } catch (e) { console.error(e); }
+function preencherSelectAtividades() {
+  const sel = document.getElementById('atividadeSelect');
+  sel.innerHTML = '<option value="">Selecione...</option>';
+  (atividades||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
+    const o = document.createElement('option');
+    o.value = a.id || a.nome; o.textContent = a.nome;
+    sel.appendChild(o);
+  });
 }
 
 // ===== LOGIN =====
@@ -305,20 +454,122 @@ function fazerLogin() {
   const sel = document.getElementById('loginFuncionario');
   if (!sel.value) { alert('Selecione seu nome.'); return; }
   usuarioAtual = sel.value;
-  document.getElementById('headerUser').textContent = '👤 ' + usuarioAtual;
+  const func = FUNCIONARIOS.find(f => f.nome === usuarioAtual);
+  document.getElementById('sidebarUser').textContent = usuarioAtual;
+  document.getElementById('sidebarCargo').textContent = func ? func.cargo : '';
   document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  carregarHistorico();
+  document.getElementById('sidebar').classList.remove('hidden');
+  carregarDadosPlanilha();
 }
 
 function fazerLogout() {
   usuarioAtual = null;
   if (cronometroAtivo) { clearInterval(cronometroAtivo); cronometroAtivo = null; }
-  document.getElementById('app').classList.add('hidden');
   document.getElementById('loginScreen').classList.remove('hidden');
 }
 
-// ===== CRONÔMETRO =====
+// ===== NAVEGAÇÃO =====
+function navegar(aba) {
+  abaAtual = aba;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + aba).classList.add('active');
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    if (a.textContent.includes(document.querySelector('#page-' + aba + ' h3')?.textContent?.replace(/[^a-zA-Z]/g,'') || aba)) {
+      // simplified matching
+    }
+  });
+  // ativar visual na sidebar
+  document.querySelectorAll('.sidebar a').forEach((a,i) => {
+    a.classList.toggle('active', i === ['dashboard','registro','funcionarios','atividades','relatorios','backup'].indexOf(aba));
+  });
+  if (aba === 'dashboard') atualizarDashboard();
+  if (aba === 'funcionarios') atualizarFuncionarios();
+  if (aba === 'relatorios') { preencherFiltros(); filtrarRelatorio(); }
+  if (aba === 'atividades') renderAdminAtividades();
+}
+
+// ===== DASHBOARD =====
+function atualizarDashboard() {
+  const dados = usuarioAtual ? todosDados.filter(r => r.FUNCIONÁRIO === usuarioAtual) : todosDados;
+  const now = new Date();
+  const mesAtual = String(now.getMonth() + 1).padStart(2,'0');
+  const anoAtual = now.getFullYear();
+  const dadosMes = dados.filter(r => r.DATA && r.DATA.startsWith(anoAtual + '-' + mesAtual));
+  const dadosHoje = dados.filter(r => r.DATA === now.toISOString().split('T')[0]);
+
+  function totalSegundos(arr) {
+    return arr.reduce((acc, r) => {
+      if (!r.TOTAL) return acc;
+      const p = r.TOTAL.split(':');
+      return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
+    }, 0);
+  }
+
+  const segMes = totalSegundos(dadosMes);
+  const segHoje = totalSegundos(dadosHoje);
+  const diasUteis = Math.min(now.getDate(), 30);
+  const mediaDia = diasUteis > 0 ? Math.round(segMes / diasUteis) : 0;
+
+  function fmtHms(s) {
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    return `${h}h ${m}min`;
+  }
+
+  document.getElementById('dashCards').innerHTML = `
+    <div class="card purple"><div class="label">Horas no Mês</div><div class="value">${fmtHms(segMes)}</div><div class="sub">${dadosMes.length} registros</div></div>
+    <div class="card green"><div class="label">Hoje</div><div class="value">${fmtHms(segHoje)}</div><div class="sub">${dadosHoje.length} registros</div></div>
+    <div class="card blue"><div class="label">Média/Dia</div><div class="value">${fmtHms(mediaDia)}</div><div class="sub">${diasUteis} dias no mês</div></div>
+    <div class="card orange"><div class="label">Total Registros</div><div class="value">${dadosMes.length}</div><div class="sub">No mês</div></div>
+  `;
+
+  // Grafico barras - ultimos 7 dias
+  const dias = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    dias.push(d);
+  }
+  const maxSeg = Math.max(...dias.map(d => {
+    const ds = d.toISOString().split('T')[0];
+    return totalSegundos(dados.filter(r => r.DATA === ds));
+  }), 1);
+
+  const container = document.getElementById('graficoBarras');
+  container.innerHTML = '';
+  dias.forEach(d => {
+    const ds = d.toISOString().split('T')[0];
+    const seg = totalSegundos(dados.filter(r => r.DATA === ds));
+    const altura = Math.max(Math.round((seg / maxSeg) * 100), 4);
+    const item = document.createElement('div');
+    item.className = 'barra-item';
+    const nomDia = d.toLocaleDateString('pt-BR', {weekday:'short', day:'numeric'});
+    item.innerHTML = `
+      <div class="barra-valor">${fmtHms(seg)}</div>
+      <div class="barra" style="height:${altura}px"></div>
+      <div class="barra-label">${nomDia}</div>
+    `;
+    container.appendChild(item);
+  });
+
+  // Tabela horas por funcionario
+  const tbody = document.getElementById('dashTabelaFunc');
+  tbody.innerHTML = '';
+  FUNCIONARIOS.forEach(f => {
+    const rf = dadosMes.filter(r => r.FUNCIONÁRIO === f.nome);
+    const sf = totalSegundos(rf);
+    const h = Math.floor(sf / 3600);
+    const m = Math.floor((sf % 3600) / 60);
+    const diasF = new Set(rf.map(r => r.DATA).filter(Boolean)).size;
+    const media = diasF > 0 ? Math.round(sf / diasF) : 0;
+    const mh = Math.floor(media/3600);
+    const mm = Math.floor((media%3600)/60);
+    tbody.innerHTML += `<tr><td>${f.nome}</td><td>${rf.length}</td><td>${h}h ${m}min</td><td>${mh}h ${mm}min</td></tr>`;
+  });
+}
+
+// ===== CRONOMETRO =====
 function iniciarCronometro() {
   const atv = document.getElementById('atividadeSelect').value;
   if (!atv) { mostrarNotificacao('Selecione uma atividade.', true); return; }
@@ -330,7 +581,7 @@ function iniciarCronometro() {
     const diff = Date.now() - inicioCronometro;
     document.getElementById('cronometroDisplay').textContent = new Date(diff).toISOString().substr(11,8);
   }, 200);
-  mostrarNotificacao('Cronômetro iniciado!');
+  mostrarNotificacao('⏱️ Cronômetro iniciado!');
 }
 
 function pararCronometro() {
@@ -339,6 +590,7 @@ function pararCronometro() {
   registroTemporario.total = registroTemporario.fim - registroTemporario.inicio;
   document.getElementById('btnParar').classList.add('hidden');
   document.getElementById('btnSalvar').classList.remove('hidden');
+  mostrarNotificacao('⏹ Cronômetro parado. Revise e salve.');
 }
 
 async function salvarRegistro() {
@@ -371,78 +623,105 @@ async function salvarRegistro() {
     const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
     const dados = await resp.json();
     if (dados.success) {
-      mostrarNotificacao('Registro salvo! ✅');
+      mostrarNotificacao('✅ Registro salvo com sucesso!');
       document.getElementById('btnSalvar').classList.add('hidden');
       document.getElementById('btnIniciar').classList.remove('hidden');
       document.getElementById('observacaoInput').value = '';
       document.getElementById('cronometroDisplay').textContent = '00:00:00';
       registroTemporario = null;
+      await carregarDadosPlanilha();
       carregarHistorico();
     }
   } catch (e) { mostrarNotificacao('Erro ao salvar.', true); }
 }
 
 // ===== HISTÓRICO =====
-async function carregarHistorico() {
-  try {
-    const resp = await fetch(SCRIPT_URL);
-    const dados = await resp.json();
-    if (!dados.success) return;
-    const meus = (dados.data || []).filter(r => r.FUNCIONÁRIO === usuarioAtual).sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
-    const tbody = document.getElementById('historicoBody');
-    tbody.innerHTML = '';
-    meus.slice(0,20).forEach(r => {
-      const tr = document.createElement('tr');
-      const st = (r.STATUS||'concluido').toLowerCase();
-      tr.innerHTML = `
-        <td>${r.DATA||'-'}</td>
-        <td>${r.ATIVIDADE||'-'}</td>
-        <td>${r['HORA INICIO']||'-'}</td>
-        <td>${r['HORA FIM']||'-'}</td>
-        <td>${r.TOTAL||'-'}</td>
-        <td><span class="badge badge-${st}">${st}</span></td>
-        <td class="acoes">
-          <button class="btn-editar" onclick="editarRegistro('${r.ID}')">✏️</button>
-          <button class="btn-excluir" onclick="excluirRegistro('${r.ID}')">🗑️</button>
-        </td>`;
-      tbody.appendChild(tr);
-    });
-  } catch (e) { console.error(e); }
+function carregarHistorico() {
+  const meus = todosDados.filter(r => r.FUNCIONÁRIO === usuarioAtual).sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
+  const tbody = document.getElementById('historicoBody');
+  tbody.innerHTML = '';
+  meus.slice(0,20).forEach(r => {
+    const st = (r.STATUS||'concluido').toLowerCase();
+    tbody.innerHTML += `<tr>
+      <td>${r.DATA||'-'}</td>
+      <td>${r.ATIVIDADE||'-'}</td>
+      <td>${r['HORA INICIO']||'-'}</td>
+      <td>${r['HORA FIM']||'-'}</td>
+      <td>${r.TOTAL||'-'}</td>
+      <td><span class="badge badge-${st}">${st}</span></td>
+      <td class="acoes">
+        <button class="btn btn-sm btn-primary" onclick="editarRegistro('${r.ID}')">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="excluirRegistro('${r.ID}')">🗑️</button>
+      </td>
+    </tr>`;
+  });
+  if (!meus.length) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro encontrado</td></tr>';
 }
 
 async function excluirRegistro(id) {
   if (!confirm('Excluir este registro?')) return;
   await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', registroId: id }) });
   mostrarNotificacao('Registro excluído.');
+  await carregarDadosPlanilha();
   carregarHistorico();
 }
 
-async function editarRegistro(id) {
-  try {
-    const resp = await fetch(SCRIPT_URL);
-    const dados = await resp.json();
-    if (!dados.success) return;
-    const r = (dados.data||[]).find(x => x.ID === id);
-    if (!r) return;
-    document.getElementById('atividadeSelect').value = r.ATIVIDADE||'';
-    document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
-    mostrarNotificacao('Registro carregado para edição.');
-  } catch (e) { mostrarNotificacao('Erro.', true); }
+function editarRegistro(id) {
+  const r = todosDados.find(x => x.ID === id);
+  if (!r) return;
+  document.getElementById('atividadeSelect').value = r.ATIVIDADE||'';
+  document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
+  navegar('registro');
+  mostrarNotificacao('Registro carregado para edição.');
 }
 
-// ===== ADMIN ATIVIDADES =====
+// ===== FUNCIONARIOS =====
+function atualizarFuncionarios() {
+  const container = document.getElementById('funcCards');
+  container.innerHTML = '';
+  FUNCIONARIOS.forEach(f => {
+    const rf = todosDados.filter(r => r.FUNCIONÁRIO === f.nome);
+    const seg = rf.reduce((acc, r) => {
+      if (!r.TOTAL) return acc;
+      const p = r.TOTAL.split(':');
+      return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
+    }, 0);
+    const h = Math.floor(seg/3600);
+    const m = Math.floor((seg%3600)/60);
+    const dias = new Set(rf.map(r => r.DATA).filter(Boolean)).size;
+    const now = new Date();
+    const mesAtual = String(now.getMonth()+1).padStart(2,'0');
+    const anoAtual = now.getFullYear();
+    const rfMes = rf.filter(r => r.DATA && r.DATA.startsWith(anoAtual+'-'+mesAtual));
+
+    container.innerHTML += `
+      <div class="card">
+        <div class="label">${f.cargo}</div>
+        <div class="value" style="font-size:20px">${f.nome}</div>
+        <div class="sub" style="margin-top:8px">
+          📧 ${f.email}<br>
+          📊 ${rfMes.length} registros no mês | ${h}h ${m}min total<br>
+          📅 ${dias} dias com registro
+        </div>
+      </div>
+    `;
+  });
+}
+
+// ===== ATIVIDADES (ADMIN) =====
 function renderAdminAtividades() {
   const tbody = document.getElementById('adminAtividadesBody');
   tbody.innerHTML = '';
   (atividades||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
+    tbody.innerHTML += `<tr>
+      <td>${a.id||'-'}</td>
       <td>${a.nome}</td>
+      <td>${a.descricao||'-'}</td>
       <td class="acoes">
-        <button class="btn-editar" onclick="abrirModalEditar('${a.id}')">✏️</button>
-        <button class="btn-excluir" onclick="excluirAtividadeId('${a.id}')">🗑️</button>
-      </td>`;
-    tbody.appendChild(tr);
+        <button class="btn btn-sm btn-primary" onclick="abrirModalEditar('${a.id}')">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="excluirAtividadeId('${a.id}')">🗑️</button>
+      </td>
+    </tr>`;
   });
 }
 
@@ -458,15 +737,10 @@ async function salvarNovaAtividade() {
   const nome = document.getElementById('novaAtvNome').value.trim();
   if (!nome) { mostrarNotificacao('Digite o nome.', true); return; }
   const desc = document.getElementById('novaAtvDesc').value.trim();
-  try {
-    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addAtividade', nome, descricao: desc }) });
-    const dados = await resp.json();
-    if (dados.success) {
-      mostrarNotificacao('Atividade criada! ✅');
-      fecharModal('modalNovaAtividade');
-      await carregarAtividades();
-    }
-  } catch (e) { mostrarNotificacao('Erro.', true); }
+  await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addAtividade', nome, descricao: desc }) });
+  mostrarNotificacao('✅ Atividade criada!');
+  fecharModal('modalNovaAtividade');
+  await carregarAtividadesPlanilha();
 }
 
 function abrirModalEditar(id) {
@@ -484,9 +758,9 @@ async function atualizarAtividade() {
   if (!nome) { mostrarNotificacao('Digite o nome.', true); return; }
   const desc = document.getElementById('editAtvDesc').value.trim();
   await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editAtividade', id, nome, descricao: desc }) });
-  mostrarNotificacao('Atividade atualizada! ✅');
+  mostrarNotificacao('✅ Atividade atualizada!');
   fecharModal('modalEditarAtividade');
-  await carregarAtividades();
+  await carregarAtividadesPlanilha();
 }
 
 async function excluirAtividade() {
@@ -495,14 +769,110 @@ async function excluirAtividade() {
   await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
   mostrarNotificacao('Atividade excluída.');
   fecharModal('modalEditarAtividade');
-  await carregarAtividades();
+  await carregarAtividadesPlanilha();
 }
 
 async function excluirAtividadeId(id) {
   if (!confirm('Excluir esta atividade?')) return;
   await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAtividade', id }) });
   mostrarNotificacao('Atividade excluída.');
-  await carregarAtividades();
+  await carregarAtividadesPlanilha();
+}
+
+// ===== RELATORIOS =====
+function preencherFiltros() {
+  const hoje = new Date();
+  const mesPassado = new Date(hoje);
+  mesPassado.setDate(1);
+  document.getElementById('relDataIni').value = mesPassado.toISOString().split('T')[0];
+  document.getElementById('relDataFim').value = hoje.toISOString().split('T')[0];
+}
+
+function filtrarRelatorio() {
+  const func = document.getElementById('relFiltroFunc').value;
+  const ini = document.getElementById('relDataIni').value;
+  const fim = document.getElementById('relDataFim').value;
+
+  let filtrados = [...todosDados];
+  if (func !== 'todos') filtrados = filtrados.filter(r => r.FUNCIONÁRIO === func);
+  if (ini) filtrados = filtrados.filter(r => r.DATA >= ini);
+  if (fim) filtrados = filtrados.filter(r => r.DATA <= fim);
+  filtrados.sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
+
+  const tbody = document.getElementById('relatorioBody');
+  tbody.innerHTML = '';
+  filtrados.forEach(r => {
+    tbody.innerHTML += `<tr>
+      <td>${r.DATA||'-'}</td>
+      <td>${r.FUNCIONÁRIO||'-'}</td>
+      <td>${r.ATIVIDADE||'-'}</td>
+      <td>${r['HORA INICIO']||'-'}</td>
+      <td>${r['HORA FIM']||'-'}</td>
+      <td>${r.TOTAL||'-'}</td>
+      <td>${r.OBSERVAÇÃO||'-'}</td>
+    </tr>`;
+  });
+  if (!filtrados.length) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro encontrado</td></tr>';
+
+  const seg = filtrados.reduce((acc, r) => {
+    if (!r.TOTAL) return acc;
+    const p = r.TOTAL.split(':');
+    return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
+  }, 0);
+  const h = Math.floor(seg/3600);
+  const m = Math.floor((seg%3600)/60);
+  document.getElementById('relTotalHoras').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  document.getElementById('relTotalReg').textContent = filtrados.length;
+
+  window._relDadosFiltrados = filtrados;
+}
+
+function exportarRelatorioCSV() {
+  if (!window._relDadosFiltrados || !window._relDadosFiltrados.length) {
+    mostrarNotificacao('Nenhum dado para exportar.', true); return;
+  }
+  const cab = 'Data,Funcionário,Atividade,Início,Fim,Total,Observação\n';
+  const linhas = window._relDadosFiltrados.map(r =>
+    `"${r.DATA||''}","${r.FUNCIONÁRIO||''}","${r.ATIVIDADE||''}","${r['HORA INICIO']||''}","${r['HORA FIM']||''}","${r.TOTAL||''}","${(r.OBSERVAÇÃO||'').replace(/"/g,'""')}"`
+  ).join('\n');
+  downloadCSV(cab + linhas, 'relatorio_' + new Date().toISOString().split('T')[0] + '.csv');
+}
+
+// ===== BACKUP =====
+function exportarJSON() {
+  if (!todosDados.length) { mostrarNotificacao('Nenhum dado para exportar.', true); return; }
+  const blob = new Blob([JSON.stringify(todosDados, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'backup_registros_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  mostrarNotificacao('✅ JSON exportado!');
+}
+
+function exportarCSV() {
+  if (!todosDados.length) { mostrarNotificacao('Nenhum dado para exportar.', true); return; }
+  const cab = Object.keys(todosDados[0]).join(',') + '\n';
+  const linhas = todosDados.map(r =>
+    Object.values(r).map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')
+  ).join('\n');
+  downloadCSV(cab + linhas, 'backup_registros_' + new Date().toISOString().split('T')[0] + '.csv');
+}
+
+function exportarAtividadesCSV() {
+  if (!atividades.length) { mostrarNotificacao('Nenhuma atividade para exportar.', true); return; }
+  const cab = 'id,nome,descricao\n';
+  const linhas = atividades.map(a => `"${a.id}","${a.nome}","${(a.descricao||'').replace(/"/g,'""')}"`).join('\n');
+  downloadCSV(cab + linhas, 'atividades_' + new Date().toISOString().split('T')[0] + '.csv');
+}
+
+function downloadCSV(conteudo, nomeArquivo) {
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + conteudo], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nomeArquivo;
+  a.click(); URL.revokeObjectURL(url);
+  mostrarNotificacao('✅ ' + nomeArquivo + ' baixado!');
 }
 
 // ===== NOTIFICAÇÃO =====
