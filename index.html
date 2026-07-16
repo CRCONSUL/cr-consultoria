@@ -15,7 +15,6 @@ body {
 }
 .hidden { display: none !important; }
 
-/* SIDEBAR */
 .sidebar {
   width: 220px; background: #1a1a24; min-height: 100vh;
   border-right: 1px solid #2a2a35; padding: 20px 0;
@@ -37,21 +36,15 @@ body {
 }
 .sidebar a:hover { background: #252533; color: #fff; }
 .sidebar a.active { background: rgba(99,102,241,.15); color: #6366f1; border-right: 3px solid #6366f1; }
-.sidebar .sair {
-  margin-top: 20px; border-top: 1px solid #2a2a35; padding-top: 12px;
-}
+.sidebar .sair { margin-top: 20px; border-top: 1px solid #2a2a35; padding-top: 12px; }
 .sidebar .sair a { color: #ef4444; }
 .sidebar .sair a:hover { background: rgba(239,68,68,.1); }
 
-/* CONTEUDO */
-.main {
-  margin-left: 220px; flex: 1; padding: 24px 32px; min-height: 100vh;
-}
+.main { margin-left: 220px; flex: 1; padding: 24px 32px; min-height: 100vh; }
 .page { display: none; }
 .page.active { display: block; }
 .page h3 { font-size: 22px; color: #fff; margin-bottom: 20px; }
 
-/* CARDS */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
 .card {
   background: #1a1a24; border-radius: 12px; padding: 20px;
@@ -60,20 +53,15 @@ body {
 .card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .5px; }
 .card .value { font-size: 28px; font-weight: 700; color: #fff; margin-top: 4px; }
 .card .sub { font-size: 13px; color: #aaa; margin-top: 2px; }
-.card.purple { border-color: #6366f1; }
-.card.purple .value { color: #818cf8; }
-.card.green { border-color: #22c55e; }
-.card.green .value { color: #4ade80; }
-.card.blue { border-color: #3b82f6; }
-.card.blue .value { color: #60a5fa; }
-.card.orange { border-color: #f59e0b; }
-.card.orange .value { color: #fbbf24; }
+.card.purple { border-color: #6366f1; } .card.purple .value { color: #818cf8; }
+.card.green { border-color: #22c55e; } .card.green .value { color: #4ade80; }
+.card.blue { border-color: #3b82f6; } .card.blue .value { color: #60a5fa; }
+.card.orange { border-color: #f59e0b; } .card.orange .value { color: #fbbf24; }
 
-/* FORM ELEMENTOS */
 select, input, textarea {
   padding: 10px 12px; border-radius: 6px; border: 1px solid #333;
   background: #252533; color: #e0e0e0; font-size: 14px;
-  width: 100%; font-family: inherit;
+  width: 100%; font-family: inherit; box-sizing: border-box;
 }
 select:focus, input:focus, textarea:focus { outline: none; border-color: #6366f1; }
 textarea { min-height: 60px; resize: vertical; }
@@ -81,7 +69,6 @@ label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
 .form-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .form-group { flex: 1; min-width: 150px; }
 
-/* BOTOES */
 .btn {
   padding: 10px 20px; border-radius: 6px; border: none;
   font-size: 14px; font-weight: 600; cursor: pointer;
@@ -95,7 +82,6 @@ label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
 .btn-sm { padding: 6px 12px; font-size: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 
-/* TABELA */
 .tabela-wrap { overflow-x: auto; margin-top: 12px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { background: #252533; color: #888; padding: 10px 12px; text-align: left; font-weight: 600; }
@@ -103,12 +89,9 @@ td { padding: 10px 12px; border-bottom: 1px solid #2a2a35; color: #ccc; }
 tr:hover td { background: rgba(99,102,241,.03); }
 th.acoes, td.acoes { width: 90px; text-align: center; }
 
-/* BADGE */
 .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
 .badge-concluido { background: rgba(34,197,94,.15); color: #22c55e; }
-.badge-andamento { background: rgba(99,102,241,.15); color: #818cf8; }
 
-/* ATIVIDADE WRAPPER */
 .atv-wrapper { display: flex; gap: 8px; }
 .atv-wrapper select { flex: 1; }
 .btn-plus {
@@ -117,14 +100,12 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
 }
 .btn-plus:hover { background: rgba(99,102,241,.1); }
 
-/* CRONOMETRO */
 .cronometro {
   font-size: 42px; font-weight: 700; color: #fff;
   font-family: 'Courier New', monospace; text-align: center;
   padding: 20px 0; letter-spacing: 3px;
 }
 
-/* MODAIS */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,.7);
   display: flex; align-items: center; justify-content: center; z-index: 2000;
@@ -136,17 +117,14 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
 .modal h4 { color: #fff; font-size: 18px; margin-bottom: 16px; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
 
-/* GRAFICO BARRAS SIMPLES */
 .grafico-wrap { margin-top: 16px; padding: 16px; background: #1a1a24; border-radius: 8px; border: 1px solid #2a2a35; }
 .grafico-wrap h4 { color: #fff; margin-bottom: 12px; font-size: 14px; }
 .barra-container { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding: 0 8px; }
 .barra-item { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
-.barra { width: 100%; max-width: 40px; background: #6366f1; border-radius: 4px 4px 0 0; min-height: 4px; transition: height .5s; position: relative; }
-.barra:hover { opacity: .85; }
+.barra { width: 100%; max-width: 40px; background: #6366f1; border-radius: 4px 4px 0 0; min-height: 4px; }
 .barra-label { font-size: 10px; color: #888; margin-top: 4px; text-align: center; }
 .barra-valor { font-size: 10px; color: #aaa; margin-bottom: 2px; font-weight: 600; }
 
-/* NOTIFICACAO */
 .notificacao {
   position: fixed; bottom: 24px; right: 24px; background: #22c55e;
   color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px;
@@ -156,7 +134,6 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
 .notificacao.erro { background: #ef4444; }
 @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* LOGIN */
 #loginScreen {
   position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
   background: #0f0f13; z-index: 5000;
@@ -172,10 +149,8 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
 .login-card select { margin-bottom: 16px; }
 .login-card .btn { width: 100%; justify-content: center; }
 
-/* FILTROS */
 .filtros { background: #1a1a24; border-radius: 8px; padding: 16px; margin-bottom: 16px; border: 1px solid #2a2a35; }
 
-/* RESPONSIVO */
 @media (max-width: 768px) {
   .sidebar { width: 60px; }
   .sidebar h2, .sidebar .user-badge, .sidebar a span { display: none; }
@@ -184,7 +159,6 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
   .cards { grid-template-columns: 1fr 1fr; }
 }
 
-/* BACKUP */
 .backup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
 .backup-card {
   background: #1a1a24; border: 1px solid #2a2a35; border-radius: 12px;
@@ -196,7 +170,6 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="emoji">👋</div>
@@ -207,7 +180,6 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <h2>📋 CR Consultoria</h2>
   <div class="user-badge">
@@ -223,9 +195,7 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
   <div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
 </div>
 
-<!-- CONTEUDO -->
 <div class="main">
-
   <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <h3>📊 Dashboard</h3>
@@ -298,9 +268,7 @@ th.acoes, td.acoes { width: 90px; text-align: center; }
       <div class="form-row">
         <div class="form-group">
           <label>Funcionário</label>
-          <select id="relFiltroFunc">
-            <option value="todos">Todos</option>
-          </select>
+          <select id="relFiltroFunc"><option value="todos">Todos</option></select>
         </div>
         <div class="form-group">
           <label>Data Inicial</label>
@@ -399,6 +367,25 @@ let inicioCronometro = null;
 let registroTemporario = null;
 let abaAtual = 'dashboard';
 
+// ===== CORRESPONDÊNCIA DE NOME FLEXÍVEL =====
+function nomeFuncionarioIgual(nomeBase, nomeRegistro) {
+  if (!nomeBase || !nomeRegistro) return false;
+  const a = nomeBase.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  const b = nomeRegistro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  if (a === b) return true;
+  if (a.includes(b) || b.includes(a)) return true;
+  const aPartes = a.split(' ');
+  const bPartes = b.split(' ');
+  return aPartes.some(p => p.length > 2 && bPartes.includes(p));
+}
+
+function getNomeAtividade(valor) {
+  if (!valor) return '-';
+  const found = (atividades||[]).find(a => String(a.id) === String(valor));
+  if (found) return found.nome;
+  return valor;
+}
+
 // ===== CARGA =====
 async function carregarTudo() {
   const selLogin = document.getElementById('loginFuncionario');
@@ -407,16 +394,14 @@ async function carregarTudo() {
     o.value = f.nome; o.textContent = `${f.nome} — ${f.cargo}`;
     selLogin.appendChild(o);
   });
-
   document.getElementById('relFiltroFunc').innerHTML = '<option value="todos">Todos</option>';
   FUNCIONARIOS.forEach(f => {
     const o = document.createElement('option');
     o.value = f.nome; o.textContent = f.nome;
     document.getElementById('relFiltroFunc').appendChild(o);
   });
-
-  await carregarDadosPlanilha();
   await carregarAtividadesPlanilha();
+  await carregarDadosPlanilha();
 }
 
 async function carregarDadosPlanilha() {
@@ -426,7 +411,11 @@ async function carregarDadosPlanilha() {
     if (dados.success) todosDados = dados.data || [];
     else todosDados = [];
   } catch (e) { todosDados = []; console.error(e); }
-  if (usuarioAtual) { atualizarDashboard(); carregarHistorico(); atualizarFuncionarios(); }
+  if (usuarioAtual) {
+    atualizarDashboard();
+    carregarHistorico();
+    atualizarFuncionarios();
+  }
 }
 
 async function carregarAtividadesPlanilha() {
@@ -444,7 +433,8 @@ function preencherSelectAtividades() {
   sel.innerHTML = '<option value="">Selecione...</option>';
   (atividades||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
     const o = document.createElement('option');
-    o.value = a.id || a.nome; o.textContent = a.nome;
+    o.value = a.id || a.nome;
+    o.textContent = a.nome;
     sel.appendChild(o);
   });
 }
@@ -473,15 +463,9 @@ function navegar(aba) {
   abaAtual = aba;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + aba).classList.add('active');
-  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-  document.querySelectorAll('.sidebar a').forEach(a => {
-    if (a.textContent.includes(document.querySelector('#page-' + aba + ' h3')?.textContent?.replace(/[^a-zA-Z]/g,'') || aba)) {
-      // simplified matching
-    }
-  });
-  // ativar visual na sidebar
+  const indices = { dashboard:0, registro:1, funcionarios:2, atividades:3, relatorios:4, backup:5 };
   document.querySelectorAll('.sidebar a').forEach((a,i) => {
-    a.classList.toggle('active', i === ['dashboard','registro','funcionarios','atividades','relatorios','backup'].indexOf(aba));
+    a.classList.toggle('active', i === (indices[aba] || 0));
   });
   if (aba === 'dashboard') atualizarDashboard();
   if (aba === 'funcionarios') atualizarFuncionarios();
@@ -490,32 +474,39 @@ function navegar(aba) {
 }
 
 // ===== DASHBOARD =====
+function totalSegundos(arr) {
+  return arr.reduce((acc, r) => {
+    if (!r.TOTAL) return acc;
+    const partes = String(r.TOTAL).split(':');
+    const h = parseInt(partes[0]) || 0;
+    const m = parseInt(partes[1]) || 0;
+    const s = parseInt(partes[2]) || 0;
+    return acc + h * 3600 + m * 60 + s;
+  }, 0);
+}
+
+function fmtHms(s) {
+  if (isNaN(s) || s < 0) return '0h 0min';
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h > 0) return `${h}h ${m}min`;
+  return `${m}min`;
+}
+
 function atualizarDashboard() {
-  const dados = usuarioAtual ? todosDados.filter(r => r.FUNCIONÁRIO === usuarioAtual) : todosDados;
+  // Usa correspondência flexível de nome
+  const dadosUser = todosDados.filter(r => nomeFuncionarioIgual(usuarioAtual, r.FUNCIONÁRIO));
+
   const now = new Date();
   const mesAtual = String(now.getMonth() + 1).padStart(2,'0');
   const anoAtual = now.getFullYear();
-  const dadosMes = dados.filter(r => r.DATA && r.DATA.startsWith(anoAtual + '-' + mesAtual));
-  const dadosHoje = dados.filter(r => r.DATA === now.toISOString().split('T')[0]);
-
-  function totalSegundos(arr) {
-    return arr.reduce((acc, r) => {
-      if (!r.TOTAL) return acc;
-      const p = r.TOTAL.split(':');
-      return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
-    }, 0);
-  }
+  const dadosMes = dadosUser.filter(r => r.DATA && r.DATA.startsWith(anoAtual + '-' + mesAtual));
+  const dadosHoje = dadosUser.filter(r => r.DATA === now.toISOString().split('T')[0]);
 
   const segMes = totalSegundos(dadosMes);
   const segHoje = totalSegundos(dadosHoje);
   const diasUteis = Math.min(now.getDate(), 30);
   const mediaDia = diasUteis > 0 ? Math.round(segMes / diasUteis) : 0;
-
-  function fmtHms(s) {
-    const h = Math.floor(s/3600);
-    const m = Math.floor((s%3600)/60);
-    return `${h}h ${m}min`;
-  }
 
   document.getElementById('dashCards').innerHTML = `
     <div class="card purple"><div class="label">Horas no Mês</div><div class="value">${fmtHms(segMes)}</div><div class="sub">${dadosMes.length} registros</div></div>
@@ -524,7 +515,7 @@ function atualizarDashboard() {
     <div class="card orange"><div class="label">Total Registros</div><div class="value">${dadosMes.length}</div><div class="sub">No mês</div></div>
   `;
 
-  // Grafico barras - ultimos 7 dias
+  // Gráfico de barras
   const dias = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(now);
@@ -533,14 +524,14 @@ function atualizarDashboard() {
   }
   const maxSeg = Math.max(...dias.map(d => {
     const ds = d.toISOString().split('T')[0];
-    return totalSegundos(dados.filter(r => r.DATA === ds));
+    return totalSegundos(dadosUser.filter(r => r.DATA === ds));
   }), 1);
 
   const container = document.getElementById('graficoBarras');
   container.innerHTML = '';
   dias.forEach(d => {
     const ds = d.toISOString().split('T')[0];
-    const seg = totalSegundos(dados.filter(r => r.DATA === ds));
+    const seg = totalSegundos(dadosUser.filter(r => r.DATA === ds));
     const altura = Math.max(Math.round((seg / maxSeg) * 100), 4);
     const item = document.createElement('div');
     item.className = 'barra-item';
@@ -548,33 +539,33 @@ function atualizarDashboard() {
     item.innerHTML = `
       <div class="barra-valor">${fmtHms(seg)}</div>
       <div class="barra" style="height:${altura}px"></div>
-      <div class="barra-label">${nomDia}</div>
-    `;
+      <div class="barra-label">${nomDia}</div>`;
     container.appendChild(item);
   });
 
-  // Tabela horas por funcionario
+  // Tabela funcionários
   const tbody = document.getElementById('dashTabelaFunc');
   tbody.innerHTML = '';
   FUNCIONARIOS.forEach(f => {
-    const rf = dadosMes.filter(r => r.FUNCIONÁRIO === f.nome);
+    const rf = todosDados.filter(r => nomeFuncionarioIgual(f.nome, r.FUNCIONÁRIO) && r.DATA && r.DATA.startsWith(anoAtual + '-' + mesAtual));
     const sf = totalSegundos(rf);
     const h = Math.floor(sf / 3600);
     const m = Math.floor((sf % 3600) / 60);
     const diasF = new Set(rf.map(r => r.DATA).filter(Boolean)).size;
     const media = diasF > 0 ? Math.round(sf / diasF) : 0;
-    const mh = Math.floor(media/3600);
-    const mm = Math.floor((media%3600)/60);
+    const mh = Math.floor(media / 3600);
+    const mm = Math.floor((media % 3600) / 60);
     tbody.innerHTML += `<tr><td>${f.nome}</td><td>${rf.length}</td><td>${h}h ${m}min</td><td>${mh}h ${mm}min</td></tr>`;
   });
 }
 
-// ===== CRONOMETRO =====
+// ===== CRONÔMETRO =====
 function iniciarCronometro() {
   const atv = document.getElementById('atividadeSelect').value;
   if (!atv) { mostrarNotificacao('Selecione uma atividade.', true); return; }
+  const nomeAtv = getNomeAtividade(atv);
   inicioCronometro = Date.now();
-  registroTemporario = { atividade: atv, obs: document.getElementById('observacaoInput').value, inicio: inicioCronometro };
+  registroTemporario = { atividade: atv, nomeAtividade: nomeAtv, obs: document.getElementById('observacaoInput').value, inicio: inicioCronometro };
   document.getElementById('btnIniciar').classList.add('hidden');
   document.getElementById('btnParar').classList.remove('hidden');
   cronometroAtivo = setInterval(() => {
@@ -603,13 +594,14 @@ async function salvarRegistro() {
   const m = Math.floor((totalSeg % 3600) / 60);
   const s = totalSeg % 60;
   const obs = document.getElementById('observacaoInput').value || '';
+  const nomeAtv = registroTemporario.nomeAtividade || registroTemporario.atividade;
 
   const payload = {
     action: 'add',
     ID: 'REG_' + Date.now(),
     DATA: data,
     FUNCIONÁRIO: usuarioAtual,
-    ATIVIDADE: registroTemporario.atividade,
+    ATIVIDADE: nomeAtv,
     'HORA INICIO': inicio.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
     'HORA FIM': fim.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
     TOTAL: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
@@ -637,14 +629,16 @@ async function salvarRegistro() {
 
 // ===== HISTÓRICO =====
 function carregarHistorico() {
-  const meus = todosDados.filter(r => r.FUNCIONÁRIO === usuarioAtual).sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
+  const meus = todosDados.filter(r => nomeFuncionarioIgual(usuarioAtual, r.FUNCIONÁRIO))
+    .sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
   const tbody = document.getElementById('historicoBody');
   tbody.innerHTML = '';
-  meus.slice(0,20).forEach(r => {
+  meus.slice(0, 20).forEach(r => {
     const st = (r.STATUS||'concluido').toLowerCase();
+    const nomeAtv = getNomeAtividade(r.ATIVIDADE);
     tbody.innerHTML += `<tr>
       <td>${r.DATA||'-'}</td>
-      <td>${r.ATIVIDADE||'-'}</td>
+      <td>${nomeAtv}</td>
       <td>${r['HORA INICIO']||'-'}</td>
       <td>${r['HORA FIM']||'-'}</td>
       <td>${r.TOTAL||'-'}</td>
@@ -663,13 +657,14 @@ async function excluirRegistro(id) {
   await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', registroId: id }) });
   mostrarNotificacao('Registro excluído.');
   await carregarDadosPlanilha();
-  carregarHistorico();
 }
 
 function editarRegistro(id) {
   const r = todosDados.find(x => x.ID === id);
   if (!r) return;
-  document.getElementById('atividadeSelect').value = r.ATIVIDADE||'';
+  // Tenta encontrar a atividade pelo nome ou ID
+  const atv = (atividades||[]).find(a => a.nome === r.ATIVIDADE || String(a.id) === String(r.ATIVIDADE));
+  document.getElementById('atividadeSelect').value = atv ? (atv.id || atv.nome) : '';
   document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
   navegar('registro');
   mostrarNotificacao('Registro carregado para edição.');
@@ -679,20 +674,17 @@ function editarRegistro(id) {
 function atualizarFuncionarios() {
   const container = document.getElementById('funcCards');
   container.innerHTML = '';
+  const now = new Date();
+  const mesAtual = String(now.getMonth()+1).padStart(2,'0');
+  const anoAtual = now.getFullYear();
+
   FUNCIONARIOS.forEach(f => {
-    const rf = todosDados.filter(r => r.FUNCIONÁRIO === f.nome);
-    const seg = rf.reduce((acc, r) => {
-      if (!r.TOTAL) return acc;
-      const p = r.TOTAL.split(':');
-      return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
-    }, 0);
+    const rf = todosDados.filter(r => nomeFuncionarioIgual(f.nome, r.FUNCIONÁRIO));
+    const rfMes = rf.filter(r => r.DATA && r.DATA.startsWith(anoAtual+'-'+mesAtual));
+    const seg = totalSegundos(rf);
     const h = Math.floor(seg/3600);
     const m = Math.floor((seg%3600)/60);
     const dias = new Set(rf.map(r => r.DATA).filter(Boolean)).size;
-    const now = new Date();
-    const mesAtual = String(now.getMonth()+1).padStart(2,'0');
-    const anoAtual = now.getFullYear();
-    const rfMes = rf.filter(r => r.DATA && r.DATA.startsWith(anoAtual+'-'+mesAtual));
 
     container.innerHTML += `
       <div class="card">
@@ -703,25 +695,20 @@ function atualizarFuncionarios() {
           📊 ${rfMes.length} registros no mês | ${h}h ${m}min total<br>
           📅 ${dias} dias com registro
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
-// ===== ATIVIDADES (ADMIN) =====
+// ===== ATIVIDADES =====
 function renderAdminAtividades() {
   const tbody = document.getElementById('adminAtividadesBody');
   tbody.innerHTML = '';
   (atividades||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
-    tbody.innerHTML += `<tr>
-      <td>${a.id||'-'}</td>
-      <td>${a.nome}</td>
-      <td>${a.descricao||'-'}</td>
+    tbody.innerHTML += `<tr><td>${a.id||'-'}</td><td>${a.nome}</td><td>${a.descricao||'-'}</td>
       <td class="acoes">
         <button class="btn btn-sm btn-primary" onclick="abrirModalEditar('${a.id}')">✏️</button>
         <button class="btn btn-sm btn-danger" onclick="excluirAtividadeId('${a.id}')">🗑️</button>
-      </td>
-    </tr>`;
+      </td></tr>`;
   });
 }
 
@@ -792,9 +779,8 @@ function filtrarRelatorio() {
   const func = document.getElementById('relFiltroFunc').value;
   const ini = document.getElementById('relDataIni').value;
   const fim = document.getElementById('relDataFim').value;
-
   let filtrados = [...todosDados];
-  if (func !== 'todos') filtrados = filtrados.filter(r => r.FUNCIONÁRIO === func);
+  if (func !== 'todos') filtrados = filtrados.filter(r => nomeFuncionarioIgual(func, r.FUNCIONÁRIO));
   if (ini) filtrados = filtrados.filter(r => r.DATA >= ini);
   if (fim) filtrados = filtrados.filter(r => r.DATA <= fim);
   filtrados.sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
@@ -802,10 +788,11 @@ function filtrarRelatorio() {
   const tbody = document.getElementById('relatorioBody');
   tbody.innerHTML = '';
   filtrados.forEach(r => {
+    const nomeAtv = getNomeAtividade(r.ATIVIDADE);
     tbody.innerHTML += `<tr>
       <td>${r.DATA||'-'}</td>
       <td>${r.FUNCIONÁRIO||'-'}</td>
-      <td>${r.ATIVIDADE||'-'}</td>
+      <td>${nomeAtv}</td>
       <td>${r['HORA INICIO']||'-'}</td>
       <td>${r['HORA FIM']||'-'}</td>
       <td>${r.TOTAL||'-'}</td>
@@ -814,16 +801,11 @@ function filtrarRelatorio() {
   });
   if (!filtrados.length) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro encontrado</td></tr>';
 
-  const seg = filtrados.reduce((acc, r) => {
-    if (!r.TOTAL) return acc;
-    const p = r.TOTAL.split(':');
-    return acc + parseInt(p[0]||0)*3600 + parseInt(p[1]||0)*60 + parseInt(p[2]||0);
-  }, 0);
+  const seg = totalSegundos(filtrados);
   const h = Math.floor(seg/3600);
   const m = Math.floor((seg%3600)/60);
   document.getElementById('relTotalHoras').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
   document.getElementById('relTotalReg').textContent = filtrados.length;
-
   window._relDadosFiltrados = filtrados;
 }
 
@@ -832,25 +814,26 @@ function exportarRelatorioCSV() {
     mostrarNotificacao('Nenhum dado para exportar.', true); return;
   }
   const cab = 'Data,Funcionário,Atividade,Início,Fim,Total,Observação\n';
-  const linhas = window._relDadosFiltrados.map(r =>
-    `"${r.DATA||''}","${r.FUNCIONÁRIO||''}","${r.ATIVIDADE||''}","${r['HORA INICIO']||''}","${r['HORA FIM']||''}","${r.TOTAL||''}","${(r.OBSERVAÇÃO||'').replace(/"/g,'""')}"`
-  ).join('\n');
+  const linhas = window._relDadosFiltrados.map(r => {
+    const nomeAtv = getNomeAtividade(r.ATIVIDADE);
+    return `"${r.DATA||''}","${r.FUNCIONÁRIO||''}","${nomeAtv}","${r['HORA INICIO']||''}","${r['HORA FIM']||''}","${r.TOTAL||''}","${(r.OBSERVAÇÃO||'').replace(/"/g,'""')}"`;
+  }).join('\n');
   downloadCSV(cab + linhas, 'relatorio_' + new Date().toISOString().split('T')[0] + '.csv');
 }
 
 // ===== BACKUP =====
 function exportarJSON() {
-  if (!todosDados.length) { mostrarNotificacao('Nenhum dado para exportar.', true); return; }
+  if (!todosDados.length) { mostrarNotificacao('Nenhum dado.', true); return; }
   const blob = new Blob([JSON.stringify(todosDados, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'backup_registros_' + new Date().toISOString().split('T')[0] + '.json';
-  a.click(); URL.revokeObjectURL(url);
+  a.href = URL.createObjectURL(blob);
+  a.download = 'backup_registros_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
   mostrarNotificacao('✅ JSON exportado!');
 }
 
 function exportarCSV() {
-  if (!todosDados.length) { mostrarNotificacao('Nenhum dado para exportar.', true); return; }
+  if (!todosDados.length) { mostrarNotificacao('Nenhum dado.', true); return; }
   const cab = Object.keys(todosDados[0]).join(',') + '\n';
   const linhas = todosDados.map(r =>
     Object.values(r).map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')
@@ -859,7 +842,7 @@ function exportarCSV() {
 }
 
 function exportarAtividadesCSV() {
-  if (!atividades.length) { mostrarNotificacao('Nenhuma atividade para exportar.', true); return; }
+  if (!atividades.length) { mostrarNotificacao('Nenhuma atividade.', true); return; }
   const cab = 'id,nome,descricao\n';
   const linhas = atividades.map(a => `"${a.id}","${a.nome}","${(a.descricao||'').replace(/"/g,'""')}"`).join('\n');
   downloadCSV(cab + linhas, 'atividades_' + new Date().toISOString().split('T')[0] + '.csv');
@@ -868,10 +851,10 @@ function exportarAtividadesCSV() {
 function downloadCSV(conteudo, nomeArquivo) {
   const bom = '\uFEFF';
   const blob = new Blob([bom + conteudo], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = nomeArquivo;
-  a.click(); URL.revokeObjectURL(url);
+  a.href = URL.createObjectURL(blob);
+  a.download = nomeArquivo;
+  a.click();
   mostrarNotificacao('✅ ' + nomeArquivo + ' baixado!');
 }
 
@@ -884,7 +867,6 @@ function mostrarNotificacao(msg, erro = false) {
   setTimeout(() => div.remove(), 3000);
 }
 
-// ===== INICIAR =====
 carregarTudo();
 </script>
 </body>
