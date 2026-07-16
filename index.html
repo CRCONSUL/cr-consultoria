@@ -96,13 +96,9 @@ th.acoes,td.acoes{width:90px;text-align:center}
 </head>
 <body>
 <div id="loginScreen">
-<div class="login-card">
-<div class="emoji">👋</div><h1>CR Consultoria</h1>
-<p class="sub">Selecione seu nome para acessar</p>
+<div class="login-card"><div class="emoji">👋</div><h1>CR Consultoria</h1><p class="sub">Selecione seu nome para acessar</p>
 <select id="loginFuncionario"><option value="">— Selecione —</option></select>
-<button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
-</div>
-</div>
+<button class="btn btn-primary" onclick="fazerLogin()">Entrar</button></div></div>
 <div class="sidebar" id="sidebar">
 <h2>📋 CR Consultoria</h2>
 <div class="user-badge"><strong id="sidebarUser">—</strong><span id="sidebarCargo">Consultoria</span></div>
@@ -112,18 +108,15 @@ th.acoes,td.acoes{width:90px;text-align:center}
 <a onclick="navegar('atividades')">📋 <span>Atividades</span></a>
 <a onclick="navegar('relatorios')">📈 <span>Relatórios</span></a>
 <a onclick="navegar('backup')">💾 <span>Back Up</span></a>
-<div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
-</div>
+<div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div></div>
 <div class="main">
 <div class="page active" id="page-dashboard">
 <h3>📊 Dashboard</h3>
 <div class="cards" id="dashCards"></div>
 <div class="graficos-row">
 <div class="grafico-card"><h4>📈 Horas por Funcionário</h4><div class="barra-container" id="graficoFuncBarras"></div></div>
-<div class="grafico-card"><h4>🍩 Distribuição por Atividade</h4><div class="donut-wrap" id="donutWrap"></div></div>
-</div>
-<div class="grafico-card"><h4>📈 Horas por Dia (últimos 7 dias)</h4><div class="barra-container" id="graficoDiaBarras"></div></div>
-</div>
+<div class="grafico-card"><h4>🍩 Distribuição por Atividade</h4><div class="donut-wrap" id="donutWrap"></div></div></div>
+<div class="grafico-card"><h4>📈 Horas por Dia (últimos 7 dias)</h4><div class="barra-container" id="graficoDiaBarras"></div></div></div>
 <div class="page" id="page-registro">
 <h3>⏱️ Registro de Horas</h3>
 <div style="background:#1a1a24;border-radius:12px;padding:24px;border:1px solid #2a2a35">
@@ -135,51 +128,36 @@ th.acoes,td.acoes{width:90px;text-align:center}
 <button class="btn btn-warning hidden" id="btnPausar" onclick="pausarCronometro()">⏸ Pausar</button>
 <button class="btn btn-success hidden" id="btnRetomar" onclick="retomarCronometro()">▶ Retomar</button>
 <button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
-<button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
-</div>
-</div>
+<button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button></div></div>
 <div style="margin-top:24px;background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35">
 <h4 style="color:#fff;margin-bottom:12px">📄 Últimos Registros</h4>
-<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table></div>
-</div>
-</div>
+<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table></div></div></div>
 <div class="page" id="page-funcionarios"><h3>👥 Funcionários</h3><div class="cards" id="funcCards"></div></div>
 <div class="page" id="page-atividades">
 <h3>📋 Gestão de Atividades</h3>
 <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button></div>
-<div class="tabela-wrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table></div>
-</div>
+<div class="tabela-wrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table></div></div>
 <div class="page" id="page-relatorios">
 <h3>📈 Relatórios</h3>
-<div class="filtros">
-<div class="form-row">
+<div class="filtros"><div class="form-row">
 <div class="form-group"><label>Funcionário</label><select id="relFiltroFunc"><option value="todos">Todos</option></select></div>
 <div class="form-group"><label>Data Inicial</label><input type="date" id="relDataIni"></div>
 <div class="form-group"><label>Data Final</label><input type="date" id="relDataFim"></div>
 <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button></div>
-<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button></div>
-</div>
-</div>
+<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button></div></div></div>
 <div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead><tbody id="relatorioBody"></tbody></table></div>
-<div style="margin-top:12px;text-align:right;color:#888;font-size:13px">Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong></div>
-</div>
+<div style="margin-top:12px;text-align:right;color:#888;font-size:13px">Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong></div></div>
 <div class="page" id="page-backup">
-<h3>💾 Back Up</h3>
-<p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
+<h3>💾 Back Up</h3><p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
 <div class="backup-grid">
 <div class="backup-card"><h4>📄 Todos os Registros</h4><p>Exportar todos como JSON</p><button class="btn btn-primary" onclick="exportarJSON()">📥 Exportar JSON</button></div>
 <div class="backup-card"><h4>📊 Registros em CSV</h4><p>Exportar todos como CSV</p><button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button></div>
-<div class="backup-card"><h4>📋 Atividades CSV</h4><p>Exportar lista de atividades</p><button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button></div>
-</div>
-</div>
-</div>
-<div id="modalNovaAtividade" class="modal-overlay hidden">
-<div class="modal"><h4>Nova Atividade</h4>
+<div class="backup-card"><h4>📋 Atividades CSV</h4><p>Exportar lista de atividades</p><button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button></div></div></div></div>
+<div id="modalNovaAtividade" class="modal-overlay hidden"><div class="modal"><h4>Nova Atividade</h4>
 <label>Nome</label><input type="text" id="novaAtvNome" placeholder="Ex: Reunião com Cliente">
 <label>Descrição</label><textarea id="novaAtvDesc" placeholder="Descrição..."></textarea>
 <div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal('modalNovaAtividade')">Cancelar</button><button class="btn btn-primary" onclick="salvarNovaAtividade()">Salvar</button></div></div></div>
-<div id="modalEditarAtividade" class="modal-overlay hidden">
-<div class="modal"><h4>Editar Atividade</h4>
+<div id="modalEditarAtividade" class="modal-overlay hidden"><div class="modal"><h4>Editar Atividade</h4>
 <input type="hidden" id="editAtvId">
 <label>Nome</label><input type="text" id="editAtvNome">
 <label>Descrição</label><textarea id="editAtvDesc"></textarea>
@@ -191,13 +169,13 @@ const CORES_DONUT=['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','
 let atividades=[],todosDados=[],usuarioAtual=null;
 let cronometroAtivo=null,inicioCronometro=null,tempoPausado=0,registroTemporario=null;
 
-// EXTRAI SEGUNDOS CORRETAMENTE de QUALQUER formato
-function calcSeg(v){
+// === FUNÇÃO CHAVE: extrai SEGUNDOS de QUALQUER formato ===
+// O Web App retorna TOTAL como "1899-12-30T04:06:28.000Z"
+// Esta função extrai "04:06:28" e calcula os segundos
+function segundos(v){
   if(v==null||v===''||v===0||v==='0')return 0;
   let s=String(v);
-  // Se vier como "1899-12-30T04:06:28.000Z", extrai só "04:06:28"
   if(s.includes('T'))s=s.split('T')[1].split('.')[0];
-  // Se vier como "04:06:28"
   const p=s.split(':');
   return(parseInt(p[0])||0)*3600+(parseInt(p[1])||0)*60+(parseInt(p[2])||0);
 }
@@ -214,7 +192,6 @@ function nomeAtv(v){
   const f=(atividades||[]).find(a=>String(a.id)===String(v)||a.nome===String(v));
   return f?f.nome:v;
 }
-
 async function init(){
   const s=document.getElementById('loginFuncionario');
   FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome+' — '+f.cargo;s.appendChild(o)});
@@ -254,35 +231,32 @@ function navegar(aba){
   if(aba==='relatorios'){pf();fRel()}
   if(aba==='atividades')admAtv();
 }
-
-function totSeg(arr){return arr.reduce((a,r)=>a+calcSeg(r?.TOTAL),0)}
+function totSeg(arr){return arr.reduce((a,r)=>a+segundos(r?.TOTAL),0)}
 function fhms(s){if(isNaN(s)||s<0)return'0h 0min';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?h+'h '+m+'min':m+'min'}
-
 function upDash(){
   const du=todosDados.filter(r=>nomeIgual(usuarioAtual,r.FUNCIONÁRIO));
   const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();
   const dm=du.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes));
-  const dh=du.filter(r=>r.DATA===now.toISOString().split('T')[0]);
+  const dh=du.filter(r=>r.DATA&&r.DATA.includes(now.toISOString().split('T')[0]));
   const sm=totSeg(dm),sh=totSeg(dh),du_m=Math.min(now.getDate(),30),md=du_m>0?Math.round(sm/du_m):0;
-  const fa=new Set(todosDados.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes)).map(r=>r.FUNCIONÁRIO)).size;
+  const fa=new Set(todosDados.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes)).map(r=>String(r.FUNCIONÁRIO).replace(/\n/g,'').trim())).size;
   document.getElementById('dashCards').innerHTML='<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fhms(sm)+'</div><div class="sub">'+dm.length+' registros</div></div><div class="card green"><div class="label">Hoje</div><div class="value">'+fhms(sh)+'</div><div class="sub">'+dh.length+' registros</div></div><div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fhms(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div><div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div><div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+fa+'</div><div class="sub">No mês</div></div>';
   const bc=document.getElementById('graficoFuncBarras');bc.innerHTML='';
   const mx=Math.max(...FUNCIONARIOS.map(f=>totSeg(todosDados.filter(r=>nomeIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(ano+'-'+mes)))),1);
   FUNCIONARIOS.forEach(f=>{const s=totSeg(todosDados.filter(r=>nomeIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(ano+'-'+mes)));const a=Math.max(Math.round(s/mx*100),s>0?10:4);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fhms(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+f.nome.split(' ')[0]+'</div>';bc.appendChild(e)});
   const dw=document.getElementById('donutWrap');const ag={};
-  dm.forEach(r=>{const n=nomeAtv(r.ATIVIDADE);if(!ag[n])ag[n]=0;ag[n]+=calcSeg(r.TOTAL)});
+  dm.forEach(r=>{const n=nomeAtv(r.ATIVIDADE);if(!ag[n])ag[n]=0;ag[n]+=segundos(r.TOTAL)});
   const en=Object.entries(ag).sort((a,b)=>b[1]-a[1]).slice(0,8);const th=en.reduce((a,[_,h])=>a+h,0)||1;
   let dn='<div class="donut-svg"><svg viewBox="0 0 100 100">';let ang=0;const cx=50,cy=50,rr=38;
   en.forEach(([nm,hr],i)=>{const fr=hr/th,aa=fr*360;if(aa>=360)dn+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rr+'" fill="none" stroke="'+CORES_DONUT[i%CORES_DONUT.length]+'" stroke-width="18"/>';else if(aa>0){const x1=cx+rr*Math.sin(ang*Math.PI/180),y1=cy-rr*Math.cos(ang*Math.PI/180),x2=cx+rr*Math.sin((ang+aa)*Math.PI/180),y2=cy-rr*Math.cos((ang+aa)*Math.PI/180);dn+='<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+rr+' '+rr+' 0 '+(aa>180?1:0)+' 1 '+x2+' '+y2+' Z" fill="'+CORES_DONUT[i%CORES_DONUT.length]+'"/>';ang+=aa}});
   dn+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rr-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';
   en.forEach(([nm,hr],i)=>{const hh=Math.floor((hr||0)/3600),mm=Math.floor((hr||0)%3600/60);dn+='<div class="donut-item"><div class="donut-cor" style="background:'+CORES_DONUT[i%CORES_DONUT.length]+'"></div><span class="donut-label">'+nm+'</span><span class="donut-valor">'+hh+'h '+mm+'min</span></div>'});
   dn+='</div>';dw.innerHTML=dn;
-  const dc=document.getElementById('graficoDiaBarras');dc.innerHTML='';
-  const dias=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dias.push(d)}
-  const mdSeg=Math.max(...dias.map(d=>totSeg(du.filter(r=>r.DATA===d.toISOString().split('T')[0]))),1);
-  dias.forEach(d=>{const s=totSeg(du.filter(r=>r.DATA===d.toISOString().split('T')[0]));const a=Math.max(Math.round(s/mdSeg*100),s>0?8:3);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fhms(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';dc.appendChild(e)});
+  const dc=document.getElementById('graficoDiaBarras');dc.innerHTML='';const dias=[];
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dias.push(d)}
+  const mdSeg=Math.max(...dias.map(d=>totSeg(du.filter(r=>r.DATA&&r.DATA.includes(d.toISOString().split('T')[0])))),1);
+  dias.forEach(d=>{const s=totSeg(du.filter(r=>r.DATA&&r.DATA.includes(d.toISOString().split('T')[0])));const a=Math.max(Math.round(s/mdSeg*100),s>0?8:3);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fhms(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';dc.appendChild(e)});
 }
-
 function iniciarCronometro(){
   const atv=document.getElementById('atividadeSelect').value;
   if(!atv){notif('Selecione uma atividade.',true);return}
@@ -327,12 +301,7 @@ async function salvarRegistro(){
 function upHist(){
   const meus=todosDados.filter(r=>nomeIgual(usuarioAtual,r.FUNCIONÁRIO)).sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));
   const t=document.getElementById('historicoBody');t.innerHTML='';
-  meus.slice(0,50).forEach(r=>{
-    const seg=calcSeg(r.TOTAL);
-    const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;
-    const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
-    t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+nomeAtv(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="editarRegistro(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirRegistro(\''+r.ID+'\')">🗑️</button></td></tr>';
-  });
+  meus.slice(0,50).forEach(r=>{const s=segundos(r.TOTAL);const hh=Math.floor(s/3600),mm=Math.floor((s%3600)/60),ss=s%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+String(r.DATA||'-').replace(/T.*/,'')+'</td><td>'+nomeAtv(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="editarRegistro(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirRegistro(\''+r.ID+'\')">🗑️</button></td></tr>'});
   if(!meus.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro</td></tr>';
 }
 async function excluirRegistro(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'delete',registroId:id})});notif('Excluído.');await loadDados()}
@@ -340,7 +309,7 @@ function editarRegistro(id){const r=todosDados.find(x=>x.ID===id);if(!r)return;c
 function upFunc(){
   const c=document.getElementById('funcCards');c.innerHTML='';
   const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();
-  FUNCIONARIOS.forEach(f=>{const rf=todosDados.filter(r=>nomeIgual(f.nome,r.FUNCIONÁRIO));const seg=totSeg(rf),h=Math.floor(seg/3600),m=Math.floor((seg%3600)/60);const dias=new Set(rf.map(r=>r.DATA).filter(Boolean)).size;const rfMes=rf.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes));c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>'})}
+  FUNCIONARIOS.forEach(f=>{const rf=todosDados.filter(r=>nomeIgual(f.nome,r.FUNCIONÁRIO));const s=totSeg(rf),h=Math.floor(s/3600),m=Math.floor((s%3600)/60);const dias=new Set(rf.map(r=>r.DATA).filter(Boolean)).size;const rfMes=rf.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes));c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>'})}
 function admAtv(){const t=document.getElementById('adminAtividadesBody');t.innerHTML='';(atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{t.innerHTML+='<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="abrirModalEditar(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirAtividadeId(\''+a.id+'\')">🗑️</button></td></tr>'})}
 function abrirModalNovaAtividade(){document.getElementById('novaAtvNome').value='';document.getElementById('novaAtvDesc').value='';document.getElementById('modalNovaAtividade').classList.remove('hidden')}
 function fecharModal(id){document.getElementById(id).classList.add('hidden')}
@@ -350,8 +319,8 @@ async function atualizarAtividade(){const id=document.getElementById('editAtvId'
 async function excluirAtividade(){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id:document.getElementById('editAtvId').value})});notif('Excluída.');fecharModal('modalEditarAtividade');await loadAtv()}
 async function excluirAtividadeId(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id})});notif('Excluída.');await loadAtv()}
 function pf(){const h=new Date(),m=new Date(h);m.setDate(1);document.getElementById('relDataIni').value=m.toISOString().split('T')[0];document.getElementById('relDataFim').value=h.toISOString().split('T')[0]}
-function fRel(){const f=document.getElementById('relFiltroFunc').value,i=document.getElementById('relDataIni').value,fi=document.getElementById('relDataFim').value;let ft=[...todosDados];if(f!=='todos')ft=ft.filter(r=>nomeIgual(f,r.FUNCIONÁRIO));if(i)ft=ft.filter(r=>r.DATA>=i);if(fi)ft=ft.filter(r=>r.DATA<=fi);ft.sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('relatorioBody');t.innerHTML='';ft.forEach(r=>{const seg=calcSeg(r.TOTAL);const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+(r.FUNCIONÁRIO||'-')+'</td><td>'+nomeAtv(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>'});if(!ft.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';const seg=totSeg(ft);document.getElementById('relTotalHoras').textContent=String(Math.floor(seg/3600)).padStart(2,'0')+':'+String(Math.floor((seg%3600)/60)).padStart(2,'0');document.getElementById('relTotalReg').textContent=ft.length;window._relDadosFiltrados=ft}
-function exportarRelatorioCSV(){if(!window._relDadosFiltrados||!window._relDadosFiltrados.length){notif('Nenhum dado.',true);return}downloadCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+window._relDadosFiltrados.map(r=>{const seg=calcSeg(r.TOTAL);const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');return'"'+(r.DATA||'')+'","'+(r.FUNCIONÁRIO||'')+'","'+nomeAtv(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+ts+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"'}).join('\n'),'relatorio_'+new Date().toISOString().split('T')[0]+'.csv')}
+function fRel(){const f=document.getElementById('relFiltroFunc').value,i=document.getElementById('relDataIni').value,fi=document.getElementById('relDataFim').value;let ft=[...todosDados];if(f!=='todos')ft=ft.filter(r=>nomeIgual(f,r.FUNCIONÁRIO));if(i)ft=ft.filter(r=>r.DATA>=i);if(fi)ft=ft.filter(r=>r.DATA<=fi);ft.sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('relatorioBody');t.innerHTML='';ft.forEach(r=>{const s=segundos(r.TOTAL);const hh=Math.floor(s/3600),mm=Math.floor((s%3600)/60),ss=s%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+String(r.DATA||'-').replace(/T.*/,'')+'</td><td>'+String(r.FUNCIONÁRIO||'-').replace(/\n/g,'').trim()+'</td><td>'+nomeAtv(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>'});if(!ft.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';const s=totSeg(ft);document.getElementById('relTotalHoras').textContent=String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor((s%3600)/60)).padStart(2,'0');document.getElementById('relTotalReg').textContent=ft.length;window._relDadosFiltrados=ft}
+function exportarRelatorioCSV(){if(!window._relDadosFiltrados||!window._relDadosFiltrados.length){notif('Nenhum dado.',true);return}downloadCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+window._relDadosFiltrados.map(r=>{const s=segundos(r.TOTAL);const hh=Math.floor(s/3600),mm=Math.floor((s%3600)/60),ss=s%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');return'"'+String(r.DATA||'').replace(/T.*/,'')+'","'+String(r.FUNCIONÁRIO||'').replace(/\n/g,'').trim()+'","'+nomeAtv(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+ts+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"'}).join('\n'),'relatorio_'+new Date().toISOString().split('T')[0]+'.csv')}
 function exportarJSON(){if(!todosDados.length){notif('Nenhum dado.',true);return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(todosDados,null,2)],{type:'application/json'}));a.download='backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();notif('✅ Exportado!')}
 function exportarCSV(){if(!todosDados.length){notif('Nenhum dado.',true);return}downloadCSV(Object.keys(todosDados[0]).join(',')+'\n'+todosDados.map(r=>Object.values(r).map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n'),'backup_'+new Date().toISOString().split('T')[0]+'.csv')}
 function exportarAtividadesCSV(){if(!atividades.length){notif('Nenhuma.',true);return}downloadCSV('id,nome,descricao\n'+atividades.map(a=>'"'+a.id+'","'+a.nome+'","'+(a.descricao||'').replace(/"/g,'""')+'"').join('\n'),'atividades_'+new Date().toISOString().split('T')[0]+'.csv')}
