@@ -5,637 +5,352 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produtividade - CR Consultoria</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family:'Segoe UI',system-ui,sans-serif;
-  background:#0f0f13; color:#e0e0e0;
-  min-height:100vh; display:flex;
-}
-.hidden { display:none!important; }
-.sidebar {
-  width:220px; background:#1a1a24; min-height:100vh;
-  border-right:1px solid #2a2a35; padding:20px 0;
-  position:fixed; left:0; top:0; bottom:0; z-index:100;
-}
-.sidebar h2 {
-  font-size:16px; color:#fff; padding:0 20px 20px;
-  border-bottom:1px solid #2a2a35; margin-bottom:8px;
-}
-.sidebar .user-badge {
-  padding:12px 20px; font-size:12px; color:#888;
-  border-bottom:1px solid #2a2a35; margin-bottom:8px;
-}
-.sidebar .user-badge strong { color:#fff; display:block; font-size:13px; }
-.sidebar a {
-  display:flex; align-items:center; gap:10px;
-  padding:12px 20px; color:#aaa; text-decoration:none;
-  font-size:14px; cursor:pointer; transition:all .2s;
-}
-.sidebar a:hover { background:#252533; color:#fff; }
-.sidebar a.active { background:rgba(99,102,241,.15); color:#6366f1; border-right:3px solid #6366f1; }
-.sidebar .sair { margin-top:20px; border-top:1px solid #2a2a35; padding-top:12px; }
-.sidebar .sair a { color:#ef4444; }
-.sidebar .sair a:hover { background:rgba(239,68,68,.1); }
-.main { margin-left:220px; flex:1; padding:24px 32px; min-height:100vh; }
-.page { display:none; }
-.page.active { display:block; }
-.page h3 { font-size:22px; color:#fff; margin-bottom:20px; }
-.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px; margin-bottom:20px; }
-.card {
-  background:#1a1a24; border-radius:12px; padding:20px;
-  border:1px solid #2a2a35; border-top:3px solid transparent;
-}
-.card .label { font-size:11px; color:#888; text-transform:uppercase; letter-spacing:.5px; }
-.card .value { font-size:26px; font-weight:700; color:#fff; margin-top:4px; }
-.card .sub { font-size:12px; color:#aaa; margin-top:2px; }
-.card.purple { border-top-color:#818cf8; } .card.purple .value { color:#818cf8; }
-.card.green { border-top-color:#4ade80; } .card.green .value { color:#4ade80; }
-.card.blue { border-top-color:#60a5fa; } .card.blue .value { color:#60a5fa; }
-.card.orange { border-top-color:#fbbf24; } .card.orange .value { color:#fbbf24; }
-.card.cyan { border-top-color:#22d3ee; } .card.cyan .value { color:#22d3ee; }
-select, input, textarea {
-  padding:10px 12px; border-radius:6px; border:1px solid #333;
-  background:#252533; color:#e0e0e0; font-size:14px;
-  width:100%; font-family:inherit; box-sizing:border-box;
-}
-select:focus, input:focus, textarea:focus { outline:none; border-color:#6366f1; }
-textarea { min-height:60px; resize:vertical; }
-label { display:block; font-size:12px; color:#888; margin-bottom:3px; }
-.form-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
-.form-group { flex:1; min-width:150px; }
-.btn {
-  padding:10px 20px; border-radius:6px; border:none;
-  font-size:14px; font-weight:600; cursor:pointer;
-  transition:opacity .2s; display:inline-flex; align-items:center; gap:6px;
-}
-.btn:hover { opacity:.85; }
-.btn-primary { background:#6366f1; color:#fff; }
-.btn-success { background:#22c55e; color:#fff; }
-.btn-warning { background:#f59e0b; color:#fff; }
-.btn-danger { background:#ef4444; color:#fff; }
-.btn-outline { background:transparent; border:1px solid #444; color:#aaa; }
-.btn-sm { padding:6px 12px; font-size:12px; }
-.actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
-.tabela-wrap { overflow-x:auto; margin-top:12px; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-th { background:#252533; color:#888; padding:10px 12px; text-align:left; font-weight:600; }
-td { padding:10px 12px; border-bottom:1px solid #2a2a35; color:#ccc; }
-tr:hover td { background:rgba(99,102,241,.03); }
-th.acoes, td.acoes { width:90px; text-align:center; }
-.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
-.badge-concluido { background:rgba(34,197,94,.15); color:#22c55e; }
-.atv-wrapper { display:flex; gap:8px; }
-.atv-wrapper select { flex:1; }
-.btn-plus {
-  padding:10px 14px; border-radius:6px; border:1px solid #6366f1;
-  background:transparent; color:#6366f1; cursor:pointer; font-size:18px; line-height:1;
-  white-space:nowrap;
-}
-.btn-plus:hover { background:rgba(99,102,241,.1); }
-.cronometro {
-  font-size:42px; font-weight:700; color:#fff;
-  font-family:'Courier New',monospace; text-align:center;
-  padding:20px 0; letter-spacing:3px;
-}
-.modal-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,.7);
-  display:flex; align-items:center; justify-content:center; z-index:2000;
-}
-.modal {
-  background:#1a1a24; border-radius:12px; padding:24px;
-  width:90%; max-width:500px; max-height:80vh; overflow-y:auto;
-}
-.modal h4 { color:#fff; font-size:18px; margin-bottom:16px; }
-.modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
-.graficos-row {
-  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;
-}
-.grafico-card {
-  background:#1a1a24; border:1px solid #2a2a35; border-radius:12px; padding:20px;
-}
-.grafico-card h4 { color:#fff; font-size:14px; margin-bottom:12px; }
-.barra-container { display:flex; align-items:flex-end; gap:6px; height:130px; padding:0 4px; }
-.barra-item { flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; }
-.barra { width:100%; max-width:36px; background:#6366f1; border-radius:4px 4px 0 0; min-height:4px; }
-.barra-label { font-size:9px; color:#888; margin-top:4px; text-align:center; white-space:nowrap; }
-.barra-valor { font-size:9px; color:#aaa; margin-bottom:2px; font-weight:600; }
-.donut-wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
-.donut-svg { width:160px; height:160px; flex-shrink:0; }
-.donut-legend { flex:1; min-width:150px; }
-.donut-item { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:12px; }
-.donut-cor { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
-.donut-label { color:#ccc; }
-.donut-valor { color:#aaa; margin-left:auto; font-size:11px; }
-.notificacao {
-  position:fixed; bottom:24px; right:24px; background:#22c55e;
-  color:#fff; padding:14px 24px; border-radius:8px; font-size:14px;
-  font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.3); z-index:3000;
-  animation:slideIn .3s ease;
-}
-.notificacao.erro { background:#ef4444; }
-@keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-#loginScreen {
-  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background:#0f0f13; z-index:5000;
-}
-.login-card {
-  background:#1a1a24; border-radius:16px; padding:40px;
-  width:100%; max-width:400px; text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-}
-.login-card .emoji { font-size:48px; margin-bottom:8px; }
-.login-card h1 { font-size:28px; color:#fff; }
-.login-card .sub { color:#888; margin-bottom:24px; font-size:14px; }
-.login-card select { margin-bottom:16px; }
-.login-card .btn { width:100%; justify-content:center; }
-.filtros { background:#1a1a24; border-radius:8px; padding:16px; margin-bottom:16px; border:1px solid #2a2a35; }
-.backup-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; }
-.backup-card {
-  background:#1a1a24; border:1px solid #2a2a35; border-radius:12px;
-  padding:24px; text-align:center;
-}
-.backup-card h4 { color:#fff; margin-bottom:8px; }
-.backup-card p { color:#888; font-size:13px; margin-bottom:16px; }
-@media (max-width:768px) {
-  .sidebar { width:60px; }
-  .sidebar h2,.sidebar .user-badge,.sidebar a span { display:none; }
-  .sidebar a { justify-content:center; padding:14px; }
-  .main { margin-left:60px; padding:16px; }
-  .cards { grid-template-columns:1fr 1fr; }
-  .graficos-row { grid-template-columns:1fr; }
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f0f13;color:#e0e0e0;min-height:100vh;display:flex}
+.hidden{display:none!important}
+.sidebar{width:220px;background:#1a1a24;min-height:100vh;border-right:1px solid #2a2a35;padding:20px 0;position:fixed;left:0;top:0;bottom:0;z-index:100}
+.sidebar h2{font-size:16px;color:#fff;padding:0 20px 20px;border-bottom:1px solid #2a2a35;margin-bottom:8px}
+.sidebar .user-badge{padding:12px 20px;font-size:12px;color:#888;border-bottom:1px solid #2a2a35;margin-bottom:8px}
+.sidebar .user-badge strong{color:#fff;display:block;font-size:13px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#aaa;text-decoration:none;font-size:14px;cursor:pointer;transition:all .2s}
+.sidebar a:hover{background:#252533;color:#fff}
+.sidebar a.active{background:rgba(99,102,241,.15);color:#6366f1;border-right:3px solid #6366f1}
+.sidebar .sair{margin-top:20px;border-top:1px solid #2a2a35;padding-top:12px}
+.sidebar .sair a{color:#ef4444}.sidebar .sair a:hover{background:rgba(239,68,68,.1)}
+.main{margin-left:220px;flex:1;padding:24px 32px;min-height:100vh}
+.page{display:none}.page.active{display:block}
+.page h3{font-size:22px;color:#fff;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:20px}
+.card{background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35;border-top:3px solid transparent}
+.card .label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.card .value{font-size:26px;font-weight:700;color:#fff;margin-top:4px}
+.card .sub{font-size:12px;color:#aaa;margin-top:2px}
+.card.purple{border-top-color:#818cf8}.card.purple .value{color:#818cf8}
+.card.green{border-top-color:#4ade80}.card.green .value{color:#4ade80}
+.card.blue{border-top-color:#60a5fa}.card.blue .value{color:#60a5fa}
+.card.orange{border-top-color:#fbbf24}.card.orange .value{color:#fbbf24}
+.card.cyan{border-top-color:#22d3ee}.card.cyan .value{color:#22d3ee}
+select,input,textarea{padding:10px 12px;border-radius:6px;border:1px solid #333;background:#252533;color:#e0e0e0;font-size:14px;width:100%;font-family:inherit;box-sizing:border-box}
+select:focus,input:focus,textarea:focus{outline:none;border-color:#6366f1}
+textarea{min-height:60px;resize:vertical}
+label{display:block;font-size:12px;color:#888;margin-bottom:3px}
+.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.form-group{flex:1;min-width:150px}
+.btn{padding:10px 20px;border-radius:6px;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{opacity:.85}
+.btn-primary{background:#6366f1;color:#fff}
+.btn-success{background:#22c55e;color:#fff}
+.btn-warning{background:#f59e0b;color:#fff}
+.btn-danger{background:#ef4444;color:#fff}
+.btn-outline{background:transparent;border:1px solid #444;color:#aaa}
+.btn-sm{padding:6px 12px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tabela-wrap{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#252533;color:#888;padding:10px 12px;text-align:left;font-weight:600}
+td{padding:10px 12px;border-bottom:1px solid #2a2a35;color:#ccc}
+tr:hover td{background:rgba(99,102,241,.03)}
+th.acoes,td.acoes{width:90px;text-align:center}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-concluido{background:rgba(34,197,94,.15);color:#22c55e}
+.atv-wrapper{display:flex;gap:8px}.atv-wrapper select{flex:1}
+.btn-plus{padding:10px 14px;border-radius:6px;border:1px solid #6366f1;background:transparent;color:#6366f1;cursor:pointer;font-size:18px;line-height:1;white-space:nowrap}
+.btn-plus:hover{background:rgba(99,102,241,.1)}
+.cronometro{font-size:42px;font-weight:700;color:#fff;font-family:'Courier New',monospace;text-align:center;padding:20px 0;letter-spacing:3px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:2000}
+.modal{background:#1a1a24;border-radius:12px;padding:24px;width:90%;max-width:500px;max-height:80vh;overflow-y:auto}
+.modal h4{color:#fff;font-size:18px;margin-bottom:16px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.graficos-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.grafico-card{background:#1a1a24;border:1px solid #2a2a35;border-radius:12px;padding:20px}
+.grafico-card h4{color:#fff;font-size:14px;margin-bottom:12px}
+.barra-container{display:flex;align-items:flex-end;gap:6px;height:130px;padding:0 4px}
+.barra-item{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.barra{width:100%;max-width:36px;background:#6366f1;border-radius:4px 4px 0 0;min-height:4px}
+.barra-label{font-size:9px;color:#888;margin-top:4px;text-align:center;white-space:nowrap}
+.barra-valor{font-size:9px;color:#aaa;margin-bottom:2px;font-weight:600}
+.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut-svg{width:160px;height:160px;flex-shrink:0}
+.donut-legend{flex:1;min-width:150px}
+.donut-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.donut-cor{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.donut-label{color:#ccc}.donut-valor{color:#aaa;margin-left:auto;font-size:11px}
+.notificacao{position:fixed;bottom:24px;right:24px;background:#22c55e;color:#fff;padding:14px 24px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:3000;animation:slideIn .3s ease}
+.notificacao.erro{background:#ef4444}
+@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+#loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0f0f13;z-index:5000}
+.login-card{background:#1a1a24;border-radius:16px;padding:40px;width:100%;max-width:400px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.login-card .emoji{font-size:48px;margin-bottom:8px}
+.login-card h1{font-size:28px;color:#fff}
+.login-card .sub{color:#888;margin-bottom:24px;font-size:14px}
+.login-card select{margin-bottom:16px}
+.login-card .btn{width:100%;justify-content:center}
+.filtros{background:#1a1a24;border-radius:8px;padding:16px;margin-bottom:16px;border:1px solid #2a2a35}
+.backup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.backup-card{background:#1a1a24;border:1px solid #2a2a35;border-radius:12px;padding:24px;text-align:center}
+.backup-card h4{color:#fff;margin-bottom:8px}
+.backup-card p{color:#888;font-size:13px;margin-bottom:16px}
+@media(max-width:768px){.sidebar{width:60px}.sidebar h2,.sidebar .user-badge,.sidebar a span{display:none}.sidebar a{justify-content:center;padding:14px}.main{margin-left:60px;padding:16px}.cards{grid-template-columns:1fr 1fr}.graficos-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="emoji">👋</div>
-    <h1>CR Consultoria</h1>
-    <p class="sub">Selecione seu nome para acessar</p>
-    <select id="loginFuncionario"><option value="">— Selecione —</option></select>
-    <button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
-  </div>
+<div class="login-card">
+<div class="emoji">👋</div>
+<h1>CR Consultoria</h1>
+<p class="sub">Selecione seu nome para acessar</p>
+<select id="loginFuncionario"><option value="">— Selecione —</option></select>
+<button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
 </div>
-
+</div>
 <div class="sidebar" id="sidebar">
-  <h2>📋 CR Consultoria</h2>
-  <div class="user-badge">
-    <strong id="sidebarUser">—</strong>
-    <span id="sidebarCargo">Consultoria</span>
-  </div>
-  <a class="active" onclick="navegar('dashboard')">📊 <span>Dashboard</span></a>
-  <a onclick="navegar('registro')">⏱️ <span>Registro</span></a>
-  <a onclick="navegar('funcionarios')">👥 <span>Funcionários</span></a>
-  <a onclick="navegar('atividades')">📋 <span>Atividades</span></a>
-  <a onclick="navegar('relatorios')">📈 <span>Relatórios</span></a>
-  <a onclick="navegar('backup')">💾 <span>Back Up</span></a>
-  <div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
+<h2>📋 CR Consultoria</h2>
+<div class="user-badge"><strong id="sidebarUser">—</strong><span id="sidebarCargo">Consultoria</span></div>
+<a class="active" onclick="navegar('dashboard')">📊 <span>Dashboard</span></a>
+<a onclick="navegar('registro')">⏱️ <span>Registro</span></a>
+<a onclick="navegar('funcionarios')">👥 <span>Funcionários</span></a>
+<a onclick="navegar('atividades')">📋 <span>Atividades</span></a>
+<a onclick="navegar('relatorios')">📈 <span>Relatórios</span></a>
+<a onclick="navegar('backup')">💾 <span>Back Up</span></a>
+<div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
 </div>
-
 <div class="main">
-
-  <!-- DASHBOARD -->
-  <div class="page active" id="page-dashboard">
-    <h3>📊 Dashboard</h3>
-    <div class="cards" id="dashCards"></div>
-    <div class="graficos-row">
-      <div class="grafico-card">
-        <h4>📈 Horas por Funcionário</h4>
-        <div class="barra-container" id="graficoFuncBarras"></div>
-      </div>
-      <div class="grafico-card">
-        <h4>🍩 Distribuição por Atividade</h4>
-        <div class="donut-wrap" id="donutWrap"></div>
-      </div>
-    </div>
-    <div class="grafico-card">
-      <h4>📈 Horas por Dia (últimos 7 dias)</h4>
-      <div class="barra-container" id="graficoDiaBarras"></div>
-    </div>
-  </div>
-
-  <!-- REGISTRO -->
-  <div class="page" id="page-registro">
-    <h3>⏱️ Registro de Horas</h3>
-    <div style="background:#1a1a24;border-radius:12px;padding:24px;border:1px solid #2a2a35">
-      <div class="cronometro" id="cronometroDisplay">00:00:00</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Atividade</label>
-          <div class="atv-wrapper">
-            <select id="atividadeSelect"><option value="">Selecione...</option></select>
-            <button class="btn-plus" onclick="abrirModalNovaAtividade()">＋</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Observação</label>
-          <textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-success" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
-        <button class="btn btn-warning hidden" id="btnPausar" onclick="pausarCronometro()">⏸ Pausar</button>
-        <button class="btn btn-success hidden" id="btnRetomar" onclick="retomarCronometro()">▶ Retomar</button>
-        <button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
-        <button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
-      </div>
-    </div>
-    <div style="margin-top:24px;background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35">
-      <h4 style="color:#fff;margin-bottom:12px">📄 Últimos Registros</h4>
-      <div class="tabela-wrap">
-        <table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table>
-      </div>
-    </div>
-  </div>
-
-  <!-- FUNCIONARIOS -->
-  <div class="page" id="page-funcionarios">
-    <h3>👥 Funcionários</h3>
-    <div class="cards" id="funcCards"></div>
-  </div>
-
-  <!-- ATIVIDADES -->
-  <div class="page" id="page-atividades">
-    <h3>📋 Gestão de Atividades</h3>
-    <div style="margin-bottom:16px">
-      <button class="btn btn-primary" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button>
-    </div>
-    <div class="tabela-wrap">
-      <table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table>
-    </div>
-  </div>
-
-  <!-- RELATORIOS -->
-  <div class="page" id="page-relatorios">
-    <h3>📈 Relatórios</h3>
-    <div class="filtros">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Funcionário</label>
-          <select id="relFiltroFunc"><option value="todos">Todos</option></select>
-        </div>
-        <div class="form-group">
-          <label>Data Inicial</label>
-          <input type="date" id="relDataIni">
-        </div>
-        <div class="form-group">
-          <label>Data Final</label>
-          <input type="date" id="relDataFim">
-        </div>
-        <div class="form-group" style="display:flex;align-items:flex-end">
-          <button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button>
-        </div>
-        <div class="form-group" style="display:flex;align-items:flex-end">
-          <button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button>
-        </div>
-      </div>
-    </div>
-    <div class="tabela-wrap">
-      <table><thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead><tbody id="relatorioBody"></tbody></table>
-    </div>
-    <div style="margin-top:12px;text-align:right;color:#888;font-size:13px">
-      Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong>
-    </div>
-  </div>
-
-  <!-- BACKUP -->
-  <div class="page" id="page-backup">
-    <h3>💾 Back Up</h3>
-    <p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
-    <div class="backup-grid">
-      <div class="backup-card">
-        <h4>📄 Todos os Registros</h4>
-        <p>Exportar todos os registros de ponto como JSON</p>
-        <button class="btn btn-primary" onclick="exportarJSON()">📥 Exportar JSON</button>
-      </div>
-      <div class="backup-card">
-        <h4>📊 Registros em CSV</h4>
-        <p>Exportar todos os registros como CSV (Excel)</p>
-        <button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button>
-      </div>
-      <div class="backup-card">
-        <h4>📋 Atividades CSV</h4>
-        <p>Exportar lista de atividades como CSV</p>
-        <button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button>
-      </div>
-    </div>
-  </div>
+<div class="page active" id="page-dashboard">
+<h3>📊 Dashboard</h3>
+<div class="cards" id="dashCards"></div>
+<div class="graficos-row">
+<div class="grafico-card"><h4>📈 Horas por Funcionário</h4><div class="barra-container" id="graficoFuncBarras"></div></div>
+<div class="grafico-card"><h4>🍩 Distribuição por Atividade</h4><div class="donut-wrap" id="donutWrap"></div></div>
 </div>
-
-<!-- MODAIS -->
+<div class="grafico-card"><h4>📈 Horas por Dia (últimos 7 dias)</h4><div class="barra-container" id="graficoDiaBarras"></div></div>
+</div>
+<div class="page" id="page-registro">
+<h3>⏱️ Registro de Horas</h3>
+<div style="background:#1a1a24;border-radius:12px;padding:24px;border:1px solid #2a2a35">
+<div class="cronometro" id="cronometroDisplay">00:00:00</div>
+<div class="form-row"><div class="form-group"><label>Atividade</label><div class="atv-wrapper"><select id="atividadeSelect"><option value="">Selecione...</option></select><button class="btn-plus" onclick="abrirModalNovaAtividade()">＋</button></div></div></div>
+<div class="form-row"><div class="form-group"><label>Observação</label><textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea></div></div>
+<div class="actions">
+<button class="btn btn-success" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
+<button class="btn btn-warning hidden" id="btnPausar" onclick="pausarCronometro()">⏸ Pausar</button>
+<button class="btn btn-success hidden" id="btnRetomar" onclick="retomarCronometro()">▶ Retomar</button>
+<button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
+<button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
+</div>
+</div>
+<div style="margin-top:24px;background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35">
+<h4 style="color:#fff;margin-bottom:12px">📄 Últimos Registros</h4>
+<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table></div>
+</div>
+</div>
+<div class="page" id="page-funcionarios"><h3>👥 Funcionários</h3><div class="cards" id="funcCards"></div></div>
+<div class="page" id="page-atividades">
+<h3>📋 Gestão de Atividades</h3>
+<div style="margin-bottom:16px"><button class="btn btn-primary" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button></div>
+<div class="tabela-wrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table></div>
+</div>
+<div class="page" id="page-relatorios">
+<h3>📈 Relatórios</h3>
+<div class="filtros">
+<div class="form-row">
+<div class="form-group"><label>Funcionário</label><select id="relFiltroFunc"><option value="todos">Todos</option></select></div>
+<div class="form-group"><label>Data Inicial</label><input type="date" id="relDataIni"></div>
+<div class="form-group"><label>Data Final</label><input type="date" id="relDataFim"></div>
+<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button></div>
+<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button></div>
+</div>
+</div>
+<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead><tbody id="relatorioBody"></tbody></table></div>
+<div style="margin-top:12px;text-align:right;color:#888;font-size:13px">Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong></div>
+</div>
+<div class="page" id="page-backup">
+<h3>💾 Back Up</h3>
+<p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
+<div class="backup-grid">
+<div class="backup-card"><h4>📄 Todos os Registros</h4><p>Exportar todos como JSON</p><button class="btn btn-primary" onclick="exportarJSON()">📥 Exportar JSON</button></div>
+<div class="backup-card"><h4>📊 Registros em CSV</h4><p>Exportar todos como CSV</p><button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button></div>
+<div class="backup-card"><h4>📋 Atividades CSV</h4><p>Exportar lista de atividades</p><button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button></div>
+</div>
+</div>
+</div>
 <div id="modalNovaAtividade" class="modal-overlay hidden">
-  <div class="modal">
-    <h4>Nova Atividade</h4>
-    <label>Nome</label>
-    <input type="text" id="novaAtvNome" placeholder="Ex: Reunião com Cliente">
-    <label>Descrição (opcional)</label>
-    <textarea id="novaAtvDesc" placeholder="Descrição da atividade..."></textarea>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="fecharModal('modalNovaAtividade')">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarNovaAtividade()">Salvar</button>
-    </div>
-  </div>
+<div class="modal">
+<h4>Nova Atividade</h4>
+<label>Nome</label><input type="text" id="novaAtvNome" placeholder="Ex: Reunião com Cliente">
+<label>Descrição</label><textarea id="novaAtvDesc" placeholder="Descrição..."></textarea>
+<div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal('modalNovaAtividade')">Cancelar</button><button class="btn btn-primary" onclick="salvarNovaAtividade()">Salvar</button></div>
+</div>
 </div>
 <div id="modalEditarAtividade" class="modal-overlay hidden">
-  <div class="modal">
-    <h4>Editar Atividade</h4>
-    <input type="hidden" id="editAtvId">
-    <label>Nome</label>
-    <input type="text" id="editAtvNome">
-    <label>Descrição</label>
-    <textarea id="editAtvDesc"></textarea>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="fecharModal('modalEditarAtividade')">Cancelar</button>
-      <button class="btn btn-danger" onclick="excluirAtividade()">Excluir</button>
-      <button class="btn btn-primary" onclick="atualizarAtividade()">Salvar</button>
-    </div>
-  </div>
+<div class="modal">
+<h4>Editar Atividade</h4>
+<input type="hidden" id="editAtvId">
+<label>Nome</label><input type="text" id="editAtvNome">
+<label>Descrição</label><textarea id="editAtvDesc"></textarea>
+<div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal('modalEditarAtividade')">Cancelar</button><button class="btn btn-danger" onclick="excluirAtividade()">Excluir</button><button class="btn btn-primary" onclick="atualizarAtividade()">Salvar</button></div>
 </div>
-
+</div>
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
-const FUNCIONARIOS = [
-  { nome:'Cecília Rijo', email:'cecilia.rijo@gmail.com', cargo:'Consultora' },
-  { nome:'Thamires Mendonça', email:'thamires@crconsul.com.br', cargo:'Analista de Marketing Jr' },
-  { nome:'Sophia Ataíde', email:'sophia@crconsul.com.br', cargo:'Estagiária' }
-];
-const CORES_DONUT = ['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','#f97316','#3b82f6','#ec4899','#84cc16'];
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
+const FUNCIONARIOS=[{nome:'Cecília Rijo',email:'cecilia.rijo@gmail.com',cargo:'Consultora'},{nome:'Thamires Mendonça',email:'thamires@crconsul.com.br',cargo:'Analista de Marketing Jr'},{nome:'Sophia Ataíde',email:'sophia@crconsul.com.br',cargo:'Estagiária'}];
+const CORES_DONUT=['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','#f97316','#3b82f6','#ec4899','#84cc16'];
+let atividades=[],todosDados=[],usuarioAtual=null;
+let cronometroAtivo=null,inicioCronometro=null,tempoPausado=0,pausando=false,registroTemporario=null;
 
-let atividades = [], todosDados = [], usuarioAtual = null;
-let cronometroAtivo = null, inicioCronometro = null, tempoPausado = 0;
-let pausando = false, registroTemporario = null;
+// ===== FUNÇÃO QUE EXTRAI SEGUNDOS CORRETAMENTE =====
+// O Web App retorna TOTAL como "1899-12-30T04:06:28.000Z"
+// Esta função extrai só "04:06:28" do meio
+function extrairSegundos(v){
+  if(!v)return 0;
+  let s=String(v);
+  if(s.includes('T'))s=s.split('T')[1].split('.')[0];
+  const p=s.split(':');
+  return(parseInt(p[0])||0)*3600+(parseInt(p[1])||0)*60+(parseInt(p[2])||0);
+}
 
-function nomeFuncionarioIgual(a, b) {
-  if (!a||!b) return false;
-  const n = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-  const na=n(a), nb=n(b);
-  if (na===nb||na.includes(nb)||nb.includes(na)) return true;
-  const pa=na.split(' ').filter(p=>p.length>2), pb=nb.split(' ').filter(p=>p.length>2);
+function nomeFuncionarioIgual(a,b){
+  if(!a||!b)return false;
+  const n=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+  const na=n(a),nb=n(b);
+  if(na===nb||na.includes(nb)||nb.includes(na))return true;
+  const pa=na.split(' ').filter(p=>p.length>2),pb=nb.split(' ').filter(p=>p.length>2);
   return pa.some(p=>pb.includes(p));
 }
-function getNomeAtividade(v) {
-  if (!v) return '-';
-  const f = (atividades||[]).find(a=>String(a.id)===String(v)||a.nome===v);
-  return f ? f.nome : v;
+function getNomeAtividade(v){
+  if(!v)return'-';
+  const f=(atividades||[]).find(a=>String(a.id)===String(v)||a.nome===v);
+  return f?f.nome:v;
 }
 
-async function carregarTudo() {
-  const s = document.getElementById('loginFuncionario');
-  FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome+' — '+f.cargo;s.appendChild(o);});
-  const rf = document.getElementById('relFiltroFunc');
-  rf.innerHTML='<option value="todos">Todos</option>';
-  FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome;rf.appendChild(o);});
-  await carregarAtividades(); await carregarDados();
+async function carregarTudo(){
+  const s=document.getElementById('loginFuncionario');
+  FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome+' — '+f.cargo;s.appendChild(o)});
+  const r=document.getElementById('relFiltroFunc');r.innerHTML='<option value="todos">Todos</option>';
+  FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome;r.appendChild(o)});
+  await carregarAtividades();await carregarDados();
 }
-async function carregarDados() {
-  try {
-    const r = await fetch(SCRIPT_URL), d = await r.json();
-    todosDados = d.success ? (d.data||[]) : [];
-  } catch(e) { todosDados = []; }
-  if (usuarioAtual) { atualizarDashboard(); carregarHistorico(); atualizarFuncionarios(); }
+async function carregarDados(){
+  try{const r=await fetch(SCRIPT_URL),d=await r.json();todosDados=d.success?(d.data||[]):[]}catch(e){todosDados=[]}
+  if(usuarioAtual){atualizarDashboard();carregarHistorico();atualizarFuncionarios()}
 }
-async function carregarAtividades() {
-  try {
-    const r = await fetch(SCRIPT_URL+'?path=atividades'), d = await r.json();
-    atividades = d.success ? (d.data||[]) : [];
-  } catch(e) { atividades = []; }
-  const sel = document.getElementById('atividadeSelect');
-  sel.innerHTML='<option value="">Selecione...</option>';
-  (atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{const o=document.createElement('option');o.value=a.id||a.nome;o.textContent=a.nome;sel.appendChild(o);});
+async function carregarAtividades(){
+  try{const r=await fetch(SCRIPT_URL+'?path=atividades'),d=await r.json();atividades=d.success?(d.data||[]):[]}catch(e){atividades=[]}
+  const s=document.getElementById('atividadeSelect');s.innerHTML='<option value="">Selecione...</option>';
+  (atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{const o=document.createElement('option');o.value=a.id||a.nome;o.textContent=a.nome;s.appendChild(o)});
   renderAdminAtividades();
 }
-function fazerLogin() {
-  const s = document.getElementById('loginFuncionario');
-  if (!s.value) return;
-  usuarioAtual = s.value;
-  const f = FUNCIONARIOS.find(x=>x.nome===usuarioAtual);
-  document.getElementById('sidebarUser').textContent = usuarioAtual;
-  document.getElementById('sidebarCargo').textContent = f ? f.cargo : '';
+function fazerLogin(){
+  const s=document.getElementById('loginFuncionario');if(!s.value)return;
+  usuarioAtual=s.value;const f=FUNCIONARIOS.find(x=>x.nome===usuarioAtual);
+  document.getElementById('sidebarUser').textContent=usuarioAtual;
+  document.getElementById('sidebarCargo').textContent=f?f.cargo:'';
   document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('sidebar').classList.remove('hidden');
-  carregarDados();
+  document.getElementById('sidebar').classList.remove('hidden');carregarDados();
 }
-function fazerLogout() {
-  usuarioAtual = null;
-  if (cronometroAtivo) { clearInterval(cronometroAtivo); cronometroAtivo = null; }
-  pausando = false; tempoPausado = 0;
-  document.getElementById('loginScreen').classList.remove('hidden');
+function fazerLogout(){
+  usuarioAtual=null;if(cronometroAtivo){clearInterval(cronometroAtivo);cronometroAtivo=null}
+  pausando=false;tempoPausado=0;document.getElementById('loginScreen').classList.remove('hidden');
 }
-function navegar(aba) {
+function navegar(aba){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+aba).classList.add('active');
-  const idx = {dashboard:0,registro:1,funcionarios:2,atividades:3,relatorios:4,backup:5};
+  const idx={dashboard:0,registro:1,funcionarios:2,atividades:3,relatorios:4,backup:5};
   document.querySelectorAll('.sidebar a').forEach((a,i)=>a.classList.toggle('active',i===(idx[aba]||0)));
-  if (aba==='dashboard') atualizarDashboard();
-  if (aba==='funcionarios') atualizarFuncionarios();
-  if (aba==='relatorios') { preencherFiltros(); filtrarRelatorio(); }
-  if (aba==='atividades') renderAdminAtividades();
+  if(aba==='dashboard')atualizarDashboard();
+  if(aba==='funcionarios')atualizarFuncionarios();
+  if(aba==='relatorios'){preencherFiltros();filtrarRelatorio()}
+  if(aba==='atividades')renderAdminAtividades();
 }
 
-function totalSegundos(arr) {
-  return arr.reduce((acc,r)=>{
-    if (!r||!r.TOTAL) return acc;
-    const p = String(r.TOTAL).split(':');
-    return acc + (parseInt(p[0])||0)*3600 + (parseInt(p[1])||0)*60 + (parseInt(p[2])||0);
-  },0);
-}
-function fmtHms(s) {
-  if (isNaN(s)||s<0) return '0h 0min';
-  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
-  return h>0 ? h+'h '+m+'min' : m+'min';
-}
+function totalSegundos(arr){return arr.reduce((acc,r)=>acc+extrairSegundos(r?.TOTAL),0)}
+function fmtHms(s){if(isNaN(s)||s<0)return'0h 0min';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?h+'h '+m+'min':m+'min'}
 
-function atualizarDashboard() {
-  const du = todosDados.filter(r=>nomeFuncionarioIgual(usuarioAtual,r.FUNCIONÁRIO));
-  const now=new Date(), mes=String(now.getMonth()+1).padStart(2,'0'), ano=now.getFullYear();
-  const dm = du.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));
-  const dh = du.filter(r=>r.DATA===now.toISOString().split('T')[0]);
-  const sm = totalSegundos(dm), sh = totalSegundos(dh);
-  const du_m = Math.min(now.getDate(),30);
-  const md = du_m>0 ? Math.round(sm/du_m) : 0;
-  const funcAtivos = new Set(todosDados.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes)).map(r=>r.FUNCIONÁRIO)).size;
+function atualizarDashboard(){
+  const du=todosDados.filter(r=>nomeFuncionarioIgual(usuarioAtual,r.FUNCIONÁRIO));
+  const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();
+  const dm=du.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));
+  const dh=du.filter(r=>r.DATA===now.toISOString().split('T')[0]);
+  const sm=totalSegundos(dm),sh=totalSegundos(dh),du_m=Math.min(now.getDate(),30),md=du_m>0?Math.round(sm/du_m):0;
+  const funcAtivos=new Set(todosDados.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes)).map(r=>r.FUNCIONÁRIO)).size;
+  document.getElementById('dashCards').innerHTML='<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fmtHms(sm)+'</div><div class="sub">'+dm.length+' registros</div></div><div class="card green"><div class="label">Hoje</div><div class="value">'+fmtHms(sh)+'</div><div class="sub">'+dh.length+' registros</div></div><div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fmtHms(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div><div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div><div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+funcAtivos+'</div><div class="sub">No mês</div></div>';
 
-  document.getElementById('dashCards').innerHTML =
-    '<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fmtHms(sm)+'</div><div class="sub">'+dm.length+' registros</div></div>'+
-    '<div class="card green"><div class="label">Hoje</div><div class="value">'+fmtHms(sh)+'</div><div class="sub">'+dh.length+' registros</div></div>'+
-    '<div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fmtHms(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div>'+
-    '<div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div>'+
-    '<div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+funcAtivos+'</div><div class="sub">No mês</div></div>';
+  const bc=document.getElementById('graficoFuncBarras');bc.innerHTML='';
+  const maxSeg=Math.max(...FUNCIONARIOS.map(f=>totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.startsWith(ano+'-'+mes)))),1);
+  FUNCIONARIOS.forEach(f=>{const seg=totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.startsWith(ano+'-'+mes)));const alt=Math.max(Math.round(seg/maxSeg*100),seg>0?10:4);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+f.nome.split(' ')[0]+'</div>';bc.appendChild(e)});
 
-  // Grafico Horas por Funcionario
-  const bc = document.getElementById('graficoFuncBarras'); bc.innerHTML='';
-  FUNCIONARIOS.forEach(f=>{
-    const rf = todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.startsWith(ano+'-'+mes));
-    const seg = totalSegundos(rf), max = Math.max(...FUNCIONARIOS.map(x=>{const r=todosDados.filter(y=>nomeFuncionarioIgual(x.nome,y.FUNCIONÁRIO)&&y.DATA&&y.DATA.startsWith(ano+'-'+mes));return totalSegundos(r);}),1);
-    const alt = Math.max(Math.round((seg/max)*100), seg>0?10:4);
-    const item=document.createElement('div'); item.className='barra-item';
-    item.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+f.nome.split(' ')[0]+'</div>';
-    bc.appendChild(item);
-  });
+  const dw=document.getElementById('donutWrap');const agrup={};
+  dm.forEach(r=>{const n=getNomeAtividade(r.ATIVIDADE);if(!agrup[n])agrup[n]=0;agrup[n]+=extrairSegundos(r.TOTAL)});
+  const entries=Object.entries(agrup).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const totalH=entries.reduce((a,[_,h])=>a+h,0)||1;
+  let donut='<div class="donut-svg"><svg viewBox="0 0 100 100">';let ang=0;const cx=50,cy=50,rr=38;
+  entries.forEach(([nm,hr],i)=>{const fra=hr/totalH,aa=fra*360;if(aa>=360)donut+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rr+'" fill="none" stroke="'+CORES_DONUT[i%CORES_DONUT.length]+'" stroke-width="18"/>';else if(aa>0){const x1=cx+rr*Math.sin(ang*Math.PI/180),y1=cy-rr*Math.cos(ang*Math.PI/180),x2=cx+rr*Math.sin((ang+aa)*Math.PI/180),y2=cy-rr*Math.cos((ang+aa)*Math.PI/180);donut+='<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+rr+' '+rr+' 0 '+(aa>180?1:0)+' 1 '+x2+' '+y2+' Z" fill="'+CORES_DONUT[i%CORES_DONUT.length]+'"/>';ang+=aa}});
+  donut+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rr-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';
+  entries.forEach(([nm,hr],i)=>{const hh=Math.floor((hr||0)/3600),mm=Math.floor((hr||0)%3600/60);donut+='<div class="donut-item"><div class="donut-cor" style="background:'+CORES_DONUT[i%CORES_DONUT.length]+'"></div><span class="donut-label">'+nm+'</span><span class="donut-valor">'+hh+'h '+mm+'min</span></div>'});
+  donut+='</div>';dw.innerHTML=donut;
 
-  // Donut - Distribuicao por Atividade
-  const dw = document.getElementById('donutWrap');
-  const agrup = {}; dm.forEach(r=>{
-    const n = getNomeAtividade(r.ATIVIDADE);
-    if (!agrup[n]) agrup[n]=0;
-    const p = String(r.TOTAL||'0:0:0').split(':');
-    agrup[n] += parseInt(p[0])||0;
-  });
-  const entries = Object.entries(agrup).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const totalH = entries.reduce((a,[_,h])=>a+h,0)||1;
-  let donut='<div class="donut-svg"><svg viewBox="0 0 100 100">', ang=0, cx=50, cy=50, r=38;
-  entries.forEach(([nome,horas],i)=>{
-    const frac = horas/totalH, a = frac*360;
-    if (a>=360) donut+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+CORES_DONUT[i%CORES_DONUT.length]+'" stroke-width="18"/>';
-    else if (a>0) {
-      const x1=cx+r*Math.sin(ang*Math.PI/180), y1=cy-r*Math.cos(ang*Math.PI/180);
-      const x2=cx+r*Math.sin((ang+a)*Math.PI/180), y2=cy-r*Math.cos((ang+a)*Math.PI/180);
-      donut+='<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+r+' '+r+' 0 '+(a>180?1:0)+' 1 '+x2+' '+y2+' Z" fill="'+CORES_DONUT[i%CORES_DONUT.length]+'"/>';
-      ang += a;
-    }
-  });
-  donut+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';
-  entries.forEach(([nome,horas],i)=>{
-    donut+='<div class="donut-item"><div class="donut-cor" style="background:'+CORES_DONUT[i%CORES_DONUT.length]+'"></div><span class="donut-label">'+nome+'</span><span class="donut-valor">'+horas+'h</span></div>';
-  });
-  donut+='</div>'; dw.innerHTML=donut;
-
-  // Grafico Horas por Dia
-  const dc = document.getElementById('graficoDiaBarras'); dc.innerHTML='';
-  const dias = []; for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dias.push(d);}
-  const maxSeg = Math.max(...dias.map(d=>totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]))),1);
-  dias.forEach(d=>{
-    const seg = totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]));
-    const alt = Math.max(Math.round(seg/maxSeg*100), seg>0?8:3);
-    const item=document.createElement('div');item.className='barra-item';
-    item.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';
-    dc.appendChild(item);
-  });
+  const dc=document.getElementById('graficoDiaBarras');dc.innerHTML='';
+  const dias=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dias.push(d)}
+  const maxDiaSeg=Math.max(...dias.map(d=>totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]))),1);
+  dias.forEach(d=>{const seg=totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]));const alt=Math.max(Math.round(seg/maxDiaSeg*100),seg>0?8:3);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';dc.appendChild(e)});
 }
 
-// CRONOMETRO
-function iniciarCronometro() {
-  const atv = document.getElementById('atividadeSelect').value;
-  if (!atv) { mostrarNotificacao('Selecione uma atividade.',true); return; }
-  inicioCronometro = Date.now(); tempoPausado = 0; pausando = false;
-  registroTemporario = { atividade:atv, nomeAtividade:getNomeAtividade(atv), obs:document.getElementById('observacaoInput').value, inicio:inicioCronometro };
-  document.getElementById('btnIniciar').classList.add('hidden');
-  document.getElementById('btnPausar').classList.remove('hidden');
-  cronometroAtivo = setInterval(()=>{
-    document.getElementById('cronometroDisplay').textContent = new Date(Date.now()-inicioCronometro-tempoPausado).toISOString().substr(11,8);
-  },200);
+function iniciarCronometro(){
+  const atv=document.getElementById('atividadeSelect').value;
+  if(!atv){mostrarNotificacao('Selecione uma atividade.',true);return}
+  inicioCronometro=Date.now();tempoPausado=0;pausando=false;
+  registroTemporario={atividade:atv,nomeAtividade:getNomeAtividade(atv),obs:document.getElementById('observacaoInput').value,inicio:inicioCronometro};
+  document.getElementById('btnIniciar').classList.add('hidden');document.getElementById('btnPausar').classList.remove('hidden');
+  cronometroAtivo=setInterval(()=>{document.getElementById('cronometroDisplay').textContent=new Date(Date.now()-inicioCronometro-tempoPausado).toISOString().substr(11,8)},200);
   mostrarNotificacao('⏱️ Iniciado!');
 }
-function pausarCronometro() {
-  if (!cronometroAtivo) return;
-  clearInterval(cronometroAtivo); cronometroAtivo = null;
-  tempoPausado += Date.now() - inicioCronometro - tempoPausado;
-  document.getElementById('btnPausar').classList.add('hidden');
-  document.getElementById('btnRetomar').classList.remove('hidden');
+function pausarCronometro(){
+  if(!cronometroAtivo)return;clearInterval(cronometroAtivo);cronometroAtivo=null;
+  tempoPausado+=Date.now()-inicioCronometro-tempoPausado;
+  document.getElementById('btnPausar').classList.add('hidden');document.getElementById('btnRetomar').classList.remove('hidden');
   mostrarNotificacao('⏸️ Pausado');
 }
-function retomarCronometro() {
-  if (cronometroAtivo) return;
-  inicioCronometro = Date.now();
-  document.getElementById('btnRetomar').classList.add('hidden');
-  document.getElementById('btnPausar').classList.remove('hidden');
-  cronometroAtivo = setInterval(()=>{
-    document.getElementById('cronometroDisplay').textContent = new Date(Date.now()-inicioCronometro+tempoPausado).toISOString().substr(11,8);
-  },200);
+function retomarCronometro(){
+  if(cronometroAtivo)return;inicioCronometro=Date.now();
+  document.getElementById('btnRetomar').classList.add('hidden');document.getElementById('btnPausar').classList.remove('hidden');
+  cronometroAtivo=setInterval(()=>{document.getElementById('cronometroDisplay').textContent=new Date(Date.now()-inicioCronometro+tempoPausado).toISOString().substr(11,8)},200);
   mostrarNotificacao('▶️ Retomado!');
 }
-function pararCronometro() {
-  if (cronometroAtivo) { clearInterval(cronometroAtivo); cronometroAtivo = null; }
-  const agora = Date.now();
-  registroTemporario.fim = agora;
-  registroTemporario.total = agora - inicioCronometro + tempoPausado;
-  document.getElementById('btnPausar').classList.add('hidden');
-  document.getElementById('btnRetomar').classList.add('hidden');
-  document.getElementById('btnParar').classList.add('hidden');
-  document.getElementById('btnSalvar').classList.remove('hidden');
+function pararCronometro(){
+  if(cronometroAtivo){clearInterval(cronometroAtivo);cronometroAtivo=null}
+  const agora=Date.now();registroTemporario.fim=agora;registroTemporario.total=agora-inicioCronometro+tempoPausado;
+  document.getElementById('btnPausar').classList.add('hidden');document.getElementById('btnRetomar').classList.add('hidden');document.getElementById('btnParar').classList.add('hidden');document.getElementById('btnSalvar').classList.remove('hidden');
 }
-async function salvarRegistro() {
-  if (!registroTemporario) return;
-  const ts = Math.floor(registroTemporario.total/1000);
-  const payload = {
-    action:'add', ID:'REG_'+Date.now(), DATA:new Date().toISOString().split('T')[0],
-    FUNCIONÁRIO:usuarioAtual, ATIVIDADE:registroTemporario.nomeAtividade||registroTemporario.atividade,
-    'HORA INICIO':new Date(registroTemporario.inicio).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    'HORA FIM':new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    TOTAL:String(Math.floor(ts/3600)).padStart(2,'0')+':'+String(Math.floor((ts%3600)/60)).padStart(2,'0')+':'+String(ts%60).padStart(2,'0'),
-    OBSERVAÇÃO:document.getElementById('observacaoInput').value||'', STATUS:'concluido',
-    'CRIADO EM':new Date().toISOString(), 'ATUALIZADO EM':new Date().toISOString()
-  };
-  try {
-    const r = await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
-    const d = await r.json();
-    if (d.success) {
-      mostrarNotificacao('✅ Registro salvo!');
-      document.getElementById('btnSalvar').classList.add('hidden');
-      document.getElementById('btnIniciar').classList.remove('hidden');
-      document.getElementById('observacaoInput').value='';
-      document.getElementById('cronometroDisplay').textContent='00:00:00';
-      registroTemporario=null; tempoPausado=0;
-      await carregarDados(); carregarHistorico();
-    }
-  } catch(e) { mostrarNotificacao('Erro ao salvar.',true); }
+async function salvarRegistro(){
+  if(!registroTemporario)return;
+  const ts=Math.floor(registroTemporario.total/1000),h=Math.floor(ts/3600),m=Math.floor((ts%3600)/60),s=ts%60;
+  const payload={action:'add',ID:'REG_'+Date.now(),DATA:new Date().toISOString().split('T')[0],FUNCIONÁRIO:usuarioAtual,ATIVIDADE:registroTemporario.nomeAtividade||registroTemporario.atividade,'HORA INICIO':new Date(registroTemporario.inicio).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),'HORA FIM':new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),TOTAL:String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'),OBSERVAÇÃO:document.getElementById('observacaoInput').value||'',STATUS:'concluido','CRIADO EM':new Date().toISOString(),'ATUALIZADO EM':new Date().toISOString()};
+  try{const r=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)}),d=await r.json();if(d.success){mostrarNotificacao('✅ Registro salvo!');document.getElementById('btnSalvar').classList.add('hidden');document.getElementById('btnIniciar').classList.remove('hidden');document.getElementById('observacaoInput').value='';document.getElementById('cronometroDisplay').textContent='00:00:00';registroTemporario=null;tempoPausado=0;await carregarDados();carregarHistorico()}}catch(e){mostrarNotificacao('Erro ao salvar.',true)}
 }
-function carregarHistorico() {
-  const meus = todosDados.filter(r=>nomeFuncionarioIgual(usuarioAtual,r.FUNCIONÁRIO)).sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));
-  const t = document.getElementById('historicoBody'); t.innerHTML='';
-  meus.slice(0,20).forEach(r=>{
-    t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+getNomeAtividade(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+(r.TOTAL||'-')+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="editarRegistro(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirRegistro(\''+r.ID+'\')">🗑️</button></td></tr>';
-  });
-  if (!meus.length) t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro</td></tr>';
+function carregarHistorico(){
+  const meus=todosDados.filter(r=>nomeFuncionarioIgual(usuarioAtual,r.FUNCIONÁRIO)).sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));
+  const t=document.getElementById('historicoBody');t.innerHTML='';
+  meus.slice(0,20).forEach(r=>{const seg=extrairSegundos(r.TOTAL);const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+getNomeAtividade(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="editarRegistro(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirRegistro(\''+r.ID+'\')">🗑️</button></td></tr>'});
+  if(!meus.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro</td></tr>';
 }
-async function excluirRegistro(id) {
-  if (!confirm('Excluir?')) return;
-  await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'delete',registroId:id})});
-  mostrarNotificacao('Excluído.'); await carregarDados();
-}
-function editarRegistro(id) {
-  const r = todosDados.find(x=>x.ID===id);
-  if (!r) return;
-  const atv = (atividades||[]).find(a=>a.nome===r.ATIVIDADE||String(a.id)===String(r.ATIVIDADE));
-  document.getElementById('atividadeSelect').value = atv ? (atv.id||atv.nome) : '';
-  document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
-  navegar('registro');
-}
-function atualizarFuncionarios() {
-  const c = document.getElementById('funcCards'); c.innerHTML='';
-  const now=new Date(), mes=String(now.getMonth()+1).padStart(2,'0'), ano=now.getFullYear();
-  FUNCIONARIOS.forEach(f=>{
-    const rf = todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO));
-    const seg = totalSegundos(rf), h=Math.floor(seg/3600), m=Math.floor((seg%3600)/60);
-    const dias = new Set(rf.map(r=>r.DATA).filter(Boolean)).size;
-    const rfMes = rf.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));
-    c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>';
-  });
-}
-function renderAdminAtividades() {
-  const t = document.getElementById('adminAtividadesBody'); t.innerHTML='';
-  (atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{
-    t.innerHTML+='<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="abrirModalEditar(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirAtividadeId(\''+a.id+'\')">🗑️</button></td></tr>';
-  });
-}
-function abrirModalNovaAtividade(){document.getElementById('novaAtvNome').value='';document.getElementById('novaAtvDesc').value='';document.getElementById('modalNovaAtividade').classList.remove('hidden');}
-function fecharModal(id){document.getElementById(id).classList.add('hidden');}
-async function salvarNovaAtividade(){const n=document.getElementById('novaAtvNome').value.trim();if(!n){mostrarNotificacao('Digite o nome.',true);return;}await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addAtividade',nome:n,descricao:document.getElementById('novaAtvDesc').value.trim()})});mostrarNotificacao('✅ Criada!');fecharModal('modalNovaAtividade');await carregarAtividades();}
-function abrirModalEditar(id){const a=(atividades||[]).find(x=>String(x.id)===String(id));if(!a)return;document.getElementById('editAtvId').value=id;document.getElementById('editAtvNome').value=a.nome||'';document.getElementById('editAtvDesc').value=a.descricao||'';document.getElementById('modalEditarAtividade').classList.remove('hidden');}
-async function atualizarAtividade(){const id=document.getElementById('editAtvId').value,nome=document.getElementById('editAtvNome').value.trim();if(!nome){mostrarNotificacao('Digite o nome.',true);return;}await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editAtividade',id,nome,descricao:document.getElementById('editAtvDesc').value.trim()})});mostrarNotificacao('✅ Atualizada!');fecharModal('modalEditarAtividade');await carregarAtividades();}
-async function excluirAtividade(){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id:document.getElementById('editAtvId').value})});mostrarNotificacao('Excluída.');fecharModal('modalEditarAtividade');await carregarAtividades();}
-async function excluirAtividadeId(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id})});mostrarNotificacao('Excluída.');await carregarAtividades();}
-function preencherFiltros(){const h=new Date(),m=new Date(h);m.setDate(1);document.getElementById('relDataIni').value=m.toISOString().split('T')[0];document.getElementById('relDataFim').value=h.toISOString().split('T')[0];}
-function filtrarRelatorio(){const f=document.getElementById('relFiltroFunc').value,i=document.getElementById('relDataIni').value,fi=document.getElementById('relDataFim').value;let filt=[...todosDados];if(f!=='todos')filt=filt.filter(r=>nomeFuncionarioIgual(f,r.FUNCIONÁRIO));if(i)filt=filt.filter(r=>r.DATA>=i);if(fi)filt=filt.filter(r=>r.DATA<=fi);filt.sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('relatorioBody');t.innerHTML='';filt.forEach(r=>{t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+(r.FUNCIONÁRIO||'-')+'</td><td>'+getNomeAtividade(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+(r.TOTAL||'-')+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>';});if(!filt.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';const seg=totalSegundos(filt);document.getElementById('relTotalHoras').textContent=String(Math.floor(seg/3600)).padStart(2,'0')+':'+String(Math.floor((seg%3600)/60)).padStart(2,'0');document.getElementById('relTotalReg').textContent=filt.length;window._relDadosFiltrados=filt;}
-function exportarRelatorioCSV(){if(!window._relDadosFiltrados||!window._relDadosFiltrados.length){mostrarNotificacao('Nenhum dado.',true);return;}downloadCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+window._relDadosFiltrados.map(r=>'"'+(r.DATA||'')+'","'+(r.FUNCIONÁRIO||'')+'","'+getNomeAtividade(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+(r.TOTAL||'')+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"').join('\n'),'relatorio_'+new Date().toISOString().split('T')[0]+'.csv');}
-function exportarJSON(){if(!todosDados.length){mostrarNotificacao('Nenhum dado.',true);return;}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(todosDados,null,2)],{type:'application/json'}));a.download='backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();mostrarNotificacao('✅ Exportado!');}
-function exportarCSV(){if(!todosDados.length){mostrarNotificacao('Nenhum dado.',true);return;}downloadCSV(Object.keys(todosDados[0]).join(',')+'\n'+todosDados.map(r=>Object.values(r).map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n'),'backup_'+new Date().toISOString().split('T')[0]+'.csv');}
-function exportarAtividadesCSV(){if(!atividades.length){mostrarNotificacao('Nenhuma.',true);return;}downloadCSV('id,nome,descricao\n'+atividades.map(a=>'"'+a.id+'","'+a.nome+'","'+(a.descricao||'').replace(/"/g,'""')+'"').join('\n'),'atividades_'+new Date().toISOString().split('T')[0]+'.csv');}
-function downloadCSV(c,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8;'}));a.download=n;a.click();mostrarNotificacao('✅ '+n+' baixado!');}
-function mostrarNotificacao(msg,erro=false){const d=document.createElement('div');d.className='notificacao'+(erro?' erro':'');d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),3000);}
+async function excluirRegistro(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'delete',registroId:id})});mostrarNotificacao('Excluído.');await carregarDados()}
+function editarRegistro(id){const r=todosDados.find(x=>x.ID===id);if(!r)return;const atv=(atividades||[]).find(a=>a.nome===r.ATIVIDADE||String(a.id)===String(r.ATIVIDADE));document.getElementById('atividadeSelect').value=atv?(atv.id||atv.nome):'';document.getElementById('observacaoInput').value=r.OBSERVAÇÃO||'';navegar('registro')}
+function atualizarFuncionarios(){const c=document.getElementById('funcCards');c.innerHTML='';const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();FUNCIONARIOS.forEach(f=>{const rf=todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO));const seg=totalSegundos(rf),h=Math.floor(seg/3600),m=Math.floor((seg%3600)/60);const dias=new Set(rf.map(r=>r.DATA).filter(Boolean)).size;const rfMes=rf.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>'})}
+function renderAdminAtividades(){const t=document.getElementById('adminAtividadesBody');t.innerHTML='';(atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{t.innerHTML+='<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="abrirModalEditar(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirAtividadeId(\''+a.id+'\')">🗑️</button></td></tr>'})}
+function abrirModalNovaAtividade(){document.getElementById('novaAtvNome').value='';document.getElementById('novaAtvDesc').value='';document.getElementById('modalNovaAtividade').classList.remove('hidden')}
+function fecharModal(id){document.getElementById(id).classList.add('hidden')}
+async function salvarNovaAtividade(){const n=document.getElementById('novaAtvNome').value.trim();if(!n){mostrarNotificacao('Digite o nome.',true);return}await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addAtividade',nome:n,descricao:document.getElementById('novaAtvDesc').value.trim()})});mostrarNotificacao('✅ Criada!');fecharModal('modalNovaAtividade');await carregarAtividades()}
+function abrirModalEditar(id){const a=(atividades||[]).find(x=>String(x.id)===String(id));if(!a)return;document.getElementById('editAtvId').value=id;document.getElementById('editAtvNome').value=a.nome||'';document.getElementById('editAtvDesc').value=a.descricao||'';document.getElementById('modalEditarAtividade').classList.remove('hidden')}
+async function atualizarAtividade(){const id=document.getElementById('editAtvId').value,nome=document.getElementById('editAtvNome').value.trim();if(!nome){mostrarNotificacao('Digite o nome.',true);return}await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editAtividade',id,nome,descricao:document.getElementById('editAtvDesc').value.trim()})});mostrarNotificacao('✅ Atualizada!');fecharModal('modalEditarAtividade');await carregarAtividades()}
+async function excluirAtividade(){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id:document.getElementById('editAtvId').value})});mostrarNotificacao('Excluída.');fecharModal('modalEditarAtividade');await carregarAtividades()}
+async function excluirAtividadeId(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id})});mostrarNotificacao('Excluída.');await carregarAtividades()}
+function preencherFiltros(){const h=new Date(),m=new Date(h);m.setDate(1);document.getElementById('relDataIni').value=m.toISOString().split('T')[0];document.getElementById('relDataFim').value=h.toISOString().split('T')[0]}
+function filtrarRelatorio(){const f=document.getElementById('relFiltroFunc').value,i=document.getElementById('relDataIni').value,fi=document.getElementById('relDataFim').value;let ft=[...todosDados];if(f!=='todos')ft=ft.filter(r=>nomeFuncionarioIgual(f,r.FUNCIONÁRIO));if(i)ft=ft.filter(r=>r.DATA>=i);if(fi)ft=ft.filter(r=>r.DATA<=fi);ft.sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('relatorioBody');t.innerHTML='';ft.forEach(r=>{const seg=extrairSegundos(r.TOTAL);const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+(r.FUNCIONÁRIO||'-')+'</td><td>'+getNomeAtividade(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>'});if(!ft.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';const seg=totalSegundos(ft);document.getElementById('relTotalHoras').textContent=String(Math.floor(seg/3600)).padStart(2,'0')+':'+String(Math.floor((seg%3600)/60)).padStart(2,'0');document.getElementById('relTotalReg').textContent=ft.length;window._relDadosFiltrados=ft}
+function exportarRelatorioCSV(){if(!window._relDadosFiltrados||!window._relDadosFiltrados.length){mostrarNotificacao('Nenhum dado.',true);return}downloadCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+window._relDadosFiltrados.map(r=>{const seg=extrairSegundos(r.TOTAL);const hh=Math.floor(seg/3600),mm=Math.floor((seg%3600)/60),ss=seg%60;const ts=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');return'"'+(r.DATA||'')+'","'+(r.FUNCIONÁRIO||'')+'","'+getNomeAtividade(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+ts+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"'}).join('\n'),'relatorio_'+new Date().toISOString().split('T')[0]+'.csv')}
+function exportarJSON(){if(!todosDados.length){mostrarNotificacao('Nenhum dado.',true);return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(todosDados,null,2)],{type:'application/json'}));a.download='backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();mostrarNotificacao('✅ Exportado!')}
+function exportarCSV(){if(!todosDados.length){mostrarNotificacao('Nenhum dado.',true);return}downloadCSV(Object.keys(todosDados[0]).join(',')+'\n'+todosDados.map(r=>Object.values(r).map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n'),'backup_'+new Date().toISOString().split('T')[0]+'.csv')}
+function exportarAtividadesCSV(){if(!atividades.length){mostrarNotificacao('Nenhuma.',true);return}downloadCSV('id,nome,descricao\n'+atividades.map(a=>'"'+a.id+'","'+a.nome+'","'+(a.descricao||'').replace(/"/g,'""')+'"').join('\n'),'atividades_'+new Date().toISOString().split('T')[0]+'.csv')}
+function downloadCSV(c,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8;'}));a.download=n;a.click();mostrarNotificacao('✅ '+n+' baixado!')}
+function mostrarNotificacao(msg,erro=false){const d=document.createElement('div');d.className='notificacao'+(erro?' erro':'');d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),3000)}
 carregarTudo();
 </script>
 </body>
