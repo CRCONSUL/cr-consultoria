@@ -3,582 +3,1118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f172a">
-<title>Controle de Produtividade Empresarial</title>
-<link rel="manifest" href='data:application/manifest+json,{"name":"Produtividade","short_name":"Prod","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a"}'>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<title>CR Consultoria - Gestão de Equipe</title>
 <style>
-:root{
-  --bg:#0f172a;
-  --card:#1e293b;
-  --border:#334155;
-  --primary:#3b82f6;
-  --text:#e2e8f0;
-  --muted:#94a3b8;
-  --danger:#ef4444;
-  --success:#22c55e;
-  --warning:#f59e0b;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0f0f13;
+  --surface: #1a1a24;
+  --surface2: #22222f;
+  --border: #2d2d3d;
+  --text: #e8e8f0;
+  --text2: #9090a8;
+  --accent: #6c5ce7;
+  --accent2: #a29bfe;
+  --green: #00b894;
+  --red: #e17055;
+  --orange: #fdcb6e;
+  --blue: #74b9ff;
+  --radius: 10px;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
-body{background:var(--bg);color:var(--text);display:flex;min-height:100vh}
-.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 0;position:fixed;height:100vh;overflow-y:auto;z-index:10}
-.sidebar h1{font-size:18px;padding:0 20px 20px;color:var(--primary);border-bottom:1px solid var(--border)}
-.nav-item{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--muted);transition:.2s;border-left:3px solid transparent}
-.nav-item:hover{background:rgba(59,130,246,.1);color:var(--text)}
-.nav-item.active{background:rgba(59,130,246,.15);color:var(--primary);border-left-color:var(--primary)}
-.main{margin-left:240px;flex:1;padding:24px;min-width:0}
-.page{display:none}
-.page.active{display:block}
-.page-title{font-size:24px;margin-bottom:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
-.card .label{color:var(--muted);font-size:13px;margin-bottom:8px}
-.card .value{font-size:28px;font-weight:700}
-.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;height:340px}
-.chart-box h3{margin-bottom:12px;font-size:15px;color:var(--muted)}
-.btn{background:var(--primary);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s;display:inline-flex;align-items:center;gap:6px}
-.btn:hover{filter:brightness(1.1)}
-.btn.secondary{background:#475569}
-.btn.danger{background:var(--danger)}
-.btn.success{background:var(--success)}
-.btn.warning{background:var(--warning);color:#000}
-.btn.small{padding:6px 10px;font-size:12px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
-th{background:#0f172a;color:var(--muted);font-weight:600}
-tr:last-child td{border-bottom:none}
-.badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block}
-.badge.ativo{background:rgba(34,197,94,.2);color:var(--success)}
-.badge.ferias{background:rgba(245,158,11,.2);color:var(--warning)}
-.badge.inativo{background:rgba(239,68,68,.2);color:var(--danger)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
-.modal.show{display:flex}
-.modal-content{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.modal-content h2{margin-bottom:16px;font-size:20px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
-input,select,textarea{width:100%;background:#0f172a;border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-size:14px}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
-.timer-display{font-size:64px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:var(--primary);margin:20px 0}
-.timer-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:560px;margin:0 auto}
-.timer-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
-.empty{text-align:center;color:var(--muted);padding:40px}
-@media(max-width:768px){
-  .sidebar{width:64px}
-  .sidebar h1{display:none}
-  .nav-item{justify-content:center;padding:14px}
-  .nav-item span{display:none}
-  .main{margin-left:64px}
-  .charts{grid-template-columns:1fr}
-  .timer-display{font-size:44px}
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.hidden { display: none !important; }
+
+/* LAYOUT */
+.app-container { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+  padding: 20px 0; flex-shrink: 0; display: flex; flex-direction: column;
 }
+.sidebar-logo {
+  padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px;
+  font-size: 14px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px;
+}
+.sidebar-logo span { color: var(--text2); font-weight: 400; }
+.sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+.nav-item {
+  padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  color: var(--text2); transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+  border: none; background: transparent; text-align: left; width: 100%;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--accent); color: white; }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); margin-top: auto; }
+.funcionario-info { font-size: 12px; color: var(--text2); }
+.funcionario-info strong { color: var(--text); display: block; font-size: 13px; }
+
+/* MAIN */
+.main-content { flex: 1; padding: 24px 32px; overflow-y: auto; max-height: 100vh; }
+.page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.page-subtitle { color: var(--text2); font-size: 13px; margin-bottom: 24px; }
+
+/* CARDS */
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; margin-bottom: 16px;
+}
+.card-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* FORM */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group label { font-size: 12px; color: var(--text2); }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px; outline: none; transition: border 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--accent);
+}
+.form-group textarea { resize: vertical; min-height: 60px; }
+.btn {
+  padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px;
+  font-weight: 600; transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-success { background: var(--green); color: white; }
+.btn-danger { background: var(--red); color: white; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* TABLE */
+.table-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; color: var(--text2); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:hover { background: var(--surface2); }
+.tag {
+  display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+}
+.tag-pendente { background: rgba(253,203,110,0.15); color: var(--orange); }
+.tag-concluido { background: rgba(0,184,148,0.15); color: var(--green); }
+.tag-andamento { background: rgba(108,92,231,0.15); color: var(--accent2); }
+.actions-cell { display: flex; gap: 4px; }
+.actions-cell button { padding: 4px 8px; font-size: 11px; }
+
+/* CRONOMETRO */
+.cronometro-display { text-align: center; padding: 20px 0; }
+.cronometro-display .time {
+  font-size: 56px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 4px;
+}
+.cronometro-display .status-text { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.cronometro-actions { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+.cronometro-actions .btn { min-width: 100px; }
+
+/* FILTROS */
+.filtros-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: end; }
+.filtros-bar .form-group { min-width: 150px; }
+.filtros-bar .btn { height: 38px; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.modal-content {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+}
+.modal-content h3 { font-size: 16px; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 8px; justify-content: end; margin-top: 16px; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text2); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* LOADING */
+.loading { text-align: center; padding: 40px; color: var(--text2); }
+.loading .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar { width: 60px; }
+  .sidebar-logo span, .sidebar-nav .nav-text, .funcionario-info { display: none; }
+  .sidebar-logo { font-size: 10px; padding: 10px; text-align: center; }
+  .nav-item { justify-content: center; padding: 10px; }
+  .main-content { padding: 16px; }
+  .form-row { grid-template-columns: 1fr; }
+  .filtros-bar { flex-direction: column; }
+  .filtros-bar .form-group { width: 100%; }
+}
+
+/* SELETOR FUNCIONARIO LOGIN */
+.login-screen {
+  display: flex; align-items: center; justify-content: center; min-height: 100vh;
+  background: var(--bg);
+}
+.login-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px; width: 90%; max-width: 380px; text-align: center;
+}
+.login-card h2 { font-size: 20px; margin-bottom: 4px; }
+.login-card p { color: var(--text2); font-size: 13px; margin-bottom: 24px; }
+.login-card .form-group { margin-bottom: 16px; }
+.login-card .form-group select { width: 100%; padding: 12px; font-size: 15px; }
+.login-card .btn { width: 100%; padding: 12px; font-size: 15px; }
 </style>
 </head>
 <body>
-<aside class="sidebar">
-  <h1>⚡ Produtividade</h1>
-  <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">📊 <span>Dashboard</span></div>
-  <div class="nav-item" data-page="employees" onclick="navigate('employees')">👥 <span>Funcionários</span></div>
-  <div class="nav-item" data-page="activities" onclick="navigate('activities')">📋 <span>Atividades</span></div>
-  <div class="nav-item" data-page="timer" onclick="navigate('timer')">⏱️ <span>Cronômetro</span></div>
-  <div class="nav-item" data-page="reports" onclick="navigate('reports')">📈 <span>Relatórios</span></div>
-  <div class="nav-item" data-page="backup" onclick="navigate('backup')">💾 <span>Backup</span></div>
-</aside>
-<main class="main">
-  <section id="page-dashboard" class="page active">
-    <h2 class="page-title">Dashboard</h2>
-    <div class="cards">
-      <div class="card"><div class="label">Funcionários Ativos</div><div class="value" id="statActive">0</div></div>
-      <div class="card"><div class="label">Atividades</div><div class="value" id="statActivities">0</div></div>
-      <div class="card"><div class="label">Total Registros</div><div class="value" id="statPoints">0</div></div>
-      <div class="card"><div class="label">Horas Totais</div><div class="value" id="statHours">0h</div></div>
-    </div>
-    <div class="charts">
-      <div class="chart-box"><h3>Horas por Funcionário</h3><canvas id="chartBar"></canvas></div>
-      <div class="chart-box"><h3>Distribuição por Atividade</h3><canvas id="chartDonut"></canvas></div>
-    </div>
-  </section>
 
-  <section id="page-employees" class="page">
-    <h2 class="page-title">Funcionários</h2>
-    <div class="toolbar"><button class="btn" onclick="openEmployeeModal()">+ Novo Funcionário</button></div>
-    <table><thead><tr><th>Nome</th><th>Cargo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="employeesBody"></tbody></table>
-  </section>
-
-  <section id="page-activities" class="page">
-    <h2 class="page-title">Atividades</h2>
-    <div class="toolbar"><button class="btn" onclick="openActivityModal()">+ Nova Atividade</button></div>
-    <table><thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead><tbody id="activitiesBody"></tbody></table>
-  </section>
-
-  <section id="page-timer" class="page">
-    <h2 class="page-title">Cronômetro</h2>
-    <div class="timer-box">
-      <div class="form-group"><label>Funcionário</label><select id="timerEmployee"></select></div>
-      <div class="form-group"><label>Atividade</label><select id="timerActivity"></select></div>
-      <div class="timer-display" id="timerDisplay">00:00:00</div>
-      <div class="timer-controls" id="timerControls">
-        <button class="btn success" id="btnStart" onclick="startTimer()">Iniciar</button>
-        <button class="btn warning" id="btnPause" onclick="pauseTimer()" style="display:none">Pausar</button>
-        <button class="btn success" id="btnResume" onclick="resumeTimer()" style="display:none">Retomar</button>
-        <button class="btn danger" id="btnFinish" onclick="finishTimer()" style="display:none">Finalizar</button>
-      </div>
-      <div class="form-group"><label>Observação</label><textarea id="timerNote" rows="3" placeholder="Observações sobre a atividade..."></textarea></div>
+<!-- TELA DE LOGIN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div style="font-size:36px;margin-bottom:8px;">👋</div>
+    <h2>CR Consultoria</h2>
+    <p>Selecione seu nome para acessar</p>
+    <div class="form-group">
+      <select id="loginFuncionario">
+        <option value="">— Selecione —</option>
+        <option value="Cecília">Cecília (Admin)</option>
+        <option value="Thamires">Thamires</option>
+        <option value="Sophia">Sophia</option>
+      </select>
     </div>
-    <h3 style="margin:24px 0 12px">Registros Recentes</h3>
-    <table><thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Ações</th></tr></thead><tbody id="recentPoints"></tbody></table>
-  </section>
-
-  <section id="page-reports" class="page">
-    <h2 class="page-title">Relatórios</h2>
-    <div class="filters">
-      <select id="filterEmployee"><option value="">Todos Funcionários</option></select>
-      <select id="filterActivity"><option value="">Todas Atividades</option></select>
-      <input type="date" id="filterStart">
-      <input type="date" id="filterEnd">
-    </div>
-    <div class="toolbar">
-      <button class="btn" onclick="renderReports()">Filtrar</button>
-      <button class="btn secondary" onclick="clearFilters()">Limpar</button>
-      <button class="btn success" onclick="exportCSV()">Exportar CSV</button>
-    </div>
-    <table><thead><tr><th>Funcionário</th><th>Atividade</th><th>Duração</th><th>Data</th><th>Observação</th><th>Ações</th></tr></thead><tbody id="reportsBody"></tbody></table>
-  </section>
-
-  <section id="page-backup" class="page">
-    <h2 class="page-title">Backup & Restore</h2>
-    <div class="toolbar">
-      <button class="btn" onclick="backupData()">Exportar JSON</button>
-      <label class="btn secondary" style="cursor:pointer">Importar JSON<input type="file" accept=".json" style="display:none" onchange="restoreData(event)"></label>
-    </div>
-    <div class="card">
-      <div class="label">Restaurar dados</div>
-      <p style="margin:10px 0;color:var(--muted)">Escolha o modo de importação:</p>
-      <div class="form-group">
-        <label><input type="radio" name="restoreMode" value="replace" checked style="width:auto"> Substituir todos os dados</label><br>
-        <label><input type="radio" name="restoreMode" value="merge" style="width:auto"> Mesclar com dados atuais</label>
-      </div>
-    </div>
-  </section>
-</main>
-
-<div class="modal" id="employeeModal">
-  <div class="modal-content">
-    <h2 id="employeeModalTitle">Novo Funcionário</h2>
-    <input type="hidden" id="empId">
-    <div class="form-group"><label>Nome</label><input type="text" id="empName"></div>
-    <div class="form-group"><label>Cargo</label><input type="text" id="empRole"></div>
-    <div class="form-group"><label>Status</label><select id="empStatus"><option value="ativo">Ativo</option><option value="ferias">Férias</option><option value="inativo">Inativo</option></select></div>
-    <div class="modal-actions"><button class="btn secondary" onclick="closeModal('employeeModal')">Cancelar</button><button class="btn" onclick="saveEmployee()">Salvar</button></div>
+    <button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
+    <div id="loginError" style="color:var(--red);font-size:12px;margin-top:8px;display:none;">Selecione seu nome para continuar</div>
   </div>
 </div>
 
-<div class="modal" id="activityModal">
-  <div class="modal-content">
-    <h2 id="activityModalTitle">Nova Atividade</h2>
-    <input type="hidden" id="actId">
-    <div class="form-group"><label>Nome</label><input type="text" id="actName"></div>
-    <div class="form-group"><label>Descrição</label><textarea id="actDesc" rows="3"></textarea></div>
-    <div class="modal-actions"><button class="btn secondary" onclick="closeModal('activityModal')">Cancelar</button><button class="btn" onclick="saveActivity()">Salvar</button></div>
-  </div>
+<!-- APP -->
+<div id="appContainer" class="app-container hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">CR<span> Consultoria</span></div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="navegar('dashboard')">
+        <span class="icon">📊</span><span class="nav-text">Dashboard</span>
+      </button>
+      <button class="nav-item" onclick="navegar('cronometro')">
+        <span class="icon">⏱️</span><span class="nav-text">Cronômetro</span>
+      </button>
+      <button class="nav-item" onclick="navegar('registros')">
+        <span class="icon">📋</span><span class="nav-text">Registros</span>
+      </button>
+      <button class="nav-item" onclick="navegar('equipe')">
+        <span class="icon">👥</span><span class="nav-text">Equipe</span>
+      </button>
+      <button class="nav-item" onclick="navegar('relatorios')">
+        <span class="icon">📈</span><span class="nav-text">Relatórios</span>
+      </button>
+      <button class="nav-item" onclick="navegar('adm')">
+        <span class="icon">⚙️</span><span class="nav-text">Admin</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="funcionario-info">
+        <strong id="sidebarNome">—</strong>
+        <span id="sidebarCargo">Colaborador</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content" id="mainContent">
+    <!-- Renderizado via JS -->
+  </main>
 </div>
 
-<div class="modal" id="confirmModal">
-  <div class="modal-content">
-    <h2>Confirmação</h2>
-    <p id="confirmMessage" style="margin:12px 0;color:var(--muted)"></p>
-    <div class="modal-actions"><button class="btn secondary" id="confirmCancelBtn">Cancelar</button><button class="btn danger" id="confirmOkBtn">Confirmar</button></div>
-  </div>
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal-content" id="modalBody"></div>
 </div>
 
 <script>
-let employees=[], activities=[], points=[];
-let confirmCallback=null;
-let timerState={running:false,paused:false,elapsed:0,startTs:0,intervalId:null,empId:null,actId:null};
-let chartBar=null, chartDonut=null;
+// ============================================================
+// CONFIGURAÇÃO
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbyeU9gtN2RHXyGGmoZbvdkJqdvkyO9mxRfaB8KTfkJYd0YvsQ1SCh8s4dzawbZWS-Z1Lw/exec'; // ← COLE A URL DO APPS SCRIPT AQUI
 
-function load(){
-  const data=localStorage.getItem('prodData');
-  if(data){
-    const d=JSON.parse(data);
-    employees=d.employees||[];
-    activities=d.activities||[];
-    points=d.points||[];
-  } else {
-    seedData();
+const FUNCIONARIOS = [
+  { nome: 'Cecília', admin: true },
+  { nome: 'Thamires', admin: false },
+  { nome: 'Sophia', admin: false }
+];
+
+const ATIVIDADES_PADRAO = ['Consultoria', 'Reunião', 'Análise', 'Relatório', 'Projeto', 'Administrativo', 'Atendimento', 'Outro'];
+
+// Estado global
+let state = {
+  funcionarioAtual: null,
+  registros: [],
+  filtroFuncionario: 'todos',
+  filtroAtividade: 'todas',
+  filtroData: '',
+  cronometroAtivo: null,
+  cronometroInterval: null,
+  cronometroInicio: null,
+  cronometroObservacao: ''
+};
+
+// ============================================================
+// API
+// ============================================================
+async function api(method, body) {
+  const url = API_URL + (method === 'GET' ? '?action=read' : '');
+  const opts = { method };
+  if (method === 'POST') {
+    opts.headers = { 'Content-Type': 'application/json' };
+    opts.body = JSON.stringify(body);
+  }
+  try {
+    const res = await fetch(url, opts);
+    const text = await res.text();
+    return JSON.parse(text);
+  } catch(e) {
+    return { success: false, error: e.message };
   }
 }
-function save(){
-  localStorage.setItem('prodData',JSON.stringify({employees,activities,points}));
-}
-function seedData(){
-  employees=[
-    {id:1,name:'Cecília Rijo',role:'Consultora',status:'ativo'},
-    {id:2,name:'Carlos Mendes',role:'Analista',status:'ativo'},
-    {id:3,name:'Ana Oliveira',role:'Gestora',status:'ferias'}
-  ];
-  activities=[
-    {id:1,name:'Reunião com Cliente',desc:'Atendimento e alinhamento com clientes'},
-    {id:2,name:'Análise de Dados',desc:'Análise de métricas e indicadores'},
-    {id:3,name:'Desenvolvimento',desc:'Implementação de funcionalidades'}
-  ];
-  const now=Date.now();
-  points=[
-    {id:1,empId:1,actId:1,duration:5400,note:'Reunião inicial',ts:now-86400000*2},
-    {id:2,empId:1,actId:2,duration:7200,note:'Análise mensal',ts:now-86400000},
-    {id:3,empId:2,actId:3,duration:10800,note:'Sprint atual',ts:now-3600000*5},
-    {id:4,empId:2,actId:1,duration:3600,note:'Follow-up',ts:now-3600000*2}
-  ];
-  save();
+
+async function carregarRegistros() {
+  const res = await api('GET');
+  if (res.success) state.registros = res.data;
+  return state.registros;
 }
 
-function navigate(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  document.querySelector('.nav-item[data-page="'+page+'"]').classList.add('active');
-  if(page==='dashboard') renderDashboard();
-  if(page==='employees') renderEmployees();
-  if(page==='activities') renderActivities();
-  if(page==='timer') renderTimerPage();
-  if(page==='reports') renderReports();
+async function criarRegistro(dados) {
+  return await api('POST', { action: 'create', ...dados });
 }
 
-function fmtDuration(sec){
-  sec=Math.floor(sec);
-  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
-  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-}
-function fmtDate(ts){
-  const d=new Date(ts);
-  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-}
-function empName(id){return (employees.find(e=>e.id===id)||{}).name||'—';}
-function actName(id){return (activities.find(a=>a.id===id)||{}).name||'—';}
-function nextId(arr){return arr.length?Math.max(...arr.map(x=>x.id))+1:1;}
-
-function renderDashboard(){
-  document.getElementById('statActive').textContent=employees.filter(e=>e.status==='ativo').length;
-  document.getElementById('statActivities').textContent=activities.length;
-  document.getElementById('statPoints').textContent=points.length;
-  const totalSec=points.reduce((s,p)=>s+p.duration,0);
-  document.getElementById('statHours').textContent=(totalSec/3600).toFixed(1)+'h';
-  renderCharts();
-}
-function renderCharts(){
-  const empHours={};
-  points.forEach(p=>{empHours[p.empId]=(empHours[p.empId]||0)+p.duration;});
-  const labels=Object.keys(empHours).map(id=>empName(+id));
-  const data=Object.values(empHours).map(s=>+(s/3600).toFixed(2));
-  if(chartBar)chartBar.destroy();
-  chartBar=new Chart(document.getElementById('chartBar'),{
-    type:'bar',
-    data:{labels,datasets:[{label:'Horas',data,backgroundColor:'#3b82f6',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}},y:{ticks:{color:'#94a3b8'},grid:{color:'#334155'}}}}
-  });
-  const actHours={};
-  points.forEach(p=>{actHours[p.actId]=(actHours[p.actId]||0)+p.duration;});
-  const alabels=Object.keys(actHours).map(id=>actName(+id));
-  const adata=Object.values(actHours).map(s=>+(s/3600).toFixed(2));
-  if(chartDonut)chartDonut.destroy();
-  chartDonut=new Chart(document.getElementById('chartDonut'),{
-    type:'doughnut',
-    data:{labels:alabels,datasets:[{data:adata,backgroundColor:['#3b82f6','#22c55e','#f59e0b','#ef4444','#a855f7','#06b6d4']}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}}}
-  });
+async function atualizarRegistro(dados) {
+  return await api('POST', { action: 'update', ...dados });
 }
 
-function renderEmployees(){
-  const body=document.getElementById('employeesBody');
-  if(!employees.length){body.innerHTML='<tr><td colspan="4" class="empty">Nenhum funcionário cadastrado</td></tr>';return;}
-  body.innerHTML=employees.map(e=>`
-    <tr>
-      <td>${e.name}</td><td>${e.role}</td>
-      <td><span class="badge ${e.status}">${e.status}</span></td>
-      <td><button class="btn small" onclick="openEmployeeModal(${e.id})">Editar</button> <button class="btn small danger" onclick="deleteEmployee(${e.id})">Excluir</button></td>
-    </tr>`).join('');
+async function deletarRegistro(id) {
+  return await api('POST', { action: 'delete', id });
 }
-function openEmployeeModal(id){
-  const m=document.getElementById('employeeModal');
-  if(id){
-    const e=employees.find(x=>x.id===id);
-    document.getElementById('employeeModalTitle').textContent='Editar Funcionário';
-    document.getElementById('empId').value=e.id;
-    document.getElementById('empName').value=e.name;
-    document.getElementById('empRole').value=e.role;
-    document.getElementById('empStatus').value=e.status;
-  } else {
-    document.getElementById('employeeModalTitle').textContent='Novo Funcionário';
-    document.getElementById('empId').value='';
-    document.getElementById('empName').value='';
-    document.getElementById('empRole').value='';
-    document.getElementById('empStatus').value='ativo';
+
+// ============================================================
+// LOGIN
+// ============================================================
+function fazerLogin() {
+  const nome = document.getElementById('loginFuncionario').value;
+  if (!nome) {
+    document.getElementById('loginError').style.display = 'block';
+    return;
   }
-  m.classList.add('show');
+  document.getElementById('loginError').style.display = 'none';
+  state.funcionarioAtual = nome;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appContainer').classList.remove('hidden');
+  document.getElementById('sidebarNome').textContent = nome;
+  const func = FUNCIONARIOS.find(f => f.nome === nome);
+  document.getElementById('sidebarCargo').textContent = func?.admin ? 'Administradora' : 'Colaboradora';
+  iniciarApp();
 }
-function saveEmployee(){
-  const id=document.getElementById('empId').value;
-  const name=document.getElementById('empName').value.trim();
-  const role=document.getElementById('empRole').value.trim();
-  const status=document.getElementById('empStatus').value;
-  if(!name||!role){alert('Preencha nome e cargo');return;}
-  if(id){
-    const e=employees.find(x=>x.id===+id);
-    e.name=name;e.role=role;e.status=status;
-  } else {
-    employees.push({id:nextId(employees),name,role,status});
+
+// ============================================================
+// NAVEGAÇÃO
+// ============================================================
+function navegar(pagina) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.nav-item:nth-child(${['dashboard','cronometro','registros','equipe','relatorios','adm'].indexOf(pagina)+1})`)?.classList.add('active');
+  renderizarPagina(pagina);
+}
+
+function renderizarPagina(pagina) {
+  const main = document.getElementById('mainContent');
+  if (pagina === 'dashboard') renderDashboard(main);
+  else if (pagina === 'cronometro') renderCronometro(main);
+  else if (pagina === 'registros') renderRegistros(main);
+  else if (pagina === 'equipe') renderEquipe(main);
+  else if (pagina === 'relatorios') renderRelatorios(main);
+  else if (pagina === 'adm') renderAdmin(main);
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard(el) {
+  const hoje = new Date().toISOString().split('T')[0];
+  const registrosHoje = state.registros.filter(r => r.data === hoje);
+  const emAndamento = registrosHoje.filter(r => r.status === 'andamento');
+  const concluidos = registrosHoje.filter(r => r.status === 'concluido');
+  const pendentes = registrosHoje.filter(r => r.status === 'pendente');
+  const totalHoras = registrosHoje.reduce((acc, r) => {
+    if (r.total) {
+      const partes = r.total.split(':');
+      return acc + parseInt(partes[0]) * 60 + parseInt(partes[1]);
+    }
+    return acc;
+  }, 0);
+
+  el.innerHTML = `
+    <h1 class="page-title">📊 Dashboard</h1>
+    <p class="page-subtitle">Resumo do dia · ${new Date().toLocaleDateString('pt-BR')}</p>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+      <div class="card" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;font-weight:700;color:var(--accent2);">${registrosHoje.length}</div>
+        <div style="font-size:12px;color:var(--text2);">Registros hoje</div>
+      </div>
+      <div class="card" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;font-weight:700;color:var(--green);">${concluidos.length}</div>
+        <div style="font-size:12px;color:var(--text2);">Concluídos</div>
+      </div>
+      <div class="card" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;font-weight:700;color:var(--orange);">${pendentes.length}</div>
+        <div style="font-size:12px;color:var(--text2);">Pendentes</div>
+      </div>
+      <div class="card" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;font-weight:700;color:var(--blue);">${Math.floor(totalHoras/60)}h${totalHoras%60}m</div>
+        <div style="font-size:12px;color:var(--text2);">Horas registradas</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Atividades de hoje</div>
+      ${registrosHoje.length === 0 ? `<div class="empty-state"><div class="icon">📭</div><p>Nenhum registro hoje ainda</p></div>` : `
+      <div class="table-container">
+        <table>
+          <thead><tr><th>Funcionário</th><th>Atividade</th><th>Horário</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody>
+            ${registrosHoje.map(r => `
+              <tr>
+                <td><strong>${r.funcionario}</strong></td>
+                <td>${r.atividade}</td>
+                <td>${r.horaInicio || '-'}${r.horaFim ? ' → '+r.horaFim : ''}</td>
+                <td>${r.total || '-'}</td>
+                <td><span class="tag tag-${r.status}">${r.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`}
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+  `;
+}
+
+// ============================================================
+// CRONÔMETRO
+// ============================================================
+function renderCronometro(el) {
+  const func = FUNCIONARIOS.find(f => f.nome === state.funcionarioAtual);
+  const isAdmin = func?.admin;
+
+  el.innerHTML = `
+    <h1 class="page-title">⏱️ Cronômetro</h1>
+    <p class="page-subtitle">Registre suas atividades em tempo real</p>
+
+    <div class="card">
+      <div class="card-title">Cronômetro</div>
+      <div class="cronometro-display">
+        <div class="time" id="cronometroTime">00:00:00</div>
+        <div class="status-text" id="cronometroStatus">Parado</div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Atividade</label>
+        <select id="cronometroAtividade">
+          ${ATIVIDADES_PADRAO.map(a => `<option value="${a}">${a}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Observação (opcional)</label>
+        <textarea id="cronometroObs" placeholder="Detalhes da atividade..."></textarea>
+      </div>
+      <div class="cronometro-actions">
+        <button class="btn btn-success" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
+        <button class="btn btn-outline hidden" id="btnPausar" onclick="pausarCronometro()">⏸ Pausar</button>
+        <button class="btn btn-primary hidden" id="btnRetomar" onclick="retomarCronometro()">▶ Retomar</button>
+        <button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Registros de hoje</div>
+      <div id="cronometroRegistros"></div>
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+    <div id="successMsg" style="display:none;padding:12px;background:rgba(0,184,148,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px;margin-top:12px;"></div>
+  `;
+  atualizarCronometroRegistros();
+}
+
+function atualizarCronometroRegistros() {
+  const hoje = new Date().toISOString().split('T')[0];
+  const meus = state.registros.filter(r => r.funcionario === state.funcionarioAtual && r.data === hoje && r.status !== 'andamento');
+  const div = document.getElementById('cronometroRegistros');
+  if (!div) return;
+  if (meus.length === 0) {
+    div.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhum registro finalizado hoje</p></div>';
+    return;
   }
-  save();renderEmployees();closeModal('employeeModal');
-}
-function deleteEmployee(id){
-  const e=employees.find(x=>x.id===id);
-  showConfirm('Excluir funcionário "'+e.name+'"? Os registros relacionados serão mantidos.',()=>{
-    employees=employees.filter(x=>x.id!==id);
-    save();renderEmployees();
-  });
+  div.innerHTML = `
+    <div class="table-container">
+      <table>
+        <thead><tr><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+          ${meus.map(r => `
+            <tr>
+              <td>${r.atividade}</td>
+              <td>${r.horaInicio || '-'}</td>
+              <td>${r.horaFim || '-'}</td>
+              <td>${r.total || '-'}</td>
+              <td><span class="tag tag-${r.status}">${r.status}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
-function renderActivities(){
-  const body=document.getElementById('activitiesBody');
-  if(!activities.length){body.innerHTML='<tr><td colspan="3" class="empty">Nenhuma atividade cadastrada</td></tr>';return;}
-  body.innerHTML=activities.map(a=>`
-    <tr>
-      <td>${a.name}</td><td>${a.desc||'—'}</td>
-      <td><button class="btn small" onclick="openActivityModal(${a.id})">Editar</button> <button class="btn small danger" onclick="deleteActivity(${a.id})">Excluir</button></td>
-    </tr>`).join('');
+function iniciarCronometro() {
+  const atividade = document.getElementById('cronometroAtividade').value;
+  if (!atividade) return mostrarErro('Selecione uma atividade');
+  state.cronometroAtivo = atividade;
+  state.cronometroInicio = new Date();
+  state.cronometroObservacao = document.getElementById('cronometroObs').value;
+  state.cronometroSegundos = 0;
+  document.getElementById('btnIniciar').classList.add('hidden');
+  document.getElementById('btnParar').classList.remove('hidden');
+  document.getElementById('btnPausar').classList.remove('hidden');
+  document.getElementById('cronometroStatus').textContent = '▶ Rodando';
+  document.getElementById('cronometroStatus').style.color = 'var(--green)';
+  if (state.cronometroInterval) clearInterval(state.cronometroInterval);
+  state.cronometroInterval = setInterval(() => {
+    state.cronometroSegundos++;
+    const h = Math.floor(state.cronometroSegundos / 3600);
+    const m = Math.floor((state.cronometroSegundos % 3600) / 60);
+    const s = state.cronometroSegundos % 60;
+    document.getElementById('cronometroTime').textContent =
+      `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+  document.getElementById('cronometroAtividade').disabled = true;
+  document.getElementById('cronometroObs').disabled = true;
 }
-function openActivityModal(id){
-  const m=document.getElementById('activityModal');
-  if(id){
-    const a=activities.find(x=>x.id===id);
-    document.getElementById('activityModalTitle').textContent='Editar Atividade';
-    document.getElementById('actId').value=a.id;
-    document.getElementById('actName').value=a.name;
-    document.getElementById('actDesc').value=a.desc||'';
+
+function pausarCronometro() {
+  if (state.cronometroInterval) clearInterval(state.cronometroInterval);
+  document.getElementById('btnPausar').classList.add('hidden');
+  document.getElementById('btnRetomar').classList.remove('hidden');
+  document.getElementById('cronometroStatus').textContent = '⏸ Pausado';
+  document.getElementById('cronometroStatus').style.color = 'var(--orange)';
+}
+
+function retomarCronometro() {
+  document.getElementById('btnRetomar').classList.add('hidden');
+  document.getElementById('btnPausar').classList.remove('hidden');
+  document.getElementById('cronometroStatus').textContent = '▶ Rodando';
+  document.getElementById('cronometroStatus').style.color = 'var(--green)';
+  state.cronometroInterval = setInterval(() => {
+    state.cronometroSegundos++;
+    const h = Math.floor(state.cronometroSegundos / 3600);
+    const m = Math.floor((state.cronometroSegundos % 3600) / 60);
+    const s = state.cronometroSegundos % 60;
+    document.getElementById('cronometroTime').textContent =
+      `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+}
+
+async function pararCronometro() {
+  if (state.cronometroInterval) clearInterval(state.cronometroInterval);
+  state.cronometroInterval = null;
+  
+  const h = Math.floor(state.cronometroSegundos / 3600);
+  const m = Math.floor((state.cronometroSegundos % 3600) / 60);
+  const s = state.cronometroSegundos % 60;
+  const total = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const agora = new Date();
+  const inicioStr = state.cronometroInicio.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+  const fimStr = agora.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+  const hoje = agora.toISOString().split('T')[0];
+
+  // Criar registro no servidor
+  const res = await criarRegistro({
+    data: hoje,
+    funcionario: state.funcionarioAtual,
+    atividade: state.cronometroAtivo,
+    horaInicio: inicioStr,
+    horaFim: fimStr,
+    total: total,
+    observacao: state.cronometroObservacao,
+    status: 'concluido'
+  });
+
+  if (res.success) {
+    // Recarregar registros
+    await carregarRegistros();
+    // Resetar cronômetro
+    state.cronometroAtivo = null;
+    state.cronometroInicio = null;
+    state.cronometroObservacao = '';
+    state.cronometroSegundos = 0;
+    document.getElementById('cronometroTime').textContent = '00:00:00';
+    document.getElementById('cronometroStatus').textContent = 'Parado';
+    document.getElementById('cronometroStatus').style.color = 'var(--text2)';
+    document.getElementById('btnIniciar').classList.remove('hidden');
+    document.getElementById('btnPausar').classList.add('hidden');
+    document.getElementById('btnRetomar').classList.add('hidden');
+    document.getElementById('btnParar').classList.add('hidden');
+    document.getElementById('cronometroAtividade').disabled = false;
+    document.getElementById('cronometroObs').disabled = false;
+    document.getElementById('cronometroObs').value = '';
+    mostrarSucesso('Registro salvo com sucesso!');
+    atualizarCronometroRegistros();
   } else {
-    document.getElementById('activityModalTitle').textContent='Nova Atividade';
-    document.getElementById('actId').value='';
-    document.getElementById('actName').value='';
-    document.getElementById('actDesc').value='';
+    mostrarErro('Erro ao salvar. Tente novamente.');
+    state.cronometroSegundos = h*3600 + m*60 + s;
+    state.cronometroInterval = setInterval(() => {
+      state.cronometroSegundos++;
+      const hh = Math.floor(state.cronometroSegundos / 3600);
+      const mm = Math.floor((state.cronometroSegundos % 3600) / 60);
+      const ss = state.cronometroSegundos % 60;
+      document.getElementById('cronometroTime').textContent =
+        `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+    }, 1000);
   }
-  m.classList.add('show');
 }
-function saveActivity(){
-  const id=document.getElementById('actId').value;
-  const name=document.getElementById('actName').value.trim();
-  const desc=document.getElementById('actDesc').value.trim();
-  if(!name){alert('Preencha o nome');return;}
-  if(id){
-    const a=activities.find(x=>x.id===+id);
-    a.name=name;a.desc=desc;
-  } else {
-    activities.push({id:nextId(activities),name,desc});
+
+// ============================================================
+// REGISTROS (Tabela completa)
+// ============================================================
+function renderRegistros(el) {
+  const func = FUNCIONARIOS.find(f => f.nome === state.funcionarioAtual);
+  const isAdmin = func?.admin;
+
+  el.innerHTML = `
+    <h1 class="page-title">📋 Registros</h1>
+    <p class="page-subtitle">Todos os registros da equipe</p>
+
+    <div class="card">
+      <div class="card-title">Filtros</div>
+      <div class="filtros-bar">
+        <div class="form-group">
+          <label>Funcionário</label>
+          <select id="filtroFuncionario" onchange="aplicarFiltros()">
+            <option value="todos">Todos</option>
+            ${FUNCIONARIOS.map(f => `<option value="${f.nome}">${f.nome}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Atividade</label>
+          <select id="filtroAtividade" onchange="aplicarFiltros()">
+            <option value="todas">Todas</option>
+            ${ATIVIDADES_PADRAO.map(a => `<option value="${a}">${a}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" id="filtroData" onchange="aplicarFiltros()">
+        </div>
+        <button class="btn btn-outline" onclick="limparFiltros()">Limpar filtros</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Registros</div>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="registrosTbody"></tbody>
+        </table>
+      </div>
+      <div id="registrosEmpty" class="empty-state hidden"><div class="icon">📭</div><p>Nenhum registro encontrado</p></div>
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+  `;
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  const filtroFunc = document.getElementById('filtroFuncionario')?.value || 'todos';
+  const filtroAtiv = document.getElementById('filtroAtividade')?.value || 'todas';
+  const filtroData = document.getElementById('filtroData')?.value || '';
+  const func = FUNCIONARIOS.find(f => f.nome === state.funcionarioAtual);
+  const isAdmin = func?.admin;
+
+  let dados = [...state.registros];
+  if (filtroFunc !== 'todos') dados = dados.filter(r => r.funcionario === filtroFunc);
+  if (filtroAtiv !== 'todas') dados = dados.filter(r => r.atividade === filtroAtiv);
+  if (filtroData) dados = dados.filter(r => r.data === filtroData);
+  dados.sort((a, b) => (b.data||'').localeCompare(a.data||''));
+
+  const tbody = document.getElementById('registrosTbody');
+  const empty = document.getElementById('registrosEmpty');
+  if (!tbody) return;
+
+  if (dados.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
   }
-  save();renderActivities();closeModal('activityModal');
+  if (empty) empty.classList.add('hidden');
+
+  tbody.innerHTML = dados.map(r => {
+    const podeEditar = isAdmin || r.funcionario === state.funcionarioAtual;
+    return `<tr>
+      <td>${r.data ? new Date(r.data+'T12:00:00').toLocaleDateString('pt-BR') : '-'}</td>
+      <td><strong>${r.funcionario || '-'}</strong></td>
+      <td>${r.atividade || '-'}</td>
+      <td>${r.horaInicio || '-'}</td>
+      <td>${r.horaFim || '-'}</td>
+      <td>${r.total || '-'}</td>
+      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${r.observacao || ''}">${r.observacao || '-'}</td>
+      <td><span class="tag tag-${r.status || 'pendente'}">${r.status || 'pendente'}</span></td>
+      <td class="actions-cell">
+        ${podeEditar ? `<button class="btn btn-sm btn-outline" onclick="editarRegistro('${r.id}')">✏️</button>` : ''}
+        ${podeEditar ? `<button class="btn btn-sm btn-danger" onclick="confirmarExclusao('${r.id}')">🗑️</button>` : ''}
+        ${!podeEditar ? `<span style="color:var(--text2);font-size:11px;">Bloqueado</span>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
 }
-function deleteActivity(id){
-  const a=activities.find(x=>x.id===id);
-  showConfirm('Excluir atividade "'+a.name+'"?',()=>{
-    activities=activities.filter(x=>x.id!==id);
-    save();renderActivities();
+
+function limparFiltros() {
+  document.getElementById('filtroFuncionario').value = 'todos';
+  document.getElementById('filtroAtividade').value = 'todas';
+  document.getElementById('filtroData').value = '';
+  aplicarFiltros();
+}
+
+// ============================================================
+// EQUIPE
+// ============================================================
+function renderEquipe(el) {
+  const hoje = new Date().toISOString().split('T')[0];
+  
+  el.innerHTML = `
+    <h1 class="page-title">👥 Equipe</h1>
+    <p class="page-subtitle">Acompanhe o que cada um está fazendo</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+      ${FUNCIONARIOS.map(f => {
+        const registros = state.registros.filter(r => r.funcionario === f.nome && r.data === hoje);
+        const emAndamento = state.registros.find(r => r.funcionario === f.nome && r.status === 'andamento');
+        const totalMin = registros.reduce((acc, r) => {
+          if (r.total) {
+            const p = r.total.split(':');
+            return acc + parseInt(p[0])*60 + parseInt(p[1]);
+          }
+          return acc;
+        }, 0);
+        return `
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:white;">${f.nome[0]}</div>
+              <div>
+                <strong>${f.nome}</strong>
+                <div style="font-size:12px;color:var(--text2);">${f.admin ? 'Administradora' : 'Colaboradora'}</div>
+              </div>
+              <div style="margin-left:auto;">
+                ${emAndamento ? '<span class="tag tag-andamento">Em andamento</span>' : ''}
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;">
+              <div style="background:var(--surface2);padding:10px;border-radius:8px;">
+                <div style="font-size:20px;font-weight:700;color:var(--blue);">${registros.length}</div>
+                <div style="font-size:11px;color:var(--text2);">Registros hoje</div>
+              </div>
+              <div style="background:var(--surface2);padding:10px;border-radius:8px;">
+                <div style="font-size:20px;font-weight:700;color:var(--green);">${Math.floor(totalMin/60)}h${totalMin%60}m</div>
+                <div style="font-size:11px;color:var(--text2);">Horas hoje</div>
+              </div>
+            </div>
+            ${registros.length > 0 ? `
+            <div style="margin-top:12px;">
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Últimas atividades:</div>
+              ${registros.slice(-3).reverse().map(r => `
+                <div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+                  <span>${r.atividade}</span>
+                  <span style="color:var(--text2);">${r.total || '-'}</span>
+                </div>
+              `).join('')}
+            </div>` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+  `;
+}
+
+// ============================================================
+// RELATÓRIOS
+// ============================================================
+function renderRelatorios(el) {
+  el.innerHTML = `
+    <h1 class="page-title">📈 Relatórios</h1>
+    <p class="page-subtitle">Exporte dados e gere relatórios da equipe</p>
+    <div class="card">
+      <div class="card-title">Filtros do relatório</div>
+      <div class="filtros-bar">
+        <div class="form-group">
+          <label>Funcionário</label>
+          <select id="relFuncionario">
+            <option value="todos">Todos</option>
+            ${FUNCIONARIOS.map(f => `<option value="${f.nome}">${f.nome}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>De</label>
+          <input type="date" id="relDataInicio">
+        </div>
+        <div class="form-group">
+          <label>Até</label>
+          <input type="date" id="relDataFim">
+        </div>
+        <button class="btn btn-primary" onclick="gerarRelatorio()" style="height:38px;">📄 Gerar relatório</button>
+        <button class="btn btn-success" onclick="exportarCSV()" style="height:38px;">📥 Exportar CSV</button>
+      </div>
+    </div>
+
+    <div class="card" id="relatorioResultado" style="display:none;">
+      <div class="card-title">Resultado</div>
+      <div id="relatorioBody"></div>
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+  `;
+}
+
+function gerarRelatorio() {
+  const func = document.getElementById('relFuncionario').value;
+  const inicio = document.getElementById('relDataInicio').value;
+  const fim = document.getElementById('relDataFim').value;
+
+  let dados = [...state.registros];
+  if (func !== 'todos') dados = dados.filter(r => r.funcionario === func);
+  if (inicio) dados = dados.filter(r => r.data >= inicio);
+  if (fim) dados = dados.filter(r => r.data <= fim);
+  dados.sort((a, b) => (a.data||'').localeCompare(b.data||''));
+
+  const div = document.getElementById('relatorioResultado');
+  const body = document.getElementById('relatorioBody');
+  div.style.display = 'block';
+
+  if (dados.length === 0) {
+    body.innerHTML = '<div class="empty-state"><p>Nenhum registro encontrado</p></div>';
+    return;
+  }
+
+  // Agrupar por funcionário
+  const grupos = {};
+  dados.forEach(r => {
+    if (!grupos[r.funcionario]) grupos[r.funcionario] = [];
+    grupos[r.funcionario].push(r);
   });
-}
 
-function renderTimerPage(){
-  const empSel=document.getElementById('timerEmployee');
-  const actSel=document.getElementById('timerActivity');
-  empSel.innerHTML='<option value="">Selecione...</option>'+employees.filter(e=>e.status==='ativo').map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
-  actSel.innerHTML='<option value="">Selecione...</option>'+activities.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
-  renderRecentPoints();
-}
-function renderRecentPoints(){
-  const body=document.getElementById('recentPoints');
-  const recent=[...points].sort((a,b)=>b.ts-a.ts).slice(0,8);
-  if(!recent.length){body.innerHTML='<tr><td colspan="5" class="empty">Nenhum registro</td></tr>';return;}
-  body.innerHTML=recent.map(p=>`
-    <tr><td>${empName(p.empId)}</td><td>${actName(p.actId)}</td><td>${fmtDuration(p.duration)}</td><td>${fmtDate(p.ts)}</td>
-    <td><button class="btn small danger" onclick="deletePoint(${p.id})">Excluir</button></td></tr>`).join('');
-}
-function updateTimerDisplay(){
-  document.getElementById('timerDisplay').textContent=fmtDuration(timerState.elapsed);
-}
-function setControls(state){
-  document.getElementById('btnStart').style.display=state==='idle'?'inline-flex':'none';
-  document.getElementById('btnPause').style.display=state==='running'?'inline-flex':'none';
-  document.getElementById('btnResume').style.display=state==='paused'?'inline-flex':'none';
-  document.getElementById('btnFinish').style.display=state==='running'||state==='paused'?'inline-flex':'none';
-}
-function startTimer(){
-  const empId=+document.getElementById('timerEmployee').value;
-  const actId=+document.getElementById('timerActivity').value;
-  if(!empId||!actId){alert('Selecione funcionário e atividade');return;}
-  timerState={running:true,paused:false,elapsed:0,startTs:Date.now(),intervalId:null,empId,actId};
-  timerState.intervalId=setInterval(()=>{timerState.elapsed=Math.floor((Date.now()-timerState.startTs)/1000);updateTimerDisplay();},1000);
-  setControls('running');
-}
-function pauseTimer(){
-  if(!timerState.running)return;
-  clearInterval(timerState.intervalId);
-  timerState.running=false;timerState.paused=true;
-  setControls('paused');
-}
-function resumeTimer(){
-  if(!timerState.paused)return;
-  timerState.running=true;timerState.paused=false;
-  timerState.startTs=Date.now()-timerState.elapsed*1000;
-  timerState.intervalId=setInterval(()=>{timerState.elapsed=Math.floor((Date.now()-timerState.startTs)/1000);updateTimerDisplay();},1000);
-  setControls('running');
-}
-function finishTimer(){
-  if(timerState.elapsed<=0){resetTimer();return;}
-  const note=document.getElementById('timerNote').value.trim();
-  points.push({id:nextId(points),empId:timerState.empId,actId:timerState.actId,duration:timerState.elapsed,note,ts:Date.now()});
-  save();renderRecentPoints();resetTimer();
-}
-function resetTimer(){
-  clearInterval(timerState.intervalId);
-  timerState={running:false,paused:false,elapsed:0,startTs:0,intervalId:null,empId:null,actId:null};
-  document.getElementById('timerDisplay').textContent='00:00:00';
-  document.getElementById('timerNote').value='';
-  setControls('idle');
-}
-function deletePoint(id){
-  showConfirm('Excluir este registro de ponto?',()=>{
-    points=points.filter(p=>p.id!==id);
-    save();renderRecentPoints();if(document.getElementById('page-reports').classList.contains('active'))renderReports();
+  let html = '';
+  Object.keys(grupos).forEach(nome => {
+    const regs = grupos[nome];
+    const totalMin = regs.reduce((acc, r) => {
+      if (r.total) {
+        const p = r.total.split(':');
+        return acc + parseInt(p[0])*60 + parseInt(p[1]);
+      }
+      return acc;
+    }, 0);
+    html += `
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:15px;margin-bottom:8px;">${nome} — ${regs.length} registros · ${Math.floor(totalMin/60)}h${totalMin%60}m</h3>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead>
+            <tbody>
+              ${regs.map(r => `<tr><td>${r.data ? new Date(r.data+'T12:00:00').toLocaleDateString('pt-BR') : '-'}</td><td>${r.atividade||'-'}</td><td>${r.horaInicio||'-'}</td><td>${r.horaFim||'-'}</td><td>${r.total||'-'}</td><td>${r.observacao||'-'}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
   });
+
+  body.innerHTML = html;
 }
 
-function renderReports(){
-  const fEmp=document.getElementById('filterEmployee').value;
-  const fAct=document.getElementById('filterActivity').value;
-  const fStart=document.getElementById('filterStart').value;
-  const fEnd=document.getElementById('filterEnd').value;
-  const empSel=document.getElementById('filterEmployee');
-  const actSel=document.getElementById('filterActivity');
-  if(empSel.options.length<=1){employees.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;empSel.appendChild(o);});}
-  if(actSel.options.length<=1){activities.forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=a.name;actSel.appendChild(o);});}
-  let filtered=[...points];
-  if(fEmp)filtered=filtered.filter(p=>p.empId===+fEmp);
-  if(fAct)filtered=filtered.filter(p=>p.actId===+fAct);
-  if(fStart)filtered=filtered.filter(p=>new Date(p.ts)>=new Date(fStart));
-  if(fEnd){const end=new Date(fEnd);end.setHours(23,59,59,999);filtered=filtered.filter(p=>new Date(p.ts)<=end);}
-  filtered.sort((a,b)=>b.ts-a.ts);
-  const body=document.getElementById('reportsBody');
-  if(!filtered.length){body.innerHTML='<tr><td colspan="6" class="empty">Nenhum registro encontrado</td></tr>';return;}
-  body.innerHTML=filtered.map(p=>`
-    <tr><td>${empName(p.empId)}</td><td>${actName(p.actId)}</td><td>${fmtDuration(p.duration)}</td><td>${fmtDate(p.ts)}</td><td>${p.note||'—'}</td>
-    <td><button class="btn small danger" onclick="deletePoint(${p.id})">Excluir</button></td></tr>`).join('');
-}
-function clearFilters(){
-  document.getElementById('filterEmployee').value='';
-  document.getElementById('filterActivity').value='';
-  document.getElementById('filterStart').value='';
-  document.getElementById('filterEnd').value='';
-  renderReports();
-}
-function exportCSV(){
-  const fEmp=document.getElementById('filterEmployee').value;
-  const fAct=document.getElementById('filterActivity').value;
-  const fStart=document.getElementById('filterStart').value;
-  const fEnd=document.getElementById('filterEnd').value;
-  let filtered=[...points];
-  if(fEmp)filtered=filtered.filter(p=>p.empId===+fEmp);
-  if(fAct)filtered=filtered.filter(p=>p.actId===+fAct);
-  if(fStart)filtered=filtered.filter(p=>new Date(p.ts)>=new Date(fStart));
-  if(fEnd){const end=new Date(fEnd);end.setHours(23,59,59,999);filtered=filtered.filter(p=>new Date(p.ts)<=end);}
-  filtered.sort((a,b)=>b.ts-a.ts);
-  const rows=[['Funcionário','Atividade','Duração','Data','Observação']];
-  filtered.forEach(p=>{rows.push([empName(p.empId),actName(p.actId),fmtDuration(p.duration),fmtDate(p.ts),(p.note||'').replace(/\n/g,' ')]);});
-  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='relatorio_produtividade.csv';a.click();
+function exportarCSV() {
+  const func = document.getElementById('relFuncionario')?.value || 'todos';
+  const inicio = document.getElementById('relDataInicio')?.value || '';
+  const fim = document.getElementById('relDataFim')?.value || '';
+
+  let dados = [...state.registros];
+  if (func !== 'todos') dados = dados.filter(r => r.funcionario === func);
+  if (inicio) dados = dados.filter(r => r.data >= inicio);
+  if (fim) dados = dados.filter(r => r.data <= fim);
+
+  if (dados.length === 0) {
+    mostrarErro('Nenhum registro para exportar');
+    return;
+  }
+
+  const headers = 'Data,Funcionário,Atividade,Início,Fim,Total,Observação,Status';
+  const rows = dados.map(r =>
+    `"${r.data||''}","${r.funcionario||''}","${r.atividade||''}","${r.horaInicio||''}","${r.horaFim||''}","${r.total||''}","${(r.observacao||'').replace(/"/g,'""')}","${r.status||''}"`
+  ).join('\n');
+
+  const csv = '\uFEFF' + headers + '\n' + rows;
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `relatorio_cr_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
 }
 
-function backupData(){
-  const blob=new Blob([JSON.stringify({employees,activities,points},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup_produtividade.json';a.click();
+// ============================================================
+// ADMIN (Backup, Restore, Gerenciar)
+// ============================================================
+function renderAdmin(el) {
+  const func = FUNCIONARIOS.find(f => f.nome === state.funcionarioAtual);
+  if (!func?.admin) {
+    el.innerHTML = `
+      <h1 class="page-title">⚙️ Admin</h1>
+      <p class="page-subtitle">Área restrita à administradora</p>
+      <div class="card"><div class="empty-state"><div class="icon">🔒</div><p>Apenas a administradora pode acessar esta página</p></div></div>
+    `;
+    return;
+  }
+
+  el.innerHTML = `
+    <h1 class="page-title">⚙️ Administração</h1>
+    <p class="page-subtitle">Gerenciar dados do sistema</p>
+
+    <div class="card">
+      <div class="card-title">Backup</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Exportar todos os dados como arquivo JSON</p>
+      <button class="btn btn-primary" onclick="exportarBackup()">📦 Baixar backup</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Restaurar backup</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Importar dados de um arquivo JSON</p>
+      <input type="file" id="backupFileInput" accept=".json" style="margin-bottom:12px;display:block;">
+      <button class="btn btn-danger" onclick="importarBackup()">📤 Restaurar</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dados no servidor</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">
+        Todos os dados estão armazenados na planilha Google Sheets.
+      </p>
+      <div style="font-size:13px;">
+        <strong>Total de registros:</strong> ${state.registros.length}<br>
+        <strong>Funcionários ativos:</strong> ${new Set(state.registros.map(r => r.funcionario)).size}
+      </div>
+    </div>
+    <div id="errorMsg" style="display:none;padding:12px;background:rgba(225,112,85,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;margin-top:12px;"></div>
+    <div id="successMsg" style="display:none;padding:12px;background:rgba(0,184,148,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px;margin-top:12px;"></div>
+  `;
 }
-function restoreData(event){
-  const file=event.target.files[0];
-  if(!file)return;
-  const mode=document.querySelector('input[name="restoreMode"]:checked').value;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const d=JSON.parse(e.target.result);
-      if(!d.employees||!d.activities||!d.points)throw new Error('Formato inválido');
-      showConfirm('Importar dados no modo '+(mode==='replace'?'SUBSTITUIR':'MESCLAR')+'?',()=>{
-        if(mode==='replace'){employees=d.employees;activities=d.activities;points=d.points;}
-        else {
-          d.employees.forEach(ne=>{if(!employees.find(e=>e.id===ne.id))employees.push(ne);});
-          d.activities.forEach(na=>{if(!activities.find(a=>a.id===na.id))activities.push(na);});
-          d.points.forEach(np=>{if(!points.find(p=>p.id===np.id))points.push(np);});
-        }
-        save();renderEmployees();renderActivities();renderRecentPoints();renderReports();alert('Dados importados com sucesso!');
-      });
-    }catch(err){alert('Erro ao importar: '+err.message);}
-    event.target.value='';
+
+function exportarBackup() {
+  const dados = state.registros;
+  const blob = new Blob([JSON.stringify({ data: dados, exportadoEm: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `backup_cr_${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+  mostrarSucesso('Backup baixado com sucesso!');
+}
+
+async function importarBackup() {
+  const input = document.getElementById('backupFileInput');
+  if (!input.files || !input.files[0]) {
+    mostrarErro('Selecione um arquivo de backup');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const json = JSON.parse(e.target.result);
+      const dados = json.data || json;
+      if (!Array.isArray(dados) || dados.length === 0) {
+        mostrarErro('Arquivo inválido ou vazio');
+        return;
+      }
+      
+      let importados = 0;
+      for (const reg of dados) {
+        const res = await criarRegistro({
+          data: reg.data || '',
+          funcionario: reg.funcionario || state.funcionarioAtual,
+          atividade: reg.atividade || 'Outro',
+          horaInicio: reg.horaInicio || '',
+          horaFim: reg.horaFim || '',
+          total: reg.total || '',
+          observacao: reg.observacao || '',
+          status: reg.status || 'pendente'
+        });
+        if (res.success) importados++;
+      }
+      
+      await carregarRegistros();
+      mostrarSucesso(`${importados} registros importados com sucesso!`);
+      input.value = '';
+    } catch(err) {
+      mostrarErro('Erro ao processar o arquivo: ' + err.message);
+    }
   };
-  reader.readAsText(file);
+  reader.readAsText(input.files[0]);
 }
 
-function closeModal(id){document.getElementById(id).classList.remove('show');}
+// ============================================================
+// MODAIS
+// ============================================================
+function abrirModal(html) {
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').classList.remove('hidden');
+}
 
-function showConfirm(message,onConfirm,onCancel){
-  document.getElementById('confirmMessage').textContent=message;
-  confirmCallback=onConfirm;
-  const btn=document.getElementById('confirmOkBtn');
-  btn.onclick=()=>{
-    const cb=confirmCallback;
-    closeConfirm();
-    if(cb)cb();
+function fecharModal() {
+  document.getElementById('modalOverlay').classList.add('hidden');
+}
+
+function editarRegistro(id) {
+  const reg = state.registros.find(r => r.id === id);
+  if (!reg) return;
+  
+  abrirModal(`
+    <h3>✏️ Editar registro</h3>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Funcionário</label>
+      <select id="editFuncionario">
+        ${FUNCIONARIOS.map(f => `<option value="${f.nome}" ${f.nome === reg.funcionario ? 'selected' : ''}>${f.nome}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Atividade</label>
+      <select id="editAtividade">
+        ${ATIVIDADES_PADRAO.map(a => `<option value="${a}" ${a === reg.atividade ? 'selected' : ''}>${a}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hora Início</label>
+        <input type="text" id="editHoraInicio" value="${reg.horaInicio || ''}">
+      </div>
+      <div class="form-group">
+        <label>Hora Fim</label>
+        <input type="text" id="editHoraFim" value="${reg.horaFim || ''}">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Total</label>
+      <input type="text" id="editTotal" value="${reg.total || ''}" placeholder="HH:MM:SS">
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Observação</label>
+      <textarea id="editObservacao">${reg.observacao || ''}</textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Status</label>
+      <select id="editStatus">
+        <option value="pendente" ${reg.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+        <option value="andamento" ${reg.status === 'andamento' ? 'selected' : ''}>Em andamento</option>
+        <option value="concluido" ${reg.status === 'concluido' ? 'selected' : ''}>Concluído</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicao('${id}')">💾 Salvar</button>
+    </div>
+  `);
+}
+
+async function salvarEdicao(id) {
+  const dados = {
+    id,
+    funcionario: document.getElementById('editFuncionario').value,
+    atividade: document.getElementById('editAtividade').value,
+    horaInicio: document.getElementById('editHoraInicio').value,
+    horaFim: document.getElementById('editHoraFim').value,
+    total: document.getElementById('editTotal').value,
+    observacao: document.getElementById('editObservacao').value,
+    status: document.getElementById('editStatus').value
   };
-  const cancelBtn=document.getElementById('confirmCancelBtn');
-  window._confirmCancel=onCancel||null;
-  cancelBtn.onclick=()=>{
-    const cc=window._confirmCancel;
-    closeConfirm();
-    if(cc)cc();
-  };
-  document.getElementById('confirmModal').classList.add('show');
+
+  const res = await atualizarRegistro(dados);
+  if (res.success) {
+    await carregarRegistros();
+    fecharModal();
+    mostrarSucesso('Registro atualizado!');
+    // Re-renderizar página atual
+    const ativa = document.querySelector('.nav-item.active');
+    if (ativa) {
+      const idx = Array.from(document.querySelectorAll('.nav-item')).indexOf(ativa);
+      const paginas = ['dashboard','cronometro','registros','equipe','relatorios','adm'];
+      renderizarPagina(paginas[idx]);
+    }
+  } else {
+    mostrarErro('Erro ao salvar. Tente novamente.');
+  }
 }
-function closeConfirm(){
-  document.getElementById('confirmModal').classList.remove('show');
-  confirmCallback=null;
-  window._confirmCancel=null;
+
+function confirmarExclusao(id) {
+  const reg = state.registros.find(r => r.id === id);
+  abrirModal(`
+    <h3>🗑️ Confirmar exclusão</h3>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px;">
+      Tem certeza que deseja excluir o registro de <strong>${reg?.funcionario || ''}</strong> — <strong>${reg?.atividade || ''}</strong>?
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-danger" onclick="executarExclusao('${id}')">🗑️ Excluir</button>
+    </div>
+  `);
 }
 
-window.navigate=navigate;
-window.openEmployeeModal=openEmployeeModal;
-window.saveEmployee=saveEmployee;
-window.deleteEmployee=deleteEmployee;
-window.openActivityModal=openActivityModal;
-window.saveActivity=saveActivity;
-window.deleteActivity=deleteActivity;
-window.startTimer=startTimer;
-window.pauseTimer=pauseTimer;
-window.resumeTimer=resumeTimer;
-window.finishTimer=finishTimer;
-window.deletePoint=deletePoint;
-window.renderReports=renderReports;
-window.clearFilters=clearFilters;
-window.exportCSV=exportCSV;
-window.backupData=backupData;
-window.restoreData=restoreData;
-window.closeModal=closeModal;
-window.closeConfirm=closeConfirm;
-window.showConfirm=showConfirm;
+async function executarExclusao(id) {
+  fecharModal();
+  const res = await deletarRegistro(id);
+  if (res.success) {
+    await carregarRegistros();
+    mostrarSucesso('Registro excluído!');
+    const ativa = document.querySelector('.nav-item.active');
+    if (ativa) {
+      const idx = Array.from(document.querySelectorAll('.nav-item')).indexOf(ativa);
+      const paginas = ['dashboard','cronometro','registros','equipe','relatorios','adm'];
+      renderizarPagina(paginas[idx]);
+    }
+  } else {
+    mostrarErro('Erro ao excluir. Tente novamente.');
+  }
+}
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeConfirm();});
+// ============================================================
+// MENSAGENS
+// ============================================================
+function mostrarErro(msg) {
+  const el = document.getElementById('errorMsg');
+  if (el) { el.textContent = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 4000); }
+}
 
-load();
-navigate('dashboard');
-setControls('idle');
+function mostrarSucesso(msg) {
+  const el = document.getElementById('successMsg');
+  if (el) { el.textContent = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 4000); }
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+async function iniciarApp() {
+  await carregarRegistros();
+  renderizarPagina('dashboard');
+  // Recarregar a cada 30 segundos
+  setInterval(async () => {
+    await carregarRegistros();
+    const ativa = document.querySelector('.nav-item.active');
+    if (ativa) {
+      const idx = Array.from(document.querySelectorAll('.nav-item')).indexOf(ativa);
+      const paginas = ['dashboard','cronometro','registros','equipe','relatorios','adm'];
+      renderizarPagina(paginas[idx]);
+    }
+  }, 30000);
+}
 </script>
 </body>
 </html>
