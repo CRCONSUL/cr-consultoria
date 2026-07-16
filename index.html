@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>CR Consultoria</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -90,547 +90,125 @@ th.acoes,td.acoes{width:90px;text-align:center}
 </style>
 </head>
 <body>
-
 <div id="loginScreen">
-<div class="login-card">
-<div class="emoji">👋</div>
-<h1>CR Consultoria</h1>
-<p class="sub">Selecione seu nome para acessar</p>
+<div class="login-card"><div class="emoji">👋</div><h1>CR Consultoria</h1><p class="sub">Selecione seu nome para acessar</p>
 <select id="loginFuncionario"><option value="">— Selecione —</option></select>
-<button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
-</div>
-</div>
-
+<button class="btn btn-primary" onclick="fl()">Entrar</button></div></div>
 <div class="sidebar" id="sidebar">
 <h2>📋 CR Consultoria</h2>
 <div class="user-badge"><strong id="sidebarUser">—</strong><span id="sidebarCargo">Consultoria</span></div>
-<a class="active" onclick="navegar('dashboard')">📊 <span>Dashboard</span></a>
-<a onclick="navegar('registro')">⏱️ <span>Registro</span></a>
-<a onclick="navegar('funcionarios')">👥 <span>Funcionários</span></a>
-<a onclick="navegar('atividades')">📋 <span>Atividades</span></a>
-<a onclick="navegar('relatorios')">📈 <span>Relatórios</span></a>
-<a onclick="navegar('backup')">💾 <span>Back Up</span></a>
-<div class="sair"><a onclick="fazerLogout()">🚪 <span>Sair</span></a></div>
-</div>
-
+<a class="active" onclick="nav('dashboard')">📊 <span>Dashboard</span></a>
+<a onclick="nav('registro')">⏱️ <span>Registro</span></a>
+<a onclick="nav('funcionarios')">👥 <span>Funcionários</span></a>
+<a onclick="nav('atividades')">📋 <span>Atividades</span></a>
+<a onclick="nav('relatorios')">📈 <span>Relatórios</span></a>
+<a onclick="nav('backup')">💾 <span>Back Up</span></a>
+<div class="sair"><a onclick="fz()">🚪 <span>Sair</span></a></div></div>
 <div class="main">
-
 <div class="page active" id="page-dashboard">
 <h3>📊 Dashboard</h3>
 <div class="cards" id="dashCards"></div>
 <div class="graficos-row">
 <div class="grafico-card"><h4>📈 Horas por Funcionário</h4><div class="barra-container" id="graficoFuncBarras"></div></div>
-<div class="grafico-card"><h4>🍩 Distribuição por Atividade</h4><div class="donut-wrap" id="donutWrap"></div></div>
-</div>
-<div class="grafico-card"><h4>📈 Horas por Dia (últimos 7 dias)</h4><div class="barra-container" id="graficoDiaBarras"></div></div>
-</div>
-
+<div class="grafico-card"><h4>🍩 Distribuição por Atividade</h4><div class="donut-wrap" id="donutWrap"></div></div></div>
+<div class="grafico-card"><h4>📈 Horas por Dia (últimos 7 dias)</h4><div class="barra-container" id="graficoDiaBarras"></div></div></div>
 <div class="page" id="page-registro">
 <h3>⏱️ Registro de Horas</h3>
 <div style="background:#1a1a24;border-radius:12px;padding:24px;border:1px solid #2a2a35">
 <div class="cronometro" id="cronometroDisplay">00:00:00</div>
-<div class="form-row">
-<div class="form-group">
-<label>Atividade</label>
-<div class="atv-wrapper">
-<select id="atividadeSelect"><option value="">Selecione...</option></select>
-<button class="btn-plus" onclick="abrirModalNovaAtividade()">＋</button>
-</div>
-</div>
-</div>
-<div class="form-row">
-<div class="form-group">
-<label>Observação</label>
-<textarea id="observacaoInput" placeholder="Descreva o que está fazendo..."></textarea>
-</div>
-</div>
+<div class="form-row"><div class="form-group"><label>Atividade</label><div class="atv-wrapper"><select id="atividadeSelect"><option value="">Selecione...</option></select><button class="btn-plus" onclick="amna()">＋</button></div></div></div>
+<div class="form-row"><div class="form-group"><label>Observação</label><textarea id="observacaoInput" placeholder="Descreva"></textarea></div></div>
 <div class="actions">
-<button class="btn btn-success" id="btnIniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
-<button class="btn btn-warning hidden" id="btnPausar" onclick="pausarCronometro()">⏸ Pausar</button>
-<button class="btn btn-success hidden" id="btnRetomar" onclick="retomarCronometro()">▶ Retomar</button>
-<button class="btn btn-danger hidden" id="btnParar" onclick="pararCronometro()">⏹ Parar</button>
-<button class="btn btn-primary hidden" id="btnSalvar" onclick="salvarRegistro()">💾 Salvar</button>
-</div>
-</div>
+<button class="btn btn-success" id="btnIniciar" onclick="icr()">▶ Iniciar</button>
+<button class="btn btn-warning hidden" id="btnPausar" onclick="pcr()">⏸ Pausar</button>
+<button class="btn btn-success hidden" id="btnRetomar" onclick="rcr()">▶ Retomar</button>
+<button class="btn btn-danger hidden" id="btnParar" onclick="pcr2()">⏹ Parar</button>
+<button class="btn btn-primary hidden" id="btnSalvar" onclick="sReg()">💾 Salvar</button>
+</div></div>
 <div style="margin-top:24px;background:#1a1a24;border-radius:12px;padding:20px;border:1px solid #2a2a35">
 <h4 style="color:#fff;margin-bottom:12px">📄 Últimos Registros</h4>
-<div class="tabela-wrap">
-<table>
-<thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead>
-<tbody id="historicoBody"></tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="page" id="page-funcionarios">
-<h3>👥 Funcionários</h3>
-<div class="cards" id="funcCards"></div>
-</div>
-
+<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Status</th><th class="acoes">Ações</th></tr></thead><tbody id="historicoBody"></tbody></table></div></div></div>
+<div class="page" id="page-funcionarios"><h3>👥 Funcionários</h3><div class="cards" id="funcCards"></div></div>
 <div class="page" id="page-atividades">
 <h3>📋 Gestão de Atividades</h3>
-<div style="margin-bottom:16px"><button class="btn btn-primary" onclick="abrirModalNovaAtividade()">＋ Nova Atividade</button></div>
-<div class="tabela-wrap">
-<table>
-<thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead>
-<tbody id="adminAtividadesBody"></tbody>
-</table>
-</div>
-</div>
-
+<div style="margin-bottom:16px"><button class="btn btn-primary" onclick="amna()">＋ Nova Atividade</button></div>
+<div class="tabela-wrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Descrição</th><th class="acoes">Ações</th></tr></thead><tbody id="adminAtividadesBody"></tbody></table></div></div>
 <div class="page" id="page-relatorios">
 <h3>📈 Relatórios</h3>
-<div class="filtros">
-<div class="form-row">
+<div class="filtros"><div class="form-row">
 <div class="form-group"><label>Funcionário</label><select id="relFiltroFunc"><option value="todos">Todos</option></select></div>
 <div class="form-group"><label>Data Inicial</label><input type="date" id="relDataIni"></div>
 <div class="form-group"><label>Data Final</label><input type="date" id="relDataFim"></div>
-<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button></div>
-<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-success" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button></div>
-</div>
-</div>
-<div class="tabela-wrap">
-<table>
-<thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead>
-<tbody id="relatorioBody"></tbody>
-</table>
-</div>
-<div style="margin-top:12px;text-align:right;color:#888;font-size:13px">Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong></div>
-</div>
-
+<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="fR()">🔍 Filtrar</button></div>
+<div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-success" onclick="eRCSV()">📥 Exportar CSV</button></div>
+</div></div>
+<div class="tabela-wrap"><table><thead><tr><th>Data</th><th>Funcionário</th><th>Atividade</th><th>Início</th><th>Fim</th><th>Total</th><th>Obs</th></tr></thead><tbody id="relatorioBody"></tbody></table></div>
+<div style="margin-top:12px;text-align:right;color:#888;font-size:13px">Total: <strong id="relTotalHoras" style="color:#fff">00:00</strong> | Registros: <strong id="relTotalReg" style="color:#fff">0</strong></div></div>
 <div class="page" id="page-backup">
 <h3>💾 Back Up</h3>
 <p style="color:#888;margin-bottom:20px">Exporte seus dados para segurança ou migração.</p>
 <div class="backup-grid">
-<div class="backup-card"><h4>📄 Todos os Registros</h4><p>Exportar todos como JSON</p><button class="btn btn-primary" onclick="exportarJSON()">📥 Exportar JSON</button></div>
-<div class="backup-card"><h4>📊 Registros em CSV</h4><p>Exportar todos como CSV</p><button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button></div>
-<div class="backup-card"><h4>📋 Atividades CSV</h4><p>Exportar lista de atividades</p><button class="btn btn-outline" onclick="exportarAtividadesCSV()">📥 Exportar CSV</button></div>
-</div>
-</div>
-
-</div>
-
+<div class="backup-card"><h4>📄 Todos os Registros</h4><p>Exportar todos como JSON</p><button class="btn btn-primary" onclick="eJ()">📥 Exportar JSON</button></div>
+<div class="backup-card"><h4>📊 Registros em CSV</h4><p>Exportar todos como CSV</p><button class="btn btn-success" onclick="eC()">📥 Exportar CSV</button></div>
+<div class="backup-card"><h4>📋 Atividades CSV</h4><p>Exportar lista de atividades</p><button class="btn btn-outline" onclick="eACSV()">📥 Exportar CSV</button></div></div></div></div>
 <div id="modalNovaAtividade" class="modal-overlay hidden">
-<div class="modal">
-<h4>Nova Atividade</h4>
+<div class="modal"><h4>Nova Atividade</h4>
 <label>Nome</label><input type="text" id="novaAtvNome" placeholder="Ex: Reunião">
 <label>Descrição</label><textarea id="novaAtvDesc" placeholder="Descrição..."></textarea>
-<div class="modal-actions">
-<button class="btn btn-outline" onclick="fecharModal('modalNovaAtividade')">Cancelar</button>
-<button class="btn btn-primary" onclick="salvarNovaAtividade()">Salvar</button>
-</div>
-</div>
-</div>
-
+<div class="modal-actions"><button class="btn btn-outline" onclick="fm('modalNovaAtividade')">Cancelar</button><button class="btn btn-primary" onclick="sna()">Salvar</button></div></div></div>
 <div id="modalEditarAtividade" class="modal-overlay hidden">
-<div class="modal">
-<h4>Editar Atividade</h4>
+<div class="modal"><h4>Editar Atividade</h4>
 <input type="hidden" id="editAtvId">
 <label>Nome</label><input type="text" id="editAtvNome">
 <label>Descrição</label><textarea id="editAtvDesc"></textarea>
-<div class="modal-actions">
-<button class="btn btn-outline" onclick="fecharModal('modalEditarAtividade')">Cancelar</button>
-<button class="btn btn-danger" onclick="excluirAtividade()">Excluir</button>
-<button class="btn btn-primary" onclick="atualizarAtividade()">Salvar</button>
-</div>
-</div>
-</div>
-
+<div class="modal-actions"><button class="btn btn-outline" onclick="fm('modalEditarAtividade')">Cancelar</button><button class="btn btn-danger" onclick="xa()">Excluir</button><button class="btn btn-primary" onclick="aa2()">Salvar</button></div></div></div>
 <script>
-const S = 'https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
-const Fs = [
-  { n: 'Cecília Rijo', e: 'cecilia.rijo@gmail.com', c: 'Consultora' },
-  { n: 'Thamires Mendonça', e: 'thamires@crconsul.com.br', c: 'Analista de Marketing Jr' },
-  { n: 'Sophia Ataíde', e: 'sophia@crconsul.com.br', c: 'Estagiária' }
-];
-const CD = ['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','#f97316','#3b82f6','#ec4899','#84cc16'];
-let as = [], dd = [], user = null, ci = null, ic = null, tp = 0, rt = null;
+const S='https://script.google.com/macros/s/AKfycbxFWYuR0AQtvfTc4XYXsXCtZUVKq8lheTGuBjqspu9gIXWl-B6nblDyzceqBsy-1X-cKA/exec';
+const Fs=[{n:'Cecília Rijo',e:'cecilia.rijo@gmail.com',c:'Consultora'},{n:'Thamires Mendonça',e:'thamires@crconsul.com.br',c:'Analista de Marketing Jr'},{n:'Sophia Ataíde',e:'sophia@crconsul.com.br',c:'Estagiária'}];
+const CD=['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','#f97316','#3b82f6','#ec4899','#84cc16'];
+let as=[],dd=[],user=null,ci=null,ic=null,tp=0,rt=null;
 
-// Extrai segundos de "01:00:00" ou "1899-12-30T04:06:28.000Z"
-function seg(v) {
-  if (v == null || v === '' || v === 0) return 0;
-  let s = String(v);
-  if (s.includes('T')) s = s.split('T')[1].split('.')[0];
-  const p = s.split(':');
-  return (parseInt(p[0])||0)*3600 + (parseInt(p[1])||0)*60 + (parseInt(p[2])||0);
-}
+function seg(v){if(v==null||v===''||v===0)return 0;let s=String(v);if(s.includes('T'))s=s.split('T')[1].split('.')[0];const p=s.split(':');return(parseInt(p[0])||0)*3600+(parseInt(p[1])||0)*60+(parseInt(p[2])||0)}
+function ni(a,b){if(!a||!b)return false;const n=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().replace(/\n/g,' ');const na=n(a),nb=n(b);if(na===nb||na.includes(nb)||nb.includes(na))return true;return na.split(' ').filter(p=>p.length>2).some(p=>nb.split(' ').filter(q=>q.length>2).includes(p))}
+function ga(v){if(!v)return'-';const f=(as||[]).find(a=>String(a.id)===String(v)||a.nome===String(v));return f?f.nome:v}
+function ts(a){return a.reduce((a,r)=>a+seg(r?.TOTAL),0)}
+function fh(s){if(isNaN(s)||s<0)return'0h 0min';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?h+'h '+m+'min':m+'min'}
 
-// Comparação de nomes (Cecília = Cecília Rijo)
-function ni(a, b) {
-  if (!a || !b) return false;
-  const n = x => x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().replace(/\n/g,' ');
-  const na = n(a), nb = n(b);
-  if (na === nb || na.includes(nb) || nb.includes(na)) return true;
-  return na.split(' ').filter(p => p.length>2).some(p => nb.split(' ').filter(q => q.length>2).includes(p));
-}
+function init(){const sl=document.getElementById('loginFuncionario');Fs.forEach(f=>{const o=document.createElement('option');o.value=f.n;o.textContent=f.n+' — '+f.c;sl.appendChild(o)});const rf=document.getElementById('relFiltroFunc');rf.innerHTML='<option value="todos">Todos</option>';Fs.forEach(f=>{const o=document.createElement('option');o.value=f.n;o.textContent=f.n;rf.appendChild(o)});la();ld()}
+async function ld(){try{const r=await fetch(S),d=await r.json();dd=d.success?(d.data||[]):[]}catch(e){dd=[]}if(user){ud();uh();uf()}}
+async function la(){try{const r=await fetch(S+'?path=atividades'),d=await r.json();as=d.success?(d.data||[]):[]}catch(e){as=[]}const s=document.getElementById('atividadeSelect');s.innerHTML='<option value="">Selecione...</option>';(as||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{const o=document.createElement('option');o.value=a.id||a.nome;o.textContent=a.nome;s.appendChild(o)});aa()}
+function fl(){const s=document.getElementById('loginFuncionario');if(!s.value)return;user=s.value;const f=Fs.find(x=>x.n===user);document.getElementById('sidebarUser').textContent=user;document.getElementById('sidebarCargo').textContent=f?f.c:'';document.getElementById('loginScreen').classList.add('hidden');document.getElementById('sidebar').classList.remove('hidden');ld()}
+function fz(){user=null;if(ci){clearInterval(ci);ci=null}tp=0;document.getElementById('loginScreen').classList.remove('hidden')}
+function nav(ba){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+ba).classList.add('active');const ix={dashboard:0,registro:1,funcionarios:2,atividades:3,relatorios:4,backup:5};document.querySelectorAll('.sidebar a').forEach((a,i)=>a.classList.toggle('active',i===(ix[ba]||0)));if(ba==='dashboard')ud();if(ba==='funcionarios')uf();if(ba==='relatorios'){pf();fR()}if(ba==='atividades')aa()}
 
-function ga(v) {
-  if (!v) return '-';
-  const f = (as||[]).find(a => String(a.id)===String(v) || a.nome===String(v));
-  return f ? f.nome : v;
-}
+function ud(){const du=dd.filter(r=>ni(user,r.FUNCIONÁRIO));const n=new Date(),ms=String(n.getMonth()+1).padStart(2,'0'),an=n.getFullYear();const dm=du.filter(r=>r.DATA&&r.DATA.includes(an+'-'+ms));const dh=du.filter(r=>r.DATA===n.toISOString().split('T')[0]);const sm=ts(dm),sh=ts(dh),du_m=Math.min(n.getDate(),30),md=du_m>0?Math.round(sm/du_m):0;const fa=new Set(dd.filter(r=>r.DATA&&r.DATA.includes(an+'-'+ms)).map(r=>r.FUNCIONÁRIO)).size;document.getElementById('dashCards').innerHTML='<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fh(sm)+'</div><div class="sub">'+dm.length+' registros</div></div><div class="card green"><div class="label">Hoje</div><div class="value">'+fh(sh)+'</div><div class="sub">'+dh.length+' registros</div></div><div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fh(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div><div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div><div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+fa+'</div><div class="sub">No mês</div></div>';const bc=document.getElementById('graficoFuncBarras');bc.innerHTML='';const mx=Math.max(...Fs.map(f=>ts(dd.filter(r=>ni(f.n,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(an+'-'+ms)))),1);Fs.forEach(f=>{const s=ts(dd.filter(r=>ni(f.n,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(an+'-'+ms)));const a=Math.max(Math.round(s/mx*100),s>0?10:4);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fh(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+f.n.split(' ')[0]+'</div>';bc.appendChild(e)});const dw=document.getElementById('donutWrap');const ag={};dm.forEach(r=>{const n=ga(r.ATIVIDADE);if(!ag[n])ag[n]=0;ag[n]+=seg(r.TOTAL)});const en=Object.entries(ag).sort((a,b)=>b[1]-a[1]).slice(0,8);const th=en.reduce((a,[_,h])=>a+h,0)||1;let dn='<div class="donut-svg"><svg viewBox="0 0 100 100">';let ang=0;const cx=50,cy=50,rr=38;en.forEach(([nm,hr],i)=>{const fr=hr/th,aa=fr*360;if(aa>=360)dn+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rr+'" fill="none" stroke="'+CD[i%CD.length]+'" stroke-width="18"/>';else if(aa>0){const x1=cx+rr*Math.sin(ang*Math.PI/180),y1=cy-rr*Math.cos(ang*Math.PI/180),x2=cx+rr*Math.sin((ang+aa)*Math.PI/180),y2=cy-rr*Math.cos((ang+aa)*Math.PI/180);dn+='<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+rr+' '+rr+' 0 '+(aa>180?1:0)+' 1 '+x2+' '+y2+' Z" fill="'+CD[i%CD.length]+'"/>';ang+=aa}});dn+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rr-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';en.forEach(([nm,hr],i)=>{const hh=Math.floor((hr||0)/3600),mm=Math.floor((hr||0)%3600/60);dn+='<div class="donut-item"><div class="donut-cor" style="background:'+CD[i%CD.length]+'"></div><span class="donut-label">'+nm+'</span><span class="donut-valor">'+hh+'h '+mm+'min</span></div>'});dn+='</div>';dw.innerHTML=dn;const dc=document.getElementById('graficoDiaBarras');dc.innerHTML='';const ds=[];for(let i=6;i>=0;i--){const d=new Date(n);d.setDate(d.getDate()-i);ds.push(d)}const ms2=Math.max(...ds.map(d=>ts(du.filter(r=>r.DATA===d.toISOString().split('T')[0]))),1);ds.forEach(d=>{const s=ts(du.filter(r=>r.DATA===d.toISOString().split('T')[0]));const a=Math.max(Math.round(s/ms2*100),s>0?8:3);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fh(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';dc.appendChild(e)})}
 
-function ts(arr) { return arr.reduce((a, r) => a + seg(r?.TOTAL), 0); }
-function fh(s) {
-  if (isNaN(s) || s < 0) return '0h 0min';
-  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
-  return h > 0 ? h+'h '+m+'min' : m+'min';
-}
-
-function init() {
-  const sl = document.getElementById('loginFuncionario');
-  Fs.forEach(f => { const o = document.createElement('option'); o.value = f.n; o.textContent = f.n+' — '+f.c; sl.appendChild(o); });
-  const rf = document.getElementById('relFiltroFunc');
-  rf.innerHTML = '<option value="todos">Todos</option>';
-  Fs.forEach(f => { const o = document.createElement('option'); o.value = f.n; o.textContent = f.n; rf.appendChild(o); });
-  la(); ld();
-}
-
-async function ld() {
-  try { const r = await fetch(S), d = await r.json(); dd = d.success ? (d.data||[]) : []; }
-  catch(e) { dd = []; }
-  if (user) { ud(); uh(); uf(); }
-}
-
-async function la() {
-  try { const r = await fetch(S+'?path=atividades'), d = await r.json(); as = d.success ? (d.data||[]) : []; }
-  catch(e) { as = []; }
-  const s = document.getElementById('atividadeSelect');
-  s.innerHTML = '<option value="">Selecione...</option>';
-  (as||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
-    const o = document.createElement('option'); o.value = a.id||a.nome; o.textContent = a.nome; s.appendChild(o);
-  });
-  aa();
-}
-
-function fl() {
-  const s = document.getElementById('loginFuncionario');
-  if (!s.value) return;
-  user = s.value;
-  const f = Fs.find(x => x.n === user);
-  document.getElementById('sidebarUser').textContent = user;
-  document.getElementById('sidebarCargo').textContent = f ? f.c : '';
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('sidebar').classList.remove('hidden');
-  ld();
-}
-
-function fz() {
-  user = null;
-  if (ci) { clearInterval(ci); ci = null; }
-  tp = 0;
-  document.getElementById('loginScreen').classList.remove('hidden');
-}
-
-function nav(ba) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+ba).classList.add('active');
-  const ix = { dashboard:0, registro:1, funcionarios:2, atividades:3, relatorios:4, backup:5 };
-  document.querySelectorAll('.sidebar a').forEach((a,i) => a.classList.toggle('active', i===(ix[ba]||0)));
-  if (ba === 'dashboard') ud();
-  if (ba === 'funcionarios') uf();
-  if (ba === 'relatorios') { pf(); fR(); }
-  if (ba === 'atividades') aa();
-}
-
-function ud() {
-  const du = dd.filter(r => ni(user, r.FUNCIONÁRIO));
-  const n = new Date(), ms = String(n.getMonth()+1).padStart(2,'0'), an = n.getFullYear();
-  const dm = du.filter(r => r.DATA && r.DATA.includes(an+'-'+ms));
-  const dh = du.filter(r => r.DATA === n.toISOString().split('T')[0]);
-  const sm = ts(dm), sh = ts(dh), du_m = Math.min(n.getDate(),30), md = du_m>0 ? Math.round(sm/du_m) : 0;
-  const fa = new Set(dd.filter(r => r.DATA && r.DATA.includes(an+'-'+ms)).map(r => r.FUNCIONÁRIO)).size;
-
-  document.getElementById('dashCards').innerHTML =
-    '<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fh(sm)+'</div><div class="sub">'+dm.length+' registros</div></div>'+
-    '<div class="card green"><div class="label">Hoje</div><div class="value">'+fh(sh)+'</div><div class="sub">'+dh.length+' registros</div></div>'+
-    '<div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fh(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div>'+
-    '<div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div>'+
-    '<div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+fa+'</div><div class="sub">No mês</div></div>';
-
-  const bc = document.getElementById('graficoFuncBarras'); bc.innerHTML = '';
-  const mx = Math.max(...Fs.map(f => ts(dd.filter(r => ni(f.n,r.FUNCIONÁRIO) && r.DATA && r.DATA.includes(an+'-'+ms)))), 1);
-  Fs.forEach(f => {
-    const s = ts(dd.filter(r => ni(f.n,r.FUNCIONÁRIO) && r.DATA && r.DATA.includes(an+'-'+ms)));
-    const a = Math.max(Math.round(s/mx*100), s>0?10:4);
-    const e = document.createElement('div'); e.className = 'barra-item';
-    e.innerHTML = '<div class="barra-valor">'+fh(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+f.n.split(' ')[0]+'</div>';
-    bc.appendChild(e);
-  });
-
-  const dw = document.getElementById('donutWrap'); const ag = {};
-  dm.forEach(r => { const n = ga(r.ATIVIDADE); if (!ag[n]) ag[n] = 0; ag[n] += seg(r.TOTAL); });
-  const en = Object.entries(ag).sort((a,b) => b[1]-a[1]).slice(0,8);
-  const th = en.reduce((a,[_,h]) => a+h, 0) || 1;
-  let dn = '<div class="donut-svg"><svg viewBox="0 0 100 100">';
-  let ang = 0; const cx = 50, cy = 50, rr = 38;
-  en.forEach(([nm,hr], i) => {
-    const fr = hr/th, aa = fr*360;
-    if (aa >= 360) dn += '<circle cx="'+cx+'" cy="'+cy+'" r="'+rr+'" fill="none" stroke="'+CD[i%CD.length]+'" stroke-width="18"/>';
-    else if (aa > 0) {
-      const x1 = cx+rr*Math.sin(ang*Math.PI/180), y1 = cy-rr*Math.cos(ang*Math.PI/180);
-      const x2 = cx+rr*Math.sin((ang+aa)*Math.PI/180), y2 = cy-rr*Math.cos((ang+aa)*Math.PI/180);
-      dn += '<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+rr+' '+rr+' 0 '+(aa>180?1:0)+' 1 '+x2+' '+y2+' Z" fill="'+CD[i%CD.length]+'"/>';
-      ang += aa;
-    }
-  });
-  dn += '<circle cx="'+cx+'" cy="'+cy+'" r="'+(rr-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';
-  en.forEach(([nm,hr], i) => {
-    const hh = Math.floor((hr||0)/3600), mm = Math.floor((hr||0)%3600/60);
-    dn += '<div class="donut-item"><div class="donut-cor" style="background:'+CD[i%CD.length]+'"></div><span class="donut-label">'+nm+'</span><span class="donut-valor">'+hh+'h '+mm+'min</span></div>';
-  });
-  dn += '</div>'; dw.innerHTML = dn;
-
-  const dc = document.getElementById('graficoDiaBarras'); dc.innerHTML = '';
-  const ds = []; for (let i=6; i>=0; i--) { const d = new Date(n); d.setDate(d.getDate()-i); ds.push(d); }
-  const ms2 = Math.max(...ds.map(d => ts(du.filter(r => r.DATA === d.toISOString().split('T')[0]))), 1);
-  ds.forEach(d => {
-    const s = ts(du.filter(r => r.DATA === d.toISOString().split('T')[0]));
-    const a = Math.max(Math.round(s/ms2*100), s>0?8:3);
-    const e = document.createElement('div'); e.className = 'barra-item';
-    e.innerHTML = '<div class="barra-valor">'+fh(s)+'</div><div class="barra" style="height:'+a+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';
-    dc.appendChild(e);
-  });
-}
-
-function iniciarCronometro() {
-  const a = document.getElementById('atividadeSelect').value;
-  if (!a) { nf('Selecione uma atividade.', true); return; }
-  ic = Date.now(); tp = 0;
-  rt = { atividade: a, nomeAtividade: ga(a), obs: document.getElementById('observacaoInput').value, inicio: ic };
-  document.getElementById('btnIniciar').classList.add('hidden');
-  document.getElementById('btnPausar').classList.remove('hidden');
-  ci = setInterval(() => {
-    document.getElementById('cronometroDisplay').textContent = new Date(Date.now()-ic-tp).toISOString().substr(11,8);
-  }, 200);
-  nf('⏱️ Iniciado!');
-}
-
-function pausarCronometro() {
-  if (!ci) return; clearInterval(ci); ci = null;
-  tp += Date.now() - ic - tp;
-  document.getElementById('btnPausar').classList.add('hidden');
-  document.getElementById('btnRetomar').classList.remove('hidden');
-  document.getElementById('btnParar').classList.remove('hidden');
-  nf('⏸️ Pausado');
-}
-
-function retomarCronometro() {
-  if (ci) return; ic = Date.now();
-  document.getElementById('btnRetomar').classList.add('hidden');
-  document.getElementById('btnPausar').classList.remove('hidden');
-  document.getElementById('btnParar').classList.add('hidden');
-  ci = setInterval(() => {
-    document.getElementById('cronometroDisplay').textContent = new Date(Date.now()-ic+tp).toISOString().substr(11,8);
-  }, 200);
-  nf('▶️ Retomado!');
-}
-
-function pararCronometro() {
-  if (ci) { clearInterval(ci); ci = null; }
-  const ag = Date.now(); rt.fim = ag; rt.total = ag - ic + tp;
-  document.getElementById('btnPausar').classList.add('hidden');
-  document.getElementById('btnRetomar').classList.add('hidden');
-  document.getElementById('btnParar').classList.add('hidden');
-  document.getElementById('btnSalvar').classList.remove('hidden');
-  nf('⏹ Parado. Revise e salve.');
-}
-
-async function salvarRegistro() {
-  if (!rt) return;
-  const ts2 = Math.floor(rt.total/1000), h = Math.floor(ts2/3600), m = Math.floor((ts2%3600)/60), s = ts2%60;
-  const payload = {
-    action:'add', ID:'REG_'+Date.now(), DATA:new Date().toISOString().split('T')[0],
-    FUNCIONÁRIO:user, ATIVIDADE:rt.nomeAtividade||rt.atividade,
-    'HORA INICIO':new Date(rt.inicio).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    'HORA FIM':new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    TOTAL:String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'),
-    OBSERVAÇÃO:document.getElementById('observacaoInput').value||'', STATUS:'concluido',
-    'CRIADO EM':new Date().toISOString(), 'ATUALIZADO EM':new Date().toISOString()
-  };
-  try {
-    const r = await fetch(S, {method:'POST', body:JSON.stringify(payload)});
-    const d = await r.json();
-    if (d.success) {
-      nf('✅ Salvo!');
-      document.getElementById('btnSalvar').classList.add('hidden');
-      document.getElementById('btnIniciar').classList.remove('hidden');
-      document.getElementById('observacaoInput').value = '';
-      document.getElementById('cronometroDisplay').textContent = '00:00:00';
-      rt = null; tp = 0;
-      await ld(); uh();
-    }
-  } catch(e) { nf('Erro ao salvar.', true); }
-}
-
-function uh() {
-  const me = dd.filter(r => ni(user, r.FUNCIONÁRIO)).sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
-  const t = document.getElementById('historicoBody'); t.innerHTML = '';
-  me.slice(0,50).forEach(r => {
-    const s2 = seg(r.TOTAL);
-    const hh = Math.floor(s2/3600), mm = Math.floor((s2%3600)/60), ss = s2%60;
-    const ts2 = String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
-    t.innerHTML += '<tr><td>'+(r.DATA||'-')+'</td><td>'+ga(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts2+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="er(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="xr(\''+r.ID+'\')">🗑️</button></td></tr>';
-  });
-  if (!me.length) t.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro</td></tr>';
-}
-
-async function xr(id) {
-  if (!confirm('Excluir?')) return;
-  await fetch(S, {method:'POST', body:JSON.stringify({action:'delete', registroId:id})});
-  nf('Excluído.'); await ld();
-}
-
-function er(id) {
-  const r = dd.find(x => x.ID === id);
-  if (!r) return;
-  const a = (as||[]).find(x => x.nome===r.ATIVIDADE || String(x.id)===String(r.ATIVIDADE));
-  document.getElementById('atividadeSelect').value = a ? (a.id||a.nome) : '';
-  document.getElementById('observacaoInput').value = r.OBSERVAÇÃO||'';
-  nav('registro');
-}
-
-function uf() {
-  const c = document.getElementById('funcCards'); c.innerHTML = '';
-  const n = new Date(), ms = String(n.getMonth()+1).padStart(2,'0'), an = n.getFullYear();
-  Fs.forEach(f => {
-    const r = dd.filter(x => ni(f.n, x.FUNCIONÁRIO));
-    const s = ts(r), h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
-    const d = new Set(r.map(x => x.DATA).filter(Boolean)).size;
-    const rm = r.filter(x => x.DATA && x.DATA.includes(an+'-'+ms));
-    c.innerHTML += '<div class="card"><div class="label">'+f.c+'</div><div class="value" style="font-size:20px">'+f.n+'</div><div class="sub" style="margin-top:8px">📧 '+f.e+'<br>📊 '+rm.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+d+' dias com registro</div></div>';
-  });
-}
-
-function aa() {
-  const t = document.getElementById('adminAtividadesBody'); t.innerHTML = '';
-  (as||[]).sort((a,b) => (a.nome||'').localeCompare(b.nome||'')).forEach(a => {
-    t.innerHTML += '<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="ame(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="xai(\''+a.id+'\')">🗑️</button></td></tr>';
-  });
-}
-
-function amna() {
-  document.getElementById('novaAtvNome').value = ''; document.getElementById('novaAtvDesc').value = '';
-  document.getElementById('modalNovaAtividade').classList.remove('hidden');
-}
-
-function fm(id) { document.getElementById(id).classList.add('hidden'); }
-
-async function sna() {
-  const n = document.getElementById('novaAtvNome').value.trim();
-  if (!n) { nf('Digite o nome.', true); return; }
-  await fetch(S, {method:'POST', body:JSON.stringify({action:'addAtividade', nome:n, descricao:document.getElementById('novaAtvDesc').value.trim()})});
-  nf('✅ Criada!'); fm('modalNovaAtividade'); await la();
-}
-
-function ame(id) {
-  const a = (as||[]).find(x => String(x.id)===String(id));
-  if (!a) return;
-  document.getElementById('editAtvId').value = id;
-  document.getElementById('editAtvNome').value = a.nome||'';
-  document.getElementById('editAtvDesc').value = a.descricao||'';
-  document.getElementById('modalEditarAtividade').classList.remove('hidden');
-}
-
-async function aa2() {
-  const id = document.getElementById('editAtvId').value, n = document.getElementById('editAtvNome').value.trim();
-  if (!n) { nf('Digite o nome.', true); return; }
-  await fetch(S, {method:'POST', body:JSON.stringify({action:'editAtividade', id, nome:n, descricao:document.getElementById('editAtvDesc').value.trim()})});
-  nf('✅ Atualizada!'); fm('modalEditarAtividade'); await la();
-}
-
-async function xa() {
-  if (!confirm('Excluir?')) return;
-  await fetch(S, {method:'POST', body:JSON.stringify({action:'deleteAtividade', id:document.getElementById('editAtvId').value})});
-  nf('Excluída.'); fm('modalEditarAtividade'); await la();
-}
-
-async function xai(id) {
-  if (!confirm('Excluir?')) return;
-  await fetch(S, {method:'POST', body:JSON.stringify({action:'deleteAtividade', id})});
-  nf('Excluída.'); await la();
-}
-
-function pf() {
-  const h = new Date(), m = new Date(h); m.setDate(1);
-  document.getElementById('relDataIni').value = m.toISOString().split('T')[0];
-  document.getElementById('relDataFim').value = h.toISOString().split('T')[0];
-}
-
-function fR() {
-  const f = document.getElementById('relFiltroFunc').value, i = document.getElementById('relDataIni').value, fi = document.getElementById('relDataFim').value;
-  let ft = [...dd];
-  if (f !== 'todos') ft = ft.filter(r => ni(f, r.FUNCIONÁRIO));
-  if (i) ft = ft.filter(r => r.DATA >= i);
-  if (fi) ft = ft.filter(r => r.DATA <= fi);
-  ft.sort((a,b) => (b.DATA||'').localeCompare(a.DATA||''));
-  const t = document.getElementById('relatorioBody'); t.innerHTML = '';
-  ft.forEach(r => {
-    const s2 = seg(r.TOTAL);
-    const hh = Math.floor(s2/3600), mm = Math.floor((s2%3600)/60), ss = s2%60;
-    const ts2 = String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
-    t.innerHTML += '<tr><td>'+(r.DATA||'-')+'</td><td>'+ga(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts2+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>';
-  });
-  if (!ft.length) t.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';
-  const s2 = ts(ft);
-  document.getElementById('relTotalHoras').textContent = String(Math.floor(s2/3600)).padStart(2,'0')+':'+String(Math.floor((s2%3600)/60)).padStart(2,'0');
-  document.getElementById('relTotalReg').textContent = ft.length;
-  window._rdf = ft;
-}
-
-function eRCSV() {
-  if (!window._rdf || !window._rdf.length) { nf('Nenhum dado.', true); return; }
-  dCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+
-    window._rdf.map(r => {
-      const s2 = seg(r.TOTAL);
-      const hh = Math.floor(s2/3600), mm = Math.floor((s2%3600)/60), ss = s2%60;
-      return '"'+(r.DATA||'')+'","'+ga(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"';
-    }).join('\n'),
-    'relatorio_'+new Date().toISOString().split('T')[0]+'.csv'
-  );
-}
-
-function eJ() {
-  if (!dd.length) { nf('Nenhum dado.', true); return; }
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(dd,null,2)], {type:'application/json'}));
-  a.download = 'backup_'+new Date().toISOString().split('T')[0]+'.json'; a.click();
-  nf('✅ Exportado!');
-}
-
-function eC() {
-  if (!dd.length) { nf('Nenhum dado.', true); return; }
-  dCSV(Object.keys(dd[0]).join(',')+'\n'+
-    dd.map(r => Object.values(r).map(v => '"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n'),
-    'backup_'+new Date().toISOString().split('T')[0]+'.csv'
-  );
-}
-
-function eACSV() {
-  if (!as.length) { nf('Nenhuma.', true); return; }
-  dCSV('id,nome,descricao\n'+as.map(a => '"'+a.id+'","'+a.nome+'","'+(a.descricao||'').replace(/"/g,'""')+'"').join('\n'),
-    'atividades_'+new Date().toISOString().split('T')[0]+'.csv'
-  );
-}
-
-function dCSV(c, n) {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['\uFEFF'+c], {type:'text/csv;charset=utf-8;'}));
-  a.download = n; a.click();
-  nf('✅ '+n+' baixado!');
-}
-
-function nf(m, e=false) {
-  const d = document.createElement('div');
-  d.className = 'notificacao' + (e ? ' erro' : '');
-  d.textContent = m;
-  document.body.appendChild(d);
-  setTimeout(() => d.remove(), 3000);
-}
-
+function icr(){const a=document.getElementById('atividadeSelect').value;if(!a){nf('Selecione uma atividade.',true);return}ic=Date.now();tp=0;rt={atividade:a,nomeAtividade:ga(a),obs:document.getElementById('observacaoInput').value,inicio:ic};document.getElementById('btnIniciar').classList.add('hidden');document.getElementById('btnPausar').classList.remove('hidden');ci=setInterval(()=>{document.getElementById('cronometroDisplay').textContent=new Date(Date.now()-ic-tp).toISOString().substr(11,8)},200);nf('⏱️ Iniciado!')}
+function pcr(){if(!ci)return;clearInterval(ci);ci=null;tp+=Date.now()-ic-tp;document.getElementById('btnPausar').classList.add('hidden');document.getElementById('btnRetomar').classList.remove('hidden');document.getElementById('btnParar').classList.remove('hidden');nf('⏸️ Pausado')}
+function rcr(){if(ci)return;ic=Date.now();document.getElementById('btnRetomar').classList.add('hidden');document.getElementById('btnPausar').classList.remove('hidden');document.getElementById('btnParar').classList.add('hidden');ci=setInterval(()=>{document.getElementById('cronometroDisplay').textContent=new Date(Date.now()-ic+tp).toISOString().substr(11,8)},200);nf('▶️ Retomado!')}
+function pcr2(){if(ci){clearInterval(ci);ci=null}const ag=Date.now();rt.fim=ag;rt.total=ag-ic+tp;document.getElementById('btnPausar').classList.add('hidden');document.getElementById('btnRetomar').classList.add('hidden');document.getElementById('btnParar').classList.add('hidden');document.getElementById('btnSalvar').classList.remove('hidden');nf('⏹ Parado. Revise e salve.')}
+async function sReg(){if(!rt)return;const ts2=Math.floor(rt.total/1000),h=Math.floor(ts2/3600),m=Math.floor((ts2%3600)/60),s=ts2%60;const p={action:'add',ID:'REG_'+Date.now(),DATA:new Date().toISOString().split('T')[0],FUNCIONÁRIO:user,ATIVIDADE:rt.nomeAtividade||rt.atividade,'HORA INICIO':new Date(rt.inicio).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),'HORA FIM':new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),TOTAL:String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'),OBSERVAÇÃO:document.getElementById('observacaoInput').value||'',STATUS:'concluido','CRIADO EM':new Date().toISOString(),'ATUALIZADO EM':new Date().toISOString()};try{const r=await fetch(S,{method:'POST',body:JSON.stringify(p)}),d=await r.json();if(d.success){nf('✅ Salvo!');document.getElementById('btnSalvar').classList.add('hidden');document.getElementById('btnIniciar').classList.remove('hidden');document.getElementById('observacaoInput').value='';document.getElementById('cronometroDisplay').textContent='00:00:00';rt=null;tp=0;await ld();uh()}}catch(e){nf('Erro ao salvar.',true)}}
+function uh(){const me=dd.filter(r=>ni(user,r.FUNCIONÁRIO)).sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('historicoBody');t.innerHTML='';me.slice(0,50).forEach(r=>{const s2=seg(r.TOTAL);const hh=Math.floor(s2/3600),mm=Math.floor((s2%3600)/60),ss=s2%60;const ts2=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+ga(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts2+'</td><td><span class="badge badge-concluido">concluido</span></td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="er(\''+r.ID+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="xr(\''+r.ID+'\')">🗑️</button></td></tr>'});if(!me.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum registro</td></tr>'}
+async function xr(id){if(!confirm('Excluir?'))return;await fetch(S,{method:'POST',body:JSON.stringify({action:'delete',registroId:id})});nf('Excluído.');await ld()}
+function er(id){const r=dd.find(x=>x.ID===id);if(!r)return;const a=(as||[]).find(x=>x.nome===r.ATIVIDADE||String(x.id)===String(r.ATIVIDADE));document.getElementById('atividadeSelect').value=a?(a.id||a.nome):'';document.getElementById('observacaoInput').value=r.OBSERVAÇÃO||'';nav('registro')}
+function uf(){const c=document.getElementById('funcCards');c.innerHTML='';const n=new Date(),ms=String(n.getMonth()+1).padStart(2,'0'),an=n.getFullYear();Fs.forEach(f=>{const r=dd.filter(x=>ni(f.n,x.FUNCIONÁRIO));const s=ts(r),h=Math.floor(s/3600),m=Math.floor((s%3600)/60);const d=new Set(r.map(x=>x.DATA).filter(Boolean)).size;const rm=r.filter(x=>x.DATA&&x.DATA.includes(an+'-'+ms));c.innerHTML+='<div class="card"><div class="label">'+f.c+'</div><div class="value" style="font-size:20px">'+f.n+'</div><div class="sub" style="margin-top:8px">📧 '+f.e+'<br>📊 '+rm.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+d+' dias com registro</div></div>'})}
+function aa(){const t=document.getElementById('adminAtividadesBody');t.innerHTML='';(as||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{t.innerHTML+='<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="ame(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="xai(\''+a.id+'\')">🗑️</button></td></tr>'})}
+function amna(){document.getElementById('novaAtvNome').value='';document.getElementById('novaAtvDesc').value='';document.getElementById('modalNovaAtividade').classList.remove('hidden')}
+function fm(id){document.getElementById(id).classList.add('hidden')}
+async function sna(){const n=document.getElementById('novaAtvNome').value.trim();if(!n){nf('Digite o nome.',true);return}await fetch(S,{method:'POST',body:JSON.stringify({action:'addAtividade',nome:n,descricao:document.getElementById('novaAtvDesc').value.trim()})});nf('✅ Criada!');fm('modalNovaAtividade');await la()}
+function ame(id){const a=(as||[]).find(x=>String(x.id)===String(id));if(!a)return;document.getElementById('editAtvId').value=id;document.getElementById('editAtvNome').value=a.nome||'';document.getElementById('editAtvDesc').value=a.descricao||'';document.getElementById('modalEditarAtividade').classList.remove('hidden')}
+async function aa2(){const id=document.getElementById('editAtvId').value,n=document.getElementById('editAtvNome').value.trim();if(!n){nf('Digite o nome.',true);return}await fetch(S,{method:'POST',body:JSON.stringify({action:'editAtividade',id,nome:n,descricao:document.getElementById('editAtvDesc').value.trim()})});nf('✅ Atualizada!');fm('modalEditarAtividade');await la()}
+async function xa(){if(!confirm('Excluir?'))return;await fetch(S,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id:document.getElementById('editAtvId').value})});nf('Excluída.');fm('modalEditarAtividade');await la()}
+async function xai(id){if(!confirm('Excluir?'))return;await fetch(S,{method:'POST',body:JSON.stringify({action:'deleteAtividade',id})});nf('Excluída.');await la()}
+function pf(){const h=new Date(),m=new Date(h);m.setDate(1);document.getElementById('relDataIni').value=m.toISOString().split('T')[0];document.getElementById('relDataFim').value=h.toISOString().split('T')[0]}
+function fR(){const f=document.getElementById('relFiltroFunc').value,i=document.getElementById('relDataIni').value,fi=document.getElementById('relDataFim').value;let ft=[...dd];if(f!=='todos')ft=ft.filter(r=>ni(f,r.FUNCIONÁRIO));if(i)ft=ft.filter(r=>r.DATA>=i);if(fi)ft=ft.filter(r=>r.DATA<=fi);ft.sort((a,b)=>(b.DATA||'').localeCompare(a.DATA||''));const t=document.getElementById('relatorioBody');t.innerHTML='';ft.forEach(r=>{const s2=seg(r.TOTAL);const hh=Math.floor(s2/3600),mm=Math.floor((s2%3600)/60),ss=s2%60;const ts2=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');t.innerHTML+='<tr><td>'+(r.DATA||'-')+'</td><td>'+(r.FUNCIONÁRIO||'-')+'</td><td>'+ga(r.ATIVIDADE)+'</td><td>'+(r['HORA INICIO']||'-')+'</td><td>'+(r['HORA FIM']||'-')+'</td><td>'+ts2+'</td><td>'+(r.OBSERVAÇÃO||'-')+'</td></tr>'});if(!ft.length)t.innerHTML='<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhum</td></tr>';const s2=ts(ft);document.getElementById('relTotalHoras').textContent=String(Math.floor(s2/3600)).padStart(2,'0')+':'+String(Math.floor((s2%3600)/60)).padStart(2,'0');document.getElementById('relTotalReg').textContent=ft.length;window._rdf=ft}
+function eRCSV(){if(!window._rdf||!window._rdf.length){nf('Nenhum dado.',true);return}dCSV('Data,Funcionário,Atividade,Início,Fim,Total,Observação\n'+window._rdf.map(r=>{const s2=seg(r.TOTAL);const hh=Math.floor(s2/3600),mm=Math.floor((s2%3600)/60),ss=s2%60;return'"'+(r.DATA||'')+'","'+(r.FUNCIONÁRIO||'')+'","'+ga(r.ATIVIDADE)+'","'+(r['HORA INICIO']||'')+'","'+(r['HORA FIM']||'')+'","'+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+'","'+((r.OBSERVAÇÃO||'').replace(/"/g,'""'))+'"'}).join('\n'),'relatorio_'+new Date().toISOString().split('T')[0]+'.csv')}
+function eJ(){if(!dd.length){nf('Nenhum dado.',true);return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(dd,null,2)],{type:'application/json'}));a.download='backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();nf('✅ Exportado!')}
+function eC(){if(!dd.length){nf('Nenhum dado.',true);return}dCSV(Object.keys(dd[0]).join(',')+'\n'+dd.map(r=>Object.values(r).map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n'),'backup_'+new Date().toISOString().split('T')[0]+'.csv')}
+function eACSV(){if(!as.length){nf('Nenhuma.',true);return}dCSV('id,nome,descricao\n'+as.map(a=>'"'+a.id+'","'+a.nome+'","'+(a.descricao||'').replace(/"/g,'""')+'"').join('\n'),'atividades_'+new Date().toISOString().split('T')[0]+'.csv')}
+function dCSV(c,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+c],{type:'text/csv;charset=utf-8;'}));a.download=n;a.click();nf('✅ '+n+' baixado!')}
+function nf(m,e=false){const d=document.createElement('div');d.className='notificacao'+(e?' erro':'');d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),3000)}
 init();
 </script>
-
 </body>
 </html>
