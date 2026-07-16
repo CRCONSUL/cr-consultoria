@@ -197,17 +197,14 @@ const CORES_DONUT=['#6366f1','#22c55e','#f59e0b','#ef4444','#a855f7','#14b8a6','
 let atividades=[],todosDados=[],usuarioAtual=null;
 let cronometroAtivo=null,inicioCronometro=null,tempoPausado=0,pausando=false,registroTemporario=null;
 
-// ===== FUNÇÃO QUE EXTRAI SEGUNDOS CORRETAMENTE =====
-// O Web App retorna TOTAL como "1899-12-30T04:06:28.000Z"
-// Esta função extrai só "04:06:28" do meio
 function extrairSegundos(v){
-  if(!v)return 0;
+  if(v==null||v===0||v==='0')return 0;
+  if(typeof v==='number')return Math.round(v/1000);
   let s=String(v);
   if(s.includes('T'))s=s.split('T')[1].split('.')[0];
   const p=s.split(':');
   return(parseInt(p[0])||0)*3600+(parseInt(p[1])||0)*60+(parseInt(p[2])||0);
 }
-
 function nomeFuncionarioIgual(a,b){
   if(!a||!b)return false;
   const n=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
@@ -221,7 +218,6 @@ function getNomeAtividade(v){
   const f=(atividades||[]).find(a=>String(a.id)===String(v)||a.nome===v);
   return f?f.nome:v;
 }
-
 async function carregarTudo(){
   const s=document.getElementById('loginFuncionario');
   FUNCIONARIOS.forEach(f=>{const o=document.createElement('option');o.value=f.nome;o.textContent=f.nome+' — '+f.cargo;s.appendChild(o)});
@@ -261,23 +257,19 @@ function navegar(aba){
   if(aba==='relatorios'){preencherFiltros();filtrarRelatorio()}
   if(aba==='atividades')renderAdminAtividades();
 }
-
 function totalSegundos(arr){return arr.reduce((acc,r)=>acc+extrairSegundos(r?.TOTAL),0)}
 function fmtHms(s){if(isNaN(s)||s<0)return'0h 0min';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?h+'h '+m+'min':m+'min'}
-
 function atualizarDashboard(){
   const du=todosDados.filter(r=>nomeFuncionarioIgual(usuarioAtual,r.FUNCIONÁRIO));
   const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();
-  const dm=du.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));
+  const dm=du.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes));
   const dh=du.filter(r=>r.DATA===now.toISOString().split('T')[0]);
   const sm=totalSegundos(dm),sh=totalSegundos(dh),du_m=Math.min(now.getDate(),30),md=du_m>0?Math.round(sm/du_m):0;
-  const funcAtivos=new Set(todosDados.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes)).map(r=>r.FUNCIONÁRIO)).size;
+  const funcAtivos=new Set(todosDados.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes)).map(r=>r.FUNCIONÁRIO)).size;
   document.getElementById('dashCards').innerHTML='<div class="card purple"><div class="label">Horas no Mês</div><div class="value">'+fmtHms(sm)+'</div><div class="sub">'+dm.length+' registros</div></div><div class="card green"><div class="label">Hoje</div><div class="value">'+fmtHms(sh)+'</div><div class="sub">'+dh.length+' registros</div></div><div class="card blue"><div class="label">Média/Dia</div><div class="value">'+fmtHms(md)+'</div><div class="sub">'+du_m+' dias no mês</div></div><div class="card orange"><div class="label">Total Registros</div><div class="value">'+dm.length+'</div><div class="sub">No mês</div></div><div class="card cyan"><div class="label">Funcionários Ativos</div><div class="value">'+funcAtivos+'</div><div class="sub">No mês</div></div>';
-
   const bc=document.getElementById('graficoFuncBarras');bc.innerHTML='';
-  const maxSeg=Math.max(...FUNCIONARIOS.map(f=>totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.startsWith(ano+'-'+mes)))),1);
-  FUNCIONARIOS.forEach(f=>{const seg=totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.startsWith(ano+'-'+mes)));const alt=Math.max(Math.round(seg/maxSeg*100),seg>0?10:4);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+f.nome.split(' ')[0]+'</div>';bc.appendChild(e)});
-
+  const maxSeg=Math.max(...FUNCIONARIOS.map(f=>totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(ano+'-'+mes)))),1);
+  FUNCIONARIOS.forEach(f=>{const seg=totalSegundos(todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO)&&r.DATA&&r.DATA.includes(ano+'-'+mes)));const alt=Math.max(Math.round(seg/maxSeg*100),seg>0?10:4);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+f.nome.split(' ')[0]+'</div>';bc.appendChild(e)});
   const dw=document.getElementById('donutWrap');const agrup={};
   dm.forEach(r=>{const n=getNomeAtividade(r.ATIVIDADE);if(!agrup[n])agrup[n]=0;agrup[n]+=extrairSegundos(r.TOTAL)});
   const entries=Object.entries(agrup).sort((a,b)=>b[1]-a[1]).slice(0,8);
@@ -287,13 +279,11 @@ function atualizarDashboard(){
   donut+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rr-12)+'" fill="#1a1a24"/></svg></div><div class="donut-legend">';
   entries.forEach(([nm,hr],i)=>{const hh=Math.floor((hr||0)/3600),mm=Math.floor((hr||0)%3600/60);donut+='<div class="donut-item"><div class="donut-cor" style="background:'+CORES_DONUT[i%CORES_DONUT.length]+'"></div><span class="donut-label">'+nm+'</span><span class="donut-valor">'+hh+'h '+mm+'min</span></div>'});
   donut+='</div>';dw.innerHTML=donut;
-
   const dc=document.getElementById('graficoDiaBarras');dc.innerHTML='';
   const dias=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dias.push(d)}
   const maxDiaSeg=Math.max(...dias.map(d=>totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]))),1);
   dias.forEach(d=>{const seg=totalSegundos(du.filter(r=>r.DATA===d.toISOString().split('T')[0]));const alt=Math.max(Math.round(seg/maxDiaSeg*100),seg>0?8:3);const e=document.createElement('div');e.className='barra-item';e.innerHTML='<div class="barra-valor">'+fmtHms(seg)+'</div><div class="barra" style="height:'+alt+'px"></div><div class="barra-label">'+d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric'})+'</div>';dc.appendChild(e)});
 }
-
 function iniciarCronometro(){
   const atv=document.getElementById('atividadeSelect').value;
   if(!atv){mostrarNotificacao('Selecione uma atividade.',true);return}
@@ -334,7 +324,7 @@ function carregarHistorico(){
 }
 async function excluirRegistro(id){if(!confirm('Excluir?'))return;await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'delete',registroId:id})});mostrarNotificacao('Excluído.');await carregarDados()}
 function editarRegistro(id){const r=todosDados.find(x=>x.ID===id);if(!r)return;const atv=(atividades||[]).find(a=>a.nome===r.ATIVIDADE||String(a.id)===String(r.ATIVIDADE));document.getElementById('atividadeSelect').value=atv?(atv.id||atv.nome):'';document.getElementById('observacaoInput').value=r.OBSERVAÇÃO||'';navegar('registro')}
-function atualizarFuncionarios(){const c=document.getElementById('funcCards');c.innerHTML='';const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();FUNCIONARIOS.forEach(f=>{const rf=todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO));const seg=totalSegundos(rf),h=Math.floor(seg/3600),m=Math.floor((seg%3600)/60);const dias=new Set(rf.map(r=>r.DATA).filter(Boolean)).size;const rfMes=rf.filter(r=>r.DATA&&r.DATA.startsWith(ano+'-'+mes));c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>'})}
+function atualizarFuncionarios(){const c=document.getElementById('funcCards');c.innerHTML='';const now=new Date(),mes=String(now.getMonth()+1).padStart(2,'0'),ano=now.getFullYear();FUNCIONARIOS.forEach(f=>{const rf=todosDados.filter(r=>nomeFuncionarioIgual(f.nome,r.FUNCIONÁRIO));const seg=totalSegundos(rf),h=Math.floor(seg/3600),m=Math.floor((seg%3600)/60);const dias=new Set(rf.map(r=>r.DATA).filter(Boolean)).size;const rfMes=rf.filter(r=>r.DATA&&r.DATA.includes(ano+'-'+mes));c.innerHTML+='<div class="card"><div class="label">'+f.cargo+'</div><div class="value" style="font-size:20px">'+f.nome+'</div><div class="sub" style="margin-top:8px">📧 '+f.email+'<br>📊 '+rfMes.length+' registros no mês | '+h+'h '+m+'min total<br>📅 '+dias+' dias com registro</div></div>'})}
 function renderAdminAtividades(){const t=document.getElementById('adminAtividadesBody');t.innerHTML='';(atividades||[]).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'')).forEach(a=>{t.innerHTML+='<tr><td>'+(a.id||'-')+'</td><td>'+a.nome+'</td><td>'+(a.descricao||'-')+'</td><td class="acoes"><button class="btn btn-sm btn-primary" onclick="abrirModalEditar(\''+a.id+'\')">✏️</button><button class="btn btn-sm btn-danger" onclick="excluirAtividadeId(\''+a.id+'\')">🗑️</button></td></tr>'})}
 function abrirModalNovaAtividade(){document.getElementById('novaAtvNome').value='';document.getElementById('novaAtvDesc').value='';document.getElementById('modalNovaAtividade').classList.remove('hidden')}
 function fecharModal(id){document.getElementById(id).classList.add('hidden')}
